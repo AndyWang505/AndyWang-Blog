@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import Layout from '../layouts/Layout.astro';
+import Aside from '../layouts/Aside.astro';
+import MobileNav from '../components/MobileNav.astro';
+
+interface PageProps {
+  size: number;
+  currentPage: number;
+  total: number;
+}
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+export async function getStaticPaths({ paginate }) {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+  return paginate(posts, {
+    pageSize: 6
+  })
+}
+
+const { page } = Astro.props as { page: PageProps };
+
+const postsPerPage = page.size;
+const currentPage = page.currentPage;
+const totalPages = Math.ceil(page.total / postsPerPage);
+const startIndex = (currentPage - 1) * postsPerPage;
+const endIndex = startIndex + postsPerPage;
+const paginatedPosts = posts.slice(startIndex, endIndex);
+
+---
+<Layout>
+	<main class="max-w-6xl mx-auto p-3 md:p-6 lg:p-12">
+    <div class="flex grid lg:grid-cols-4">
+      <section class="col-span-3">
+        <ul>
+          {
+            paginatedPosts.map(post => (
+              <li class="w-full bg-white drop-shadow rounded-lg overflow-hidden mb-6 transition-hover-link">
+                <a class="sm:flex min-h-44" href={`/post/${post.slug}/`}>
+                  <div class="sm:w-64 overflow-hidden">
+                    <img class="w-full min-h-52 sm:h-full object-cover transition-hover-img" src={post.data.heroImage} alt="" />
+                  </div>
+                  <div class="flex-1 ml-4 p-3">
+                    <h4 class="text-xl font-bold mb-2">{post.data.title}</h4>
+                    <p class="text-sm text-neutral-500 mb-4">
+                      <FormattedDate date={post.data.pubDate} />
+                      {post.data.category}
+                      #{post.data.tags.join(' #')}
+                    </p>
+                    <p class="text-md line-clamp-3">
+                      {post.data.description}
+                    </p>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <Aside />
+    </div>
+    <nav class="my-6">
+      <ul class="mx-auto flex justify-center">
+				{currentPage > 1 && (
+					<li>
+						<a class="p-2 bg-white drop-shadow rounded-md text-orange-500" href={`/${currentPage - 1}`}>&lt;&lt; Previous</a>
+					</li>
+				)}
+				{currentPage < totalPages && (
+					<li>
+						<a class="p-2 bg-white drop-shadow rounded-md text-blue-500" href={`/${currentPage + 1}`}>Next &gt;&gt;</a>
+					</li>
+				)}
+			</ul>
+    </nav>
+    <MobileNav />
+	</main>
+</Layout>

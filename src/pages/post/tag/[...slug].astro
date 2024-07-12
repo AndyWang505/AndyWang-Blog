@@ -1,0 +1,66 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import Layout from '../../../layouts/Layout.astro';
+import Aside from '../../../layouts/Aside.astro';
+import MobileNav from '../../../components/MobileNav.astro';
+
+export interface Props {
+  posts: CollectionEntry<'blog'>;
+  publishedPosts: CollectionEntry<'blog'>[];
+  categories: string[]
+}
+
+export async function getStaticPaths() {
+  const publishedPosts = await getCollection('blog', (post) => (import.meta.env.PROD ? !post.data.isDraft : true));
+  const categories = [...new Set(publishedPosts.map((post) => post.data.tags).flat())];
+  return categories.flatMap((category) => [
+    { 
+      params: { slug: category },
+      props: { publishedPosts } 
+    }
+  ]);
+}
+
+const { slug } = Astro.params;
+const { publishedPosts } = Astro.props;
+const avaliableCurrentTagPosts = publishedPosts
+  .filter((post) => post.data.tags.includes(slug))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+---
+
+<Layout>
+  <main class="max-w-6xl mx-auto p-3 md:p-12 flex grid lg:grid-cols-4">
+    <section class="col-span-3 bg-white drop-shadow rounded-lg overflow-hidden py-6">
+      <h2 class="flex gap-2 text-2xl font-bold mb-4 ml-6 md:ml-12">
+        <a class="flex items-center gap-1.5" href="/post/tag/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.5 19C4.01472 19 2 16.9853 2 14.5C2 12.1564 3.79151 10.2313 6.07974 10.0194C6.54781 7.17213 9.02024 5 12 5C14.9798 5 17.4522 7.17213 17.9203 10.0194C20.2085 10.2313 22 12.1564 22 14.5C22 16.9853 19.9853 19 17.5 19C13.1102 19 10.3433 19 6.5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Tag Cloud
+        </a>
+         &gt; 
+        <a class="text-blue-400" href="">#{slug}</a>
+      </h2>
+      <ul class="pl-10 md:pl-16">
+        {
+          avaliableCurrentTagPosts.map(post => {
+            return (
+              <li class="mb-2 list-disc">
+                <a href={`/post/${post.slug}/`}>
+                  <p class="text-sm text-neutral-400 inline-block">
+                    <FormattedDate date={post.data.pubDate} />
+                  </p>
+                  <h4 class="ml-2 inline-block">{post.data.title}</h4>
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </section>
+    <Aside />
+    <MobileNav />
+  </main>
+</Layout>
