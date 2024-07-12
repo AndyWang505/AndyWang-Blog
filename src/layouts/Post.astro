@@ -7,13 +7,9 @@ import Aside from './Aside.astro';
 import MobileNav from '../components/MobileNav.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
-const { title, description, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
-
+const { title, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
 
 const blog = await getCollection('blog');
-const posts = (blog).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
 // Tags
 const tagsSet = new Set();
 blog.forEach(post => {
@@ -21,7 +17,7 @@ blog.forEach(post => {
     tagsSet.add(tag);
   });
 });
-const tagsCount = tagsSet.size;
+
 ---
 
 <Layout>

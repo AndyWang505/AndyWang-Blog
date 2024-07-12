@@ -19,10 +19,6 @@ const categoryCount = publishedPosts.reduce((acc: CategoryCount, post) => {
 
 const categories = Object.keys(categoryCount).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
 ---
 <div class="w-full rounded-lg bg-white drop-shadow p-6 mb-6">
   <h3 class="mb-2">

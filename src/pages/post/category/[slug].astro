@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const { publishedPosts, categories } = Astro.props;
+const { publishedPosts } = Astro.props;
 const avaliableCurrentCategoryPosts = publishedPosts
   .filter((post) => post.data.category === slug)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
