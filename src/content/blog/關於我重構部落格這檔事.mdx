@@ -1,0 +1,56 @@
+---
+title: '關於我重構部落格這檔事'
+description: '自從去年2023年12月開始就已經在想著重構這件事，但當時當兵結束又忙著應付面試，實在空不出時間，直到現在花了一個禮拜的時間終於寫完了，對於成品我也十分滿意'
+pubDate: 'July 12 2024'
+heroImage: '/Astro-Image1.png'
+tags: ['心得', 'Blog']
+category: 'Astro'
+---
+
+自從去年2023年12月開始就已經在想著重構這件事，但當時當兵結束又忙著應付面試，實在空不出時間，直到現在花了一個禮拜的時間終於寫完了，對於成品我也十分滿意。
+
+之後應該會記錄我在使用 Astro 這個 Framework 碰到的各種問題吧～
+
+## 先聊聊 Astro
+
+在我開始接觸 Astro 時，過去曾經使用過 Jekyll 來自架部落格
+
+不過當時對於這種靜態網頁生成的框架還不太熟悉，且 jekyll 是使用 Liquid 模板語言，需要一段時間上手
+
+而且那個時候 AI 工具也還不夠完善，找資料都要花上非常大量的時間，總之對於當時的我來說是滿頭痛的
+
+後期想要換框架就在猶豫該使用比較主流的 Hexo 還是 Hugo，Next 有想過，但我功力不夠也擔心 bug 太多ww
+
+後來認識 Astro 這個 Framework 是從工作上的一位助教，接著我也開始查閱一些相關資訊
+
+發現 Astro 的學習曲線相對平緩，使用 Island 架構，也能搭配自己想要的框架
+
+剛好在上手 React 之後就決定了使用 Astro + React 來做開發
+
+不過 Astro 社群在中文圈的資訊比較少，碰到問題大部分都是查官方文件和透過 Github Issues 看人家類似有沒有碰過類似的問題來解決
+
+## 設計理念
+
+Astro 強調他的設計理念是打造 **以內容為中心的網站**，像是部落格、電商、行銷網站，而這些都有一個共通點，就是需要良好的 SEO 和速度
+
+而 Astro 也不太需要花額外的時間成本去學習其他語言，因為是靜態生成，主體圍繞在 HTML、CSS、JavaScript，當然也可以用 TypeScript
+
+另外官方文件也有提到
+
+> Astro 設計成比其他 UI 框架及語言還簡單，其中一個重要原因是：Astro 是用來在伺服器而非瀏覽器上算繪。這就代表你毋需擔心像：hook（React）、stale closure（還是 React）、ref（Vue）、observable（Svelte）、atom、selector、reaction 或 derivation。由於使用者無法在伺服器端算繪時與頁面互動，所以這些複雜度都消失了。
+
+這也是為什麼我在 Astro 寫不了 React hook 的原因，所以就不能用 SPA 那套思路來撰寫，應該去想這些東西是運行在 Server Side 的而不是 Client Side
+
+關於 Astro 的設計理念可以參考 [Astro 官方網站](https://docs.astro.build/zh-tw/concepts/why-astro/#_top)，有詳細的說明，還滿有趣的～
+
+## 最後新手開發上要注意的事
+
+開發上前面有講到，就是思路需要調整，那基本上就沒有太大的問題了
+
+同時你也能夠去插入 `<script>`，幫助你在客戶端運行某些功能～
+
+另外，最後在部屬階段時有發現 Github Actions 會一直報錯，因為 Github Pages 會默認使用 Jekyll 來建構
+
+但我是使用 Astro，因此你需要告訴他不要使用 jekyll
+
+可以在根目錄加入 `.nojekyll` 的空白檔案，重新部屬之後應該就可以正常運行了！
