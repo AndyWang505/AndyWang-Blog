@@ -4,22 +4,28 @@ import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
 
-type CategoryCount = {
-  [key: string]: number;
-};
-const publishedPosts = await getCollection('blog', (post) => (import.meta.env.PROD ? !post.data.isDraft : true));
-// get categories set
-const categoryCount = publishedPosts.reduce((acc: CategoryCount, post) => {
-  const category = post.data.category;
-  if(acc[category]){
-    acc[category]++;
-  }else {
-    acc[category] = 1;
+interface CategoryCount {
+  [category: string]: {
+    category: string;
+    count: number;
+  };
+}
+
+const blog = await getCollection('blog');
+// get categories data
+const categoriesCount = blog.reduce((acc: CategoryCount, post) => {
+  if (acc[post.data.category]) {
+    acc[post.data.category].count++;
+  } else {
+    acc[post.data.category] = {
+      category: post.data.category,
+      count: 1
+    };
   }
   return acc;
-}, {})
+} ,{});
 
-const categories = Object.keys(categoryCount).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+const categoriesArray = Object.values(categoriesCount);
 
 ---
 <Layout>
@@ -32,14 +38,14 @@ const categories = Object.keys(categoryCount).sort((a, b) => a.localeCompare(b, 
           </svg>
           Categories
         </h2>
-        <h3 class="text-xl">共 {categories.length} 種類別</h3>
+        <h3 class="text-xl">共 {categoriesArray.length} 種類別</h3>
       </div>
       <ul class="pl-10 md:pl-16">
-        {categories.map(category => (
+        {categoriesArray.map(category => (
           <li class="mb-2 list-disc">
-            <a class="inline-block" href={`/post/category/${category}`}>
-              {category}&nbsp
-              <span class="text-neutral-400">({categoryCount[category]})</span>
+            <a class="inline-block" href={`/post/category/${category.category}`}>
+              {category.category}&nbsp
+              <span class="text-neutral-400">({category.count})</span>
             </a>
           </li>
         ))}

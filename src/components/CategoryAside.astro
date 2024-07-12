@@ -1,23 +1,28 @@
 ---
 import { getCollection } from 'astro:content';
 
-type CategoryCount = {
-  [key: string]: number;
-};
+interface CategoryCount {
+  [category: string]: {
+    category: string;
+    count: number;
+  };
+}
 
-const publishedPosts = await getCollection('blog', (post) => (import.meta.env.PROD ? !post.data.isDraft : true));
-// get categories set
-const categoryCount = publishedPosts.reduce((acc: CategoryCount, post) => {
-  const category = post.data.category;
-  if(acc[category]){
-    acc[category]++;
-  }else {
-    acc[category] = 1;
+const blog = await getCollection('blog');
+// get categories data
+const categoriesCount = blog.reduce((acc: CategoryCount, post) => {
+  if (acc[post.data.category]) {
+    acc[post.data.category].count++;
+  } else {
+    acc[post.data.category] = {
+      category: post.data.category,
+      count: 1
+    };
   }
   return acc;
-}, {})
+} ,{});
 
-const categories = Object.keys(categoryCount).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+const categoriesArray = Object.values(categoriesCount);
 
 ---
 <div class="w-full rounded-lg bg-white drop-shadow p-6 mb-6">
@@ -30,11 +35,12 @@ const categories = Object.keys(categoryCount).sort((a, b) => a.localeCompare(b, 
     </a>
   </h3>
   <ul class="ml-3">
-    {categories.map(category => (
+    {categoriesArray.map(category => (
+      
       <li class="text-neutral-500">
-        <a class="inline-block hover:text-neutral-800" href={`/post/category/${category}`}>
-          {category}&nbsp
-          <span class="text-neutral-400">({categoryCount[category]})</span>
+        <a class="inline-block hover:text-neutral-800" href={`/post/category/${category.category}`}>
+          {category.category}&nbsp
+          <span class="text-neutral-400">({category.count})</span>
         </a>
       </li>
     ))}

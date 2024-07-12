@@ -11,20 +11,27 @@ export interface Props {
   categories: string[]
 }
 
+const blog = await getCollection('blog');
+
 export async function getStaticPaths() {
-  const publishedPosts = await getCollection('blog', (post) => (import.meta.env.PROD ? !post.data.isDraft : true));
-  const categories = [...new Set(publishedPosts.map((post) => post.data.category).flat())];
-  return categories.flatMap((category) => [
+  const blog = await getCollection('blog');
+  const categoriesSet = new Set();
+  blog.forEach(post => {
+    categoriesSet.add(post.data.category);
+  });
+  const cateArray = Array.from(categoriesSet);
+  return cateArray.flatMap((category) => [
     { 
       params: { slug: category },
-      props: { publishedPosts, categories } 
+      props: { blog, cateArray }
     }
   ]);
 }
 
 const { slug } = Astro.params;
-const { publishedPosts } = Astro.props;
-const avaliableCurrentCategoryPosts = publishedPosts
+
+
+const avaliableCurrentCategoryPosts = blog
   .filter((post) => post.data.category === slug)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
