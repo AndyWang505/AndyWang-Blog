@@ -25,5 +25,5 @@ export default defineConfig({
     tailwind()
   ],
   site: 'https://andywang505.github.io',
-  base: '/',
+  base: '',
 });
