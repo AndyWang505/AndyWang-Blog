@@ -5,27 +5,28 @@ import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
 
-export interface Props {
-  posts: CollectionEntry<'blog'>;
-  publishedPosts: CollectionEntry<'blog'>[];
-  categories: string[]
-}
+const blog = await getCollection('blog');
 
 export async function getStaticPaths() {
-  const publishedPosts = await getCollection('blog', (post) => (import.meta.env.PROD ? !post.data.isDraft : true));
-  const categories = [...new Set(publishedPosts.map((post) => post.data.tags).flat())];
-  return categories.flatMap((category) => [
-    { 
-      params: { slug: category },
-      props: { publishedPosts } 
-    }
-  ]);
+  const blog = await getCollection('blog');
+  const tagsSet = new Set();
+  blog.forEach(post => {
+    post.data.tags.forEach(tag => {
+      tagsSet.add(tag);
+    });
+  });
+  const tagsArray = Array.from(tagsSet);
+  // console.log(tagsArray);
+  
+  return tagsArray.map(tags => ({
+    params: { slug: tags }
+  }));
 }
 
 const { slug } = Astro.params;
-const { publishedPosts } = Astro.props;
-const avaliableCurrentTagPosts = publishedPosts
-  .filter((post) => post.data.tags.includes(slug))
+
+const avaliableCurrentTagsPosts = blog
+  .filter((post) => post.data.tags.includes(slug as string))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 ---
@@ -45,7 +46,7 @@ const avaliableCurrentTagPosts = publishedPosts
       </h2>
       <ul class="pl-10 md:pl-16">
         {
-          avaliableCurrentTagPosts.map(post => {
+          avaliableCurrentTagsPosts.map(post => {
             return (
               <li class="mb-2 list-disc">
                 <a href={`/post/${post.slug}/`}>

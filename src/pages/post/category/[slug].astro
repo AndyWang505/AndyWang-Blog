@@ -1,15 +1,9 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
-
-export interface Props {
-  posts: CollectionEntry<'blog'>;
-  publishedPosts: CollectionEntry<'blog'>[];
-  categories: string[]
-}
 
 const blog = await getCollection('blog');
 
@@ -20,16 +14,12 @@ export async function getStaticPaths() {
     categoriesSet.add(post.data.category);
   });
   const cateArray = Array.from(categoriesSet);
-  return cateArray.flatMap((category) => [
-    { 
-      params: { slug: category },
-      props: { blog, cateArray }
-    }
-  ]);
+  return cateArray.map(category => ({
+    params: { slug: category }
+  }));
 }
 
 const { slug } = Astro.params;
-
 
 const avaliableCurrentCategoryPosts = blog
   .filter((post) => post.data.category === slug)
