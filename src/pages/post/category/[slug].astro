@@ -61,3 +61,11 @@ const avaliableCurrentCategoryPosts = blog
     <MobileNav />
   </main>
 </Layout>
+<script is:inline lang="ts">
+	if (typeof window !== "undefined") {
+		const theme = localStorage.getItem('theme');
+		if (theme === 'dark' || theme === 'light') {
+			document.documentElement.classList.add(theme);
+		}
+	}
+</script>
