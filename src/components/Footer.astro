@@ -2,14 +2,14 @@
 const today = new Date();
 ---
 
-<footer>
-	Copyright &copy; {today.getFullYear()} - AndyWang.
+<footer class="bg-slate-600 dark:bg-zinc-800">
+	<p class="text-zinc-100">
+		Copyright &copy; {today.getFullYear()} - AndyWang.
+	</p>
 </footer>
 <style>
 	footer {
 		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
 		text-align: center;
 	}
 	.social-links {
@@ -20,9 +20,7 @@ const today = new Date();
 	}
 	.social-links a {
 		text-decoration: none;
-		color: rgb(var(--gray));
 	}
 	.social-links a:hover {
-		color: rgb(var(--gray-dark));
 	}
 </style>

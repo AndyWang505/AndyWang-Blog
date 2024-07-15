@@ -1,10 +1,10 @@
 ---
-
+import ThemeToggle from "./ThemeToggle";
 ---
 <!-- mobile nav -->
 <div class="flex lg:hidden gap-2 border bg-pink-200 bg-opacity-30 backdrop-filter backdrop-blur-lg fixed bottom-5 right-5 rounded-md">
   <nav id="mobileNav" class="hidden p-2">
-    <ul class="flex items-center gap-3">
+    <ul class="flex items-center gap-3 dark:text-neutral-100">
       <li>
         <a href="/">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +40,9 @@
           </svg>
         </a>
       </li>
+      <!-- <li>
+        <ThemeToggle client:visible />
+      </li> -->
     </ul>
   </nav>
   <button type="button" id="navToggle" class="p-2">

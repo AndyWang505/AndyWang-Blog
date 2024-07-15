@@ -1,19 +1,23 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+import ThemeToggle from './ThemeToggle';
 ---
 
-<header>
-	<nav class="max-w-6xl py-3 lg:p-0  mx-auto">
+<header class="dark:bg-zinc-800 dark:text-zinc-100">
+	<nav class="max-w-6xl py-3 lg:p-0 mx-auto">
 		<h2 class="font-bold">
 			<a href="/" class="text-xl">{SITE_TITLE}</a>
 		</h2>
 		<div class="hidden lg:block">
+			<ThemeToggle client:visible />
 			<HeaderLink href="/about">關於</HeaderLink>
 			<HeaderLink href="/post">歸檔</HeaderLink>
+			
 		</div>
 	</nav>
 </header>
+
 <style>
 	header {
 		margin: 0;
