@@ -5,9 +5,10 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Layout from './Layout.astro';
 import Aside from './Aside.astro';
 import MobileNav from '../components/MobileNav.astro';
+import BaseHead from '../components/BaseHead.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
-const { title, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
+const { title, pubDate, updatedDate, heroImage, description, category, tags } = Astro.props;
 
 const blog = await getCollection('blog');
 // Tags
@@ -20,7 +21,7 @@ blog.forEach(post => {
 
 ---
 
-<Layout>
+<Layout image={heroImage} description={description}>
 	<main class="max-w-6xl mx-auto p-3 md:p-6 lg:p-12 lg:flex lg:grid lg:grid-cols-4">
 		<article class="lg:col-span-3 bg-white drop-shadow rounded-lg p-3 md:p-6 dark:bg-zinc-800">
 			<h1 class="text-3xl font-semibold mb-4 dark:text-zinc-100">{title}</h1>

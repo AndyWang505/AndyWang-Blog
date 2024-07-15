@@ -1,12 +1,19 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const post = Astro.params;
+const dynamicTitle = post.slug === undefined ? SITE_TITLE : post.slug;
+const {image, description } = Astro.props;
+const dynamicDescription = description === undefined ? SITE_DESCRIPTION : description;
+
 ---
 <html lang="zh_Hant">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={dynamicTitle} description={dynamicDescription} image={image}/>
 	</head>
 
 	<body>

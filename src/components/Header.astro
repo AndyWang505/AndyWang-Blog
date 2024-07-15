@@ -5,15 +5,16 @@ import ThemeToggle from './ThemeToggle';
 ---
 
 <header class="dark:bg-zinc-800 dark:text-zinc-100">
-	<nav class="max-w-6xl py-3 lg:p-0 mx-auto">
-		<h2 class="font-bold">
-			<a href="/" class="text-xl">{SITE_TITLE}</a>
+	<nav class="max-w-6xl py-3 mx-auto">
+		<h2 class="flex items-center">
+			<a href="/" class="text-xl font-semibold py-1">{SITE_TITLE}</a>
+			<div class="hidden lg:flex">
+				<HeaderLink href="/about">關於</HeaderLink>
+				<HeaderLink href="/post">歸檔</HeaderLink>
+			</div>
 		</h2>
-		<div class="hidden lg:block">
+		<div>
 			<ThemeToggle client:visible />
-			<HeaderLink href="/about">關於</HeaderLink>
-			<HeaderLink href="/post">歸檔</HeaderLink>
-			
 		</div>
 	</nav>
 </header>
@@ -40,7 +41,7 @@ import ThemeToggle from './ThemeToggle';
 		justify-content: space-between;
 	}
 	nav a {
-		padding: 1em 0.5em;
+		margin-left: 1rem;
 		color: var(--black);
 		text-decoration: none;
 	}
