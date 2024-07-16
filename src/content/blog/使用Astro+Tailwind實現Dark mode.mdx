@@ -1,0 +1,143 @@
+---
+title: '使用 Astro+Tailwind 實現 Dark mode'
+description: '紀錄如何使用 Astro+Tailwind 來實現 Dark mode 功能，並將狀態儲存在 localStorage，每次進入時檢查 localStorage 的 theme 來切換 mode'
+pubDate: 'July 15 2024'
+heroImage: '/Astro-Image1.png'
+tags: ['Notes','Blog']
+category: 'Astro'
+---
+
+紀錄如何使用 Astro+Tailwind 來實現 Dark mode 功能，並將狀態儲存在 localStorage，每次進入時檢查 localStorage 的 theme 來切換 mode
+
+## 安裝 Tailwind
+
+在 Astro 中有 `astro add` 指令來自動整合套件，可以直接在終端機輸入
+
+```shell
+npx astro add tailwind
+```
+
+接著他會問你是否繼續，以及幫你建立 `tailwind.config.cjs` 檔案，這邊就都 Yes 就可以了
+
+結束後，你應該會看到根目錄幫你建立好 `tailwind.config.cjs` 檔案，以及在 `astro.config.mjs` 設定中的 integrations 裡看到多了一個 `tailwind()`
+
+如果有問題也能參考一下[官方文件](https://docs.astro.build/en/guides/integrations-guide/tailwind/)
+
+## 啟用 Dark mode
+
+在剛剛安裝完後，你的 `tailwind.config.cjs` 大致上會長這樣
+
+```js=
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+	theme: {
+		extend: {},
+	},
+	plugins: [],
+}
+```
+
+這時我們可以來啟用 Tailwind 的 Dark mode
+
+只需要在 module 中多加一個 `darkMode` 就可以了
+
+```js=
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  darkMode: 'class', // or 'media' for system preference
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+darkMode 有兩種選項
+
+* class：透過 class 手動切換模式
+* media：當裝置設定是在深色模式時會自動切換模式
+
+## 功能實作
+
+這邊使用 React 元件實作，模式有 `light` 和 `dark`
+
+一開始會先檢查用戶的主題偏好，如果是深色模式就直接回傳 `dark`
+
+再來製作按鈕的 click function，如果當前 theme 是 `light` 則切換成 `dark`，反之，同時儲存到 localStorage 中
+
+接著製作切換頁面模式的 function，如果在 light 模式就移除 root 的 dark class，否則新增 dark class
+
+
+```jsx
+const themes = ['light', 'dark']
+
+export default function ThemeToggle() {
+  const getInitialTheme = () => {
+    // 檢查用戶主題偏好
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  };
+  const [theme, setTheme] = useState(getInitialTheme());
+  // Click Function
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    setTheme(newTheme);
+  };
+
+  useEffect(() => {
+    applyTheme();
+  }, [theme]);
+
+  const applyTheme = () => {
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.remove('dark');
+    } else {
+      root.classList.add('dark');
+    }
+  };
+
+  return (
+    <div>
+      {themes.map((t) => (
+        <button
+          key={t}
+          type="button"
+          onClick={toggleTheme}
+          className={`p-2 rounded ${
+            theme === t ? 'bg-gray-200 dark:bg-gray-800 text-black dark:text-white' : ''
+          }`}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+最後再把他匯入到畫面上就可以運作了
+
+不過，有個小問題，可能會發現換頁時會有短暫閃爍，這跟元件渲染機制有關，因為當換頁時元件會觸發重新渲染，因此 dark mode 也就會重新新增一次
+
+可以嘗試在畫面中加入這段 `<script>` 直接在客戶端去檢查 localStorage 加入 theme，避免元件重新渲染時造成的畫面閃爍問題
+
+```html
+<script is:inline>
+  if (typeof window !== "undefined") {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      document.documentElement.classList.add(theme);
+    }
+  }
+</script>
+```
+
