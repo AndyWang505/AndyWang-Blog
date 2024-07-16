@@ -141,3 +141,20 @@ export default function ThemeToggle() {
 </script>
 ```
 
+## 撰寫 style
+
+上述功能如果都順利的話，應該可以發現 `<html>` 標籤上會多一個 class，能夠去切換 `class="light"` 或 `class="dark"`
+
+接著就可以來撰寫樣式了
+
+寫法 `dark: style`
+
+```css
+<div class="bg-white dark:bg-black">
+  <p class="dark:text-white">這是一段文字</p>
+</div>
+```
+### 參考來源
+* [Tailwind Dark Mode](https://tailwindcss.com/docs/dark-mode)
+* [How to create a 'What I Use' blog with Astro and Tailwind CSS](https://www.youtube.com/watch?v=3_JE76PKBWE&list=LL&index=4)
+* [astrojs/tailwind - Astro Docs](https://docs.astro.build/zh-tw/guides/integrations-guide/tailwind/)
