@@ -39,15 +39,17 @@ Astro 強調他的設計理念是打造 **以內容為中心的網站**，像是
 
 > Astro 設計成比其他 UI 框架及語言還簡單，其中一個重要原因是：Astro 是用來在伺服器而非瀏覽器上算繪。這就代表你毋需擔心像：hook（React）、stale closure（還是 React）、ref（Vue）、observable（Svelte）、atom、selector、reaction 或 derivation。由於使用者無法在伺服器端算繪時與頁面互動，所以這些複雜度都消失了。
 
-這也是為什麼我在 Astro 寫不了 React hook 的原因，所以就不能用 SPA 那套思路來撰寫，應該去想這些東西是運行在 Server Side 的而不是 Client Side
+這也是為什麼我在 `.astro` 寫不了 React hook 的原因，除非是寫在 `.jsx` 或 `.tsx`
+
+所以在寫 `.astro` 應該去想這些東西是運行在 Server Side 的而不是 Client Side
 
 關於 Astro 的設計理念可以參考 [Astro 官方網站](https://docs.astro.build/zh-tw/concepts/why-astro/#_top)，有詳細的說明，還滿有趣的～
 
 ## 最後新手開發上要注意的事
 
-開發上前面有講到，就是思路需要調整，那基本上就沒有太大的問題了
+開發上前面有講到，就是要注意 `.astro` 是運行在 Server Side，那些 Client Side 的語法自然就不能用，如果需要可以建議一個 `.jsx` 或 `.tsx` 來撰寫元件
 
-同時你也能夠去插入 `<script>`，幫助你在客戶端運行某些功能～
+或是你也能在 `.astro` 去插入 `<script>`，幫助你在客戶端運行某些功能～
 
 另外，最後在部屬階段時有發現 Github Actions 會一直報錯，因為 Github Pages 會默認使用 Jekyll 來建構
 
