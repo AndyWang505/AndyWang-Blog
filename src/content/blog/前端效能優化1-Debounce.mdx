@@ -37,7 +37,7 @@ Debounce 是一種常見的效能優化方式，主要用於限制高頻事件�
 ```js=
 function debounce(func, delay = 1000) {
   let timer;
-  // ...args 用於接收所有參數，最後整包 return
+  // ...args 用於接收所有參數
   return function(...args) {
     // 清除舊的 timer 後重新計時
     clearTimeout(timer);
