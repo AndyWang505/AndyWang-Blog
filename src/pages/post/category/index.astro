@@ -43,7 +43,7 @@ const categoriesArray = Object.values(categoriesCount);
       <ul class="pl-10 md:pl-16">
         {categoriesArray.map(category => (
           <li class="mb-2 list-disc">
-            <a class="inline-block" href={`/post/category/${category.category}`}>
+            <a class="inline-block hover:underline hover:underline-offset-2" href={`/post/category/${category.category}`}>
               {category.category}&nbsp
               <span class="text-neutral-400">({category.count})</span>
             </a>

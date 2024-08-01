@@ -177,3 +177,24 @@ blockquote {
   transform: scale(1);
   transition: all 0.5s ease-out;
 }
+
+.title-hover-link:hover .title-hover::after {
+	width: 100%;
+}
+
+.title-hover {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+}
+
+.title-hover::after{
+	content: '';
+	width: 0%;
+	height: 1px;
+	background-color: rgb(64 64 64);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	transition: width .5s cubic-bezier(0.55, 0, 0.45, 1);
+}
