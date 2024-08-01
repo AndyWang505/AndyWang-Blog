@@ -41,13 +41,13 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
         <ul>
 					{
 						paginatedPosts.map(post => (
-							<li class="w-full drop-shadow rounded-lg overflow-hidden mb-6 transition-hover-link">
+							<li class="w-full drop-shadow rounded-lg overflow-hidden mb-6 transition-hover-link title-hover-link">
 								<a class="sm:flex min-h-44" href={`/post/${post.slug}/`}>
 									<div class="sm:w-64 overflow-hidden">
 										<img class="w-full h-52 sm:h-full object-cover transition-hover-img" src={post.data.heroImage} alt="" />
 									</div>
 									<div class="flex-1 md:pl-5 p-3 bg-white dark:bg-zinc-800">
-										<h4 class="text-xl font-semibold mb-2 dark:text-neutral-200">{post.data.title}</h4>
+										<h4 class="text-xl font-semibold mb-2 dark:text-neutral-200 title-hover">{post.data.title}</h4>
 										<div class="block md:flex mb-4">
 											<div class="flex gap-1 items-center text-sm text-neutral-500 dark:text-neutral-300 mr-1">
 												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

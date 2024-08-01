@@ -1,0 +1,248 @@
+---
+title: '貫穿所有軟體開發的 SOLID 原則'
+description: 'SOLID 是軟體開發中必須知道的設計原則，而 SOLID 提出的五大原則能夠提升軟體的可維護性和可擴展性，即使在沒有任何架構的環境下也能夠寫出井然有序的程式碼。'
+pubDate: 'August 1 2024'
+heroImage: '/SOLID.png'
+tags: ['心得', 'OOP', 'SOLID']
+category: 'Clean Code'
+---
+
+SOLID 是一組通用的原則，當系統規模不斷擴大時，維護和擴充的工作會越來越困難
+
+而 SOLID 能引導開發者設計更靈活、維護性、擴充性更高的軟體架構。
+
+## S.O.L.I.D
+
+雖然大多 SOLID 和 OOP 比較有關，但背後的概念其實可以套用到各種軟體設計模式下。
+
+SOLID 主要由 5 個設計原則組成：
+
+* 單一職責原則 ( Single-Responsibility Principle，SRP )
+
+* 開放封閉原則 ( Open–Closed Principle，OCP )
+
+* 里氏替換原則 ( Liskov Substitution Principle，LSP )
+
+* 介面切離原則 ( Interface Segregation Principle，ISP )
+
+* 依賴反轉原則 ( Dependency Inversion Principle，DIP )
+
+取開頭字母組合起來就是 S.O.L.I.D
+
+## 單一職責原則 ( Single-Responsibility Principle，SRP )
+
+> 原文定義：A class should have only one reason to change.
+
+翻譯成中文就是說，一個模組應有且只有一個理由會使其改變。
+
+不過這跟我們後來得出的定義有些不同，其中原文是將 職責（responsibility）定義成 one reason to change.
+
+後來再經過一些推導之後才得出我們現在所知道的 單一職責原則。
+
+雖然大家對 SRP 都有不同的理解，但大多都遵循一個核心概念，就是
+
+**＂一個類別或函式應該只負責一個單一職責。＂**
+
+更簡單的說就是，**一個類別或函式只做一件事。**
+
+以 Clean Code 書上範例來說：
+
+假如我們的任務是撰寫一個小型日曆，可能會實作兩個不同的抽象
+
+```js=
+class Calender {}
+class Event {}
+```
+
+Event 類別主要包含事件的時間和後設資訊，而 Calendar 類別包含了事件，你可以在 Calendar 新增一個或多個 Event，也可以刪除他們
+
+```js=
+class Calender {
+  addEvent(event) { ... }
+  removeEvent(event) { ... }
+}
+```
+
+隨著時間的推移，Calendar 為因應需求新增了其他功能，如：搜尋特定日期的事件，以及輸出成其他格式的功能
+
+```js=
+class Calendar {
+  addEvent(event) { ... }
+  removeEvent(event) { ... }
+  getEventBetween(stateDate, endDate) { ... }
+
+  setTimeOfEvent(event, startTime, endTime) { ... }
+  setTitleOfEvent(event, title) { ... }
+
+  exportFilteredEventsToXML(filter) { ... }
+  exportFilteredEventsToJSON(filter) { ... }
+}
+```
+
+可以發現，這個 Calendar 的複雜度越來越高，同時也衍生了，高耦合度、測試困難、擴充性差等問題。
+
+如果今天需要更改其中的功能，像是需要修改事件的儲存方式，可能會引發連鎖反應，
+影響到 `addEvent`、`removeEvent`、`getEventBetween`方法，再更糟可能影響到輸出格式的功能。
+
+而這些就是潛在風險，只要有變更就會有新的 Bug，而 SRP 有做好的話就能避免不必要的變更，減少 Bug 出現的風險。
+
+如果將不同職責的功能拆開並封裝，可以寫成：
+
+```js=
+class EventManager {
+  addEvent(event) { ... }
+  removeEvent(event) { ... }
+  getEventBetween(startDate, endDate) { ... }
+}
+
+class EventModifier {
+  setTimeOfEvent(event, startTime, endTime) { ... }
+  setTitleOfEvent(event, title) { ... }
+}
+
+class EventExporter {
+  exportToXML(events, filter) { ... }
+  exportToJSON(events, filter) { ... }
+}
+
+class Calendar {
+  constructor() {
+    this.eventManager = new EventManager();
+    this.eventModifier = new EventModifier();
+    this.eventExporter = new EventExporter();
+  }
+  ...
+}
+```
+
+這樣的結構使得每個類別都有明確的單一職責，降低了變更帶來的風險，提高了代碼的可維護性和可擴充性。
+
+不過 SRP 比較難實現的地方在於，什麼時候該劃分職責，這個劃分時機的定義通常會因為需求或環境而改變，如果硬是要實現 SRP 也可能會讓程式碼更複雜，所以 SRP 其實很難完美的在專案中實現
+
+
+## 開放封閉原則 ( Open–Closed Principle，OCP )
+
+> 原文定義：Software entities (class, modules, functions, etc.) should be open for extension, but closed for modification.
+
+翻成中文就是說，軟體實體 ( 類別、模組、函數等 ) 應該對擴展開放，對修改封閉。
+
+這段話有兩個重點：
+* 開放擴展 ( Open for extension )：這代表系統應該要是靈活的，能夠輕易地擴充新功能或新行為到現有的程式碼中。
+
+* 封閉修改 ( Closed for modification )：表示擴充新功能時，不應該修改到現有的程式碼，原本經過測試和部屬的程式碼應保持穩定。
+
+這個原則的核心概念是
+
+**＂當需求變化時，應該通過加入新的程式碼來擴充該系統的功能，而不是去修改現有的程式碼。＂**
+
+這裡用一個例子解釋：
+
+```js=
+class PaymentProcessor {
+  processPayment(paymentType, amount) {
+    if (paymentType === 'credit_card') {
+      // 處理信用卡支付
+      console.log(`Processing credit card payment of $${amount}`);
+    } else if (paymentType === 'paypal') {
+      // 處理PayPal支付
+      console.log(`Processing PayPal payment of $${amount}`);
+    }
+    // 如果需要添加新的支付方式，我們需要修改這個類
+  }
+}
+
+// 使用
+const processor = new PaymentProcessor();
+processor.processPayment('credit_card', 100);
+processor.processPayment('paypal', 50);
+```
+
+在這個例子中，如果要新增新的支付方式，就必須更改 `PaymentProcessor`，這可能造成現有的邏輯被破壞，也可能衍生像是版控合併、測試困難等問題
+
+如果使用 OCP 改寫的話：
+
+```js=
+class PaymentProcessor {
+  constructor() {
+    this.paymentMethods = {};
+  }
+
+  // 用來提供外部註冊新的支付方式
+  registerPaymentMethod(type, processor) {
+    this.paymentMethods[type] = processor;
+  }
+
+  processPayment(paymentType, amount) {
+    if (this.paymentMethods[paymentType]) {
+      return this.paymentMethods[paymentType].process(amount);
+    }
+    throw new Error('Unsupported payment type');
+  }
+}
+
+// 支付方式
+class CreditCardPayment {
+  process(amount) {
+    console.log(`Processing credit card payment of $${amount}`);
+  }
+}
+
+class PayPalPayment {
+  process(amount) {
+    console.log(`Processing PayPal payment of $${amount}`);
+  }
+}
+
+// 使用
+const processor = new PaymentProcessor();
+processor.registerPaymentMethod('credit_card', new CreditCardPayment());
+processor.registerPaymentMethod('paypal', new PayPalPayment());
+
+processor.processPayment('credit_card', 100);
+processor.processPayment('paypal', 50);
+
+// 添加新的支付方式
+class ApplePayPayment {
+  process(amount) {
+    console.log(`Processing Apple Pay payment of $${amount}`);
+  }
+}
+
+processor.registerPaymentMethod('apple_pay', new ApplePayPayment());
+processor.processPayment('apple_pay', 75);
+```
+
+在這例子中，如果需要擴充新的支付方式，只需要創建一個新的類別，並註冊到 `PaymentProcessor` 中，不需要修改現有的程式碼。
+
+## 里氏替換原則 ( Liskov Substitution Principle，LSP )
+
+> 原文定義：Subtypes must be substitutable for their base types.
+
+## 介面切離原則 ( Interface Segregation Principle，ISP )
+
+> 原文定義：Clients should not be forced to depend on methods that they do not use.
+
+## 依賴反轉原則 ( Dependency Inversion Principle，DIP )
+
+> 原文定義：
+> * High-level modules should not depend on low-level modules. Both should depend on abstractions.
+> * Abstractions should not depend on details. Details should depend on abstractions.
+
+## 結語
+
+SOLID 五大原則：
+
+* SRP：降低改變影響到類別或模組或函式的程度，減少出 Bug 的風險。
+* DIP：當依賴的技術細節變更時，可以保護你的關鍵業務流程不被影響。
+* OCP：加入新功能時，依賴這個介面的 Client Code 可以不用改動。
+* LSP：新增或修改子類別時，不會弄壞依賴父類別的 Client Code。
+* ISP：只依賴必要的部分，降低可能被改變或誤用的可能。
+
+不過也不需要將 SOLID 當作一定要遵循的設計原則，這樣可能反而造成過度設計
+
+而是盡可能的遵循這些原則
+
+通常使用 SOLID 最好的時機是在 TDD 的時候
+
+好的架構也是透過不斷的迭代慢慢實現的
+
