@@ -117,7 +117,7 @@ class Calendar {
 
 這樣的結構使得每個類別都有明確的單一職責，降低了變更帶來的風險，提高了代碼的可維護性和可擴充性。
 
-不過 SRP 比較難實現的地方在於，什麼時候該劃分職責，這個劃分時機的定義通常會因為需求或環境而改變，如果硬是要實現 SRP 也可能會讓程式碼更複雜，所以 SRP 其實很難完美的在專案中實現
+不過 SRP 比較難實現的地方在於，什麼時候該劃分職責，這個劃分時機的定義通常會因為需求或環境而改變，如果硬是要實現 SRP 也可能會讓程式碼更複雜，所以 SRP 其實很難完美的在專案中實現。
 
 
 ## 開放封閉原則 ( Open–Closed Principle，OCP )
@@ -133,7 +133,7 @@ class Calendar {
 
 這個原則的核心概念是
 
-**＂當需求變化時，應該通過加入新的程式碼來擴充該系統的功能，而不是去修改現有的程式碼。＂**
+**＂當需求變化時，應該透過加入新的程式碼來擴充該系統的功能，而不是去修改現有的程式碼。＂**
 
 這裡用一個例子解釋：
 
@@ -218,9 +218,208 @@ processor.processPayment('apple_pay', 75);
 
 > 原文定義：Subtypes must be substitutable for their base types.
 
+翻成中文就是，子類別要能替換掉父類別。
+
+該定義指出，**所有類別都應該能夠被子類別替換，且不影響原有的功能**
+
+從定義來看有點含糊，這裡直接用例子搭配程式碼來解釋：
+
+假設我們有一個類別 `Rectangle`，提供一些基本的方法，像是：`setWidth()` 和 `setHeight()`，然後我們設計了 `Square` 類別繼承了 `Rectangle`，
+但是 `Square` 因為自己的需求需要修改兩邊的長度，所以需要 override，但這就違反了 `Rectangle` 的定義，因為在 `Rectangle` 裡兩邊可以有不同的長度
+
+而這會造成其他繼承 `Rectangle` 的子類別無法正確地使用 `Rectangle` 成員函式
+
+這就是違反了 LSP
+
+```js=
+class Rectangle {
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    setWidth(width) {
+        this.width = width;
+    }
+
+    setHeight(height) {
+        this.height = height;
+    }
+
+    area() {
+        return this.width * this.height;
+    }
+}
+
+class Square extends Rectangle {
+    constructor(size) {
+        super(size, size);
+    }
+
+    setWidth(width) {
+        this.width = width;
+        this.height = width;
+    }
+
+    setHeight(height) {
+        this.width = height;
+        this.height = height;
+    }
+}
+
+const square = new Square(2);
+square.setWidth(5);
+square.setHeight(6);
+console.log(square.area());
+```
+
+由於 `Square` 的需求，導致它不能完全替代 `Rectangle`，而 LSP 是要求子類別可以替代父類別的情況下，不破壞原本的抽象
+
+如果用 LSP 修改後：
+
+```js=
+class Shape {
+    area() {
+        throw new Error("Method 'area()' must be implemented.");
+    }
+}
+
+class Rectangle extends Shape {
+    constructor(width, height) {
+        super();
+        this.width = width;
+        this.height = height;
+    }
+
+    setWidth(width) {
+        this.width = width;
+    }
+
+    setHeight(height) {
+        this.height = height;
+    }
+
+    area() {
+        return this.width * this.height;
+    }
+}
+
+class Square extends Shape {
+    constructor(size) {
+        super();
+        this.size = size;
+    }
+
+    setSize(size) {
+        this.size = size;
+    }
+
+    area() {
+        return this.size ** 2;
+    }
+}
+
+function printArea(shape) {
+    console.log(`Area: ${shape.area()}`);
+}
+
+const shapes = [new Rectangle(5, 10), new Square(5)];
+shapes.forEach(shape => printArea(shape));
+```
+
+這段程式碼中，`Rectangle` 和 `Square` 都繼承了 `Shape`，並且實現了抽象方法 `area()`
+
+* `Rectangle` 類別實現了 `area()` 方法來計算矩形面積。
+* `Square` 類別實現了 `area()` 方法來計算正方形面積。
+
+透過 `printArea()` 函式接收一個 `Shape` 物件，然後呼叫 `area()` 取得面積
+
+從 `area()` 方法實現來看，因為 `Square` 和 `Square` 物件在計算面積上是相同的行為，且能替代 `Shape` 物件，因此符合 LSP
+
 ## 介面切離原則 ( Interface Segregation Principle，ISP )
 
 > 原文定義：Clients should not be forced to depend on methods that they do not use.
+
+翻成中文是，客戶端不應該被強迫依賴他們不使用的方法。
+
+該原則和「單一職責原則 SRP」有點類似，目標都是確保建立具高凝聚力的抽象
+
+不過在 ISP 有幾個關注點：
+* 一個類別或介面不應該強迫其客戶端（使用該類別或介面的其他類別）依賴於它們不需要的方法。
+* 介面應該是小而專注的，而不是大而全面的。
+* 客戶端應該只需要知道它們實際使用的方法，而不是被迫了解整個大型介面。
+
+在實際應用上應該將大型介面分解成更小更單一，減少系統耦合、提高程式碼維護與擴充性
+
+以印表機舉例，如果有一個多功能的印表機介面，它可能包含列印、掃描、傳真等方法。但是，如果某個客戶端只需要列印功能，
+它就不應該被強制實作或依賴於掃描和傳真的方法。
+
+在這種情況下，將大的印表機介面分解成多個小介面 ( 如 Printer、Scanner、Fax ) 會更好。
+
+這邊看程式，雖然 JS 沒有 Interface 的概念，但可以先用註解模擬介面行為：
+
+```js=
+// 多功能印表機介面
+class AllInOnePrinterInterface {
+  print(document) {...}
+  scan() {...}
+  fax(document) {...}
+  copyDocument() {...}
+}
+
+// 簡單印表機類別 ( 只需要列印 )
+class SimplePrinter extends PrinterInterface {
+  print(document) {...}
+  // 被迫實作不需要的方法
+  scan() {...}
+  fax(document) {...}
+  copyDocument() {...}
+}
+```
+
+這個問題在於，`PrinterInterface` 介面過於龐大，包含太多功能
+
+`SimplePrinter` 只需要列印功能，但被迫實作了所有的方法，即使它不支援，未來在使用上也可能誤用了這些功能，增加了程式的不穩定性
+
+比較好的做法應該是：
+
+```js=
+// 印表機介面
+class PrinterInterface {
+  print(document) {...}
+}
+// 掃描器介面
+class ScannerInterface {
+  scan() {...}
+}
+// 傳真機介面
+class FaxInterface {
+  fax(document) {...}
+}
+
+// 簡單印表機類別（只實作列印功能）
+class SimplePrinter extends PrinterInterface {
+  print(document) {...}
+}
+
+// 多功能印表機類別
+class AllInOnePrinter extends PrinterInterface, ScannerInterface, FaxInterface {
+  print(document) {...}
+  scan() {...}
+  fax(document) {...}
+}
+```
+
+這邊定義了三個獨立的介面，`PrinterInterface`、`ScannerInterface`、`FaxInterface`
+
+* `SimplePrinter` 因為只需要列印功能，所以實作了 `PrinterInterface`
+* `AllInOnePrinter` 因為需要包含多種功能，所以實作了 `PrinterInterface`、`ScannerInterface`、`FaxInterface` 這三種介面
+
+這樣的設計遵循了 ISP 原則，客戶端可以只依賴它們需要的介面。例如，只需要列印功能的客戶端可以使用 `SimplePrinter`，而不需要知道掃描或傳真的存在或它們怎麼實作的。
+
+此概念也能夠套用到畫面 ( UI ) 的關注點分離上，建立具模組化、可維護和可重複利用的 component。
+
+在 OOP 上比較有感的地方在，設計多型 ( Polymorphism ) 時，比較好為類別實作不同的應對方式。
 
 ## 依賴反轉原則 ( Dependency Inversion Principle，DIP )
 
@@ -228,21 +427,118 @@ processor.processPayment('apple_pay', 75);
 > * High-level modules should not depend on low-level modules. Both should depend on abstractions.
 > * Abstractions should not depend on details. Details should depend on abstractions.
 
+翻成中文是：
+* 「高層模組」不應該依賴於「低階模組」，兩者都應該依賴於「抽象」（介面）。
+* 「抽象」不應該依賴於「細節」。「細節」應取決於「抽象」。
+
+為何稱為「依賴反轉」？
+
+* 傳統的依賴關係：在傳統的程式設計中，高層模組（如業務邏輯）通常直接依賴於低層模組（如數據訪問、IO操作等）。這種關係是從上到下的。
+
+* 依賴反轉：依賴反轉原則是建議我們「反轉」這種依賴關係。
+
+具體來說：
+高階模組和低階模組都應該依賴於抽象（接口或抽象類）。
+抽象不應該依賴於具體實現，而具體實現應該依賴於抽象。
+
+用簡單的咖啡機系統來舉例：
+
+```js=
+// 具體的咖啡豆類型
+class ArabicaCoffeeBean {
+  grind() {
+    return "磨碎阿拉比卡咖啡豆";
+  }
+}
+
+// 咖啡機直接依賴於具體的咖啡豆類型
+class CoffeeMachine {
+  constructor() {
+    this.coffeeBean = new ArabicaCoffeeBean();
+  }
+
+  brewCoffee() {
+    const groundCoffee = this.coffeeBean.grind();
+    console.log(`用${groundCoffee}沖泡咖啡`);
+  }
+}
+```
+
+這個例子的問題在於，咖啡機直接依賴於特定類型的咖啡豆（阿拉比卡）。
+
+如果我們想使用不同種類的咖啡豆，就需要修改咖啡機的程式碼。
+
+依賴反轉後：
+
+```js=
+// 定義咖啡豆的抽象介面
+class CoffeeBean {
+  grind() {
+    throw new Error("必須實現研磨方法");
+  }
+}
+
+// 具體的咖啡豆類型
+class ArabicaCoffeeBean extends CoffeeBean {
+  grind() {
+    return "磨碎阿拉比卡咖啡豆";
+  }
+}
+
+class RobustaCoffeeBean extends CoffeeBean {
+  grind() {
+    return "磨碎羅布斯塔咖啡豆";
+  }
+}
+
+// 咖啡機依賴於抽象的咖啡豆介面
+class CoffeeMachine {
+  constructor(coffeeBean) {
+    this.coffeeBean = coffeeBean;
+  }
+
+  brewCoffee() {
+    const groundCoffee = this.coffeeBean.grind();
+    console.log(`用${groundCoffee}沖泡咖啡`);
+  }
+}
+```
+
+這段程式碼改進了幾個地方
+* 我們定義了一個抽象的 CoffeeBean 類，它定義了咖啡豆應該有的行為（研磨）。
+* 具體的咖啡豆類型（如 ArabicaCoffeeBean 和 RobustaCoffeeBean）實現了這個抽象類別。
+* CoffeeMachine 不再直接依賴於具體的咖啡豆類型，而是依賴於抽象的 CoffeeBean，可以算是解耦合了。
+* 我們可以在創建咖啡機時注入任何實現了 CoffeeBean 介面的咖啡豆。
+
+這個例子展示了依賴反轉原則的核心思想：高層模組（咖啡機）不應該依賴於低層模組（具體的咖啡豆類型），
+兩者都應該依賴於抽象（咖啡豆介面）。
+
+這樣我們就＂反轉＂了依賴關係，使系統更加靈活和可維護。
+
 ## 結語
 
-SOLID 五大原則：
+這些原則裡面有幾個都有類似的概念，但事實上有很細微的差異，實作上大多是要到專案需要擴大或重構的階段時才比較能體會
+
+這邊再整理一下 SOLID 5 大原則關注的重點：
 
 * SRP：降低改變影響到類別或模組或函式的程度，減少出 Bug 的風險。
-* DIP：當依賴的技術細節變更時，可以保護你的關鍵業務流程不被影響。
 * OCP：加入新功能時，依賴這個介面的 Client Code 可以不用改動。
 * LSP：新增或修改子類別時，不會弄壞依賴父類別的 Client Code。
 * ISP：只依賴必要的部分，降低可能被改變或誤用的可能。
+* DIP：當依賴的技術細節變更時，可以保護你的關鍵業務流程不被影響。
 
-不過也不需要將 SOLID 當作一定要遵循的設計原則，這樣可能反而造成過度設計
+仔細了解後，可以發現這幾個原則都在談 **＂改變＂** 這件事，所以 SOLID 它是在講述面對改變下不同的應對方式
 
-而是盡可能的遵循這些原則
+不過也不是說要將 SOLID 當作一定要遵循的設計原則或聖旨什麼的
 
-通常使用 SOLID 最好的時機是在 TDD 的時候
+這樣反而會造成 **＂過度設計＂**，使系統變得過於複雜
 
-好的架構也是透過不斷的迭代慢慢實現的
+在開發上也不用糾結一開始就要去實踐去寫得多完美拆得多乾淨（當然盡可能啦）
 
+畢竟好的架構其實也是透過不斷的迭代慢慢實現的，最終找到最適合這個系統的架構。
+
+### 參考來源：
+* [SOLID：五則皆變](https://teddy-chen-tw.blogspot.com/2014/04/solid.html)
+* [使人瘋狂的 SOLID 原則](https://medium.com/%E7%A8%8B%E5%BC%8F%E6%84%9B%E5%A5%BD%E8%80%85/%E4%BD%BF%E4%BA%BA%E7%98%8B%E7%8B%82%E7%9A%84-solid-%E5%8E%9F%E5%89%87-%E7%9B%AE%E9%8C%84-b33fdfc983ca)
+* [看到 code 寫成這樣我也是醉了，不如試試重構？](https://ithelp.ithome.com.tw/users/20102562/ironman/1338)
+* Clean Code 學派的風格實踐
