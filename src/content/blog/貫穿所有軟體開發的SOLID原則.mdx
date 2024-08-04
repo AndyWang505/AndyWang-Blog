@@ -52,7 +52,7 @@ class Calender {}
 class Event {}
 ```
 
-Event 類別主要包含事件的時間和後設資訊，而 Calendar 類別包含了事件，你可以在 Calendar 新增一個或多個 Event，也可以刪除他們
+`Event` 類別主要包含事件的時間和後設資訊，而 `Calendar` 類別包含了事件，你可以在 `Calendar` 新增一個或多個 `Event`，也可以刪除他們
 
 ```js=
 class Calender {
@@ -61,7 +61,7 @@ class Calender {
 }
 ```
 
-隨著時間的推移，Calendar 為因應需求新增了其他功能，如：搜尋特定日期的事件，以及輸出成其他格式的功能
+隨著時間的推移，`Calendar` 為因應需求新增了其他功能，如：搜尋特定日期的事件，以及輸出成其他格式的功能
 
 ```js=
 class Calendar {
@@ -77,7 +77,7 @@ class Calendar {
 }
 ```
 
-可以發現，這個 Calendar 的複雜度越來越高，同時也衍生了，高耦合度、測試困難、擴充性差等問題。
+可以發現，這個 `Calendar` 的複雜度越來越高，同時也衍生了，高耦合度、測試困難、擴充性差等問題。
 
 如果今天需要更改其中的功能，像是需要修改事件的儲存方式，可能會引發連鎖反應，
 影響到 `addEvent`、`removeEvent`、`getEventBetween`方法，再更糟可能影響到輸出格式的功能。
@@ -145,11 +145,10 @@ class PaymentProcessor {
       // 處理PayPal支付
       console.log(`Processing PayPal payment of $${amount}`);
     }
-    // 如果需要添加新的支付方式，我們需要修改這個類
+    //...
   }
 }
 
-// 使用
 const processor = new PaymentProcessor();
 processor.processPayment('credit_card', 100);
 processor.processPayment('paypal', 50);
@@ -164,12 +163,10 @@ class PaymentProcessor {
   constructor() {
     this.paymentMethods = {};
   }
-
   // 用來提供外部註冊新的支付方式
   registerPaymentMethod(type, processor) {
     this.paymentMethods[type] = processor;
   }
-
   processPayment(paymentType, amount) {
     if (this.paymentMethods[paymentType]) {
       return this.paymentMethods[paymentType].process(amount);
@@ -184,14 +181,12 @@ class CreditCardPayment {
     console.log(`Processing credit card payment of $${amount}`);
   }
 }
-
 class PayPalPayment {
   process(amount) {
     console.log(`Processing PayPal payment of $${amount}`);
   }
 }
 
-// 使用
 const processor = new PaymentProcessor();
 processor.registerPaymentMethod('credit_card', new CreditCardPayment());
 processor.registerPaymentMethod('paypal', new PayPalPayment());
@@ -199,7 +194,7 @@ processor.registerPaymentMethod('paypal', new PayPalPayment());
 processor.processPayment('credit_card', 100);
 processor.processPayment('paypal', 50);
 
-// 添加新的支付方式
+// 增加新的支付方式
 class ApplePayPayment {
   process(amount) {
     console.log(`Processing Apple Pay payment of $${amount}`);
@@ -235,15 +230,12 @@ class Rectangle {
         this.width = width;
         this.height = height;
     }
-
     setWidth(width) {
         this.width = width;
     }
-
     setHeight(height) {
         this.height = height;
     }
-
     area() {
         return this.width * this.height;
     }
@@ -253,12 +245,10 @@ class Square extends Rectangle {
     constructor(size) {
         super(size, size);
     }
-
     setWidth(width) {
         this.width = width;
         this.height = width;
     }
-
     setHeight(height) {
         this.width = height;
         this.height = height;
@@ -277,6 +267,7 @@ console.log(square.area());
 
 ```js=
 class Shape {
+  // 定義方法
     area() {
         throw new Error("Method 'area()' must be implemented.");
     }
@@ -325,14 +316,14 @@ const shapes = [new Rectangle(5, 10), new Square(5)];
 shapes.forEach(shape => printArea(shape));
 ```
 
-這段程式碼中，`Rectangle` 和 `Square` 都繼承了 `Shape`，並且實現了抽象方法 `area()`
+這段程式碼中，`Rectangle` 和 `Square` 都繼承了 `Shape`，並且實作了抽象方法 `area()`
 
-* `Rectangle` 類別實現了 `area()` 方法來計算矩形面積。
-* `Square` 類別實現了 `area()` 方法來計算正方形面積。
+* `Rectangle` 類別實作了 `area()` 方法來計算矩形面積。
+* `Square` 類別實作了 `area()` 方法來計算正方形面積。
 
 透過 `printArea()` 函式接收一個 `Shape` 物件，然後呼叫 `area()` 取得面積
 
-從 `area()` 方法實現來看，因為 `Square` 和 `Square` 物件在計算面積上是相同的行為，且能替代 `Shape` 物件，因此符合 LSP
+從 `area()` 方法實作上來看，因為 `Square` 和 `Square` 物件在計算面積上是相同的行為，且能替代 `Shape` 物件，因此符合 LSP
 
 ## 介面切離原則 ( Interface Segregation Principle，ISP )
 
@@ -366,7 +357,7 @@ class AllInOnePrinterInterface {
 }
 
 // 簡單印表機類別 ( 只需要列印 )
-class SimplePrinter extends PrinterInterface {
+class SimplePrinter extends AllInOnePrinterInterface {
   print(document) {...}
   // 被迫實作不需要的方法
   scan() {...}
@@ -375,7 +366,7 @@ class SimplePrinter extends PrinterInterface {
 }
 ```
 
-這個問題在於，`PrinterInterface` 介面過於龐大，包含太多功能
+這個問題在於，`AllInOnePrinterInterface` 介面過於龐大，包含太多功能
 
 `SimplePrinter` 只需要列印功能，但被迫實作了所有的方法，即使它不支援，未來在使用上也可能誤用了這些功能，增加了程式的不穩定性
 
@@ -426,18 +417,18 @@ class AllInOnePrinter extends PrinterInterface, ScannerInterface, FaxInterface {
 > * Abstractions should not depend on details. Details should depend on abstractions.
 
 翻成中文是：
-* 「高層模組」不應該依賴於「低階模組」，兩者都應該依賴於「抽象」（介面）。
-* 「抽象」不應該依賴於「細節」。「細節」應取決於「抽象」。
+
+* 「高階模組」不應該依賴於「低階模組」，兩者都應該依賴於「抽象」（介面）。
+
+* 「抽象」不應該依賴於「具體實現」。「具體實現」應取決於「抽象」。
 
 為何稱為「依賴反轉」？
 
-* 傳統的依賴關係：在傳統的程式設計中，高層模組（如業務邏輯）通常直接依賴於低層模組（如數據訪問、IO操作等）。這種關係是從上到下的。
+* 在傳統的程式設計中，高階模組（如業務邏輯）通常直接依賴於低階模組（如資料接收、IO操作等），所以兩者具有依賴關係。
 
-* 依賴反轉：依賴反轉原則是建議我們「反轉」這種依賴關係。
+* 這種依賴關係通常需要承擔一定的風險，當低階模組變動時影響到高階模組，可能導致無法運作的狀況發生。
 
-具體來說：
-高階模組和低階模組都應該依賴於抽象（接口或抽象類）。
-抽象不應該依賴於具體實現，而具體實現應該依賴於抽象。
+* 因此我們將其「反轉」，原本依賴於實體變為依賴於抽象，解開依賴關係，就稱為「依賴反轉」。
 
 用簡單的咖啡機系統來舉例：
 
@@ -502,16 +493,18 @@ class CoffeeMachine {
 }
 ```
 
-在這段程式碼中
-* 我們定義了一個抽象的 CoffeeBean 類，它定義了咖啡豆應該有的行為（研磨）。
-* 具體的咖啡豆類型（如 ArabicaCoffeeBean 和 RobustaCoffeeBean）實現了這個抽象類別。
-* CoffeeMachine 不再直接依賴於具體的咖啡豆類型，而是依賴於抽象的 CoffeeBean，可以算是解耦合了。
-* 我們可以在創建咖啡機時注入任何實現了 CoffeeBean 介面的咖啡豆。
+整理一下上述程式碼做了什麼
+* 我們定義了一個抽象 `CoffeeBean` 類別，並定義了咖啡豆應該有的行為（研磨）。
+* 具體的咖啡豆類型（如 `ArabicaCoffeeBean` 和 `RobustaCoffeeBean`）實作了這個抽象類別。
+* `CoffeeMachine` 不再直接依賴於具體的咖啡豆類型，而是依賴於抽象的 `CoffeeBean`，也算是解耦合了。
+* 我們可以在創建咖啡機時，注入任何依賴 `CoffeeBean` 抽象的咖啡豆。
 
-這個例子展示了依賴反轉原則的核心思想：高層模組（咖啡機）不應該依賴於低層模組（具體的咖啡豆類型），
+這個例子實現了 DIP 原則的核心思想：高階模組（咖啡機）不應該依賴於低階模組（具體的咖啡豆類型），
 兩者都應該依賴於抽象（咖啡豆介面）。
 
-這樣我們就＂反轉＂了依賴關係，使系統更加靈活和可維護。
+這樣我們就「反轉」了依賴關係，使系統更加靈活。
+
+在 DIP 中還有其他觀念，像是：IoC（Inversion of Control，控制反轉）、DI（Dependency Injection，依賴注入）有興趣也可以了解一下
 
 ## 結語
 
@@ -519,11 +512,11 @@ class CoffeeMachine {
 
 這邊再整理一下 SOLID 5 大原則關注的重點：
 
-* SRP：降低改變影響到類別或模組或函式的程度，減少出 Bug 的風險。
-* OCP：加入新功能時，依賴這個介面的 Client Code 可以不用改動。
-* LSP：新增或修改子類別時，不會弄壞依賴父類別的 Client Code。
-* ISP：只依賴必要的部分，降低可能被改變或誤用的可能。
-* DIP：當依賴的技術細節變更時，可以保護你的關鍵業務流程不被影響。
+* SRP：一個類別或函式應該只負責一個單一職責，降低改變影響的程度，減少出 Bug 的風險。
+* OCP：當需求變化時，應該透過加入新的程式碼來擴充該系統的功能，而不是去修改現有的程式碼。
+* LSP：所有類別都應該能夠被子類別替換，且不影響原有的功能。
+* ISP：客戶端不應該被強迫依賴他們不使用的方法。
+* DIP：高階模組不應該依賴於低階模組，兩者都應該依賴於抽象（介面），抽象不應該依賴於具體實現。具體實現應取決於抽象。 
 
 仔細了解後，可以發現這幾個原則都在談 **＂改變＂** 這件事，所以 SOLID 它是在講述面對改變下不同的應對方式
 
