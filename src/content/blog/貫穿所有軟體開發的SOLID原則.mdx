@@ -33,7 +33,7 @@ SOLID 主要由 5 個設計原則組成：
 
 翻譯成中文就是說，一個模組應有且只有一個理由會使其改變。
 
-不過這跟我們後來得出的定義有些不同，其中原文是將 職責（responsibility）定義成 one reason to change.
+不過這跟後來得出的定義有些不同，其中原文是將 職責（responsibility）定義成 one reason to change.
 
 後來再經過一些推導之後才得出我們現在所知道的 單一職責原則。
 
@@ -52,7 +52,7 @@ class Calender {}
 class Event {}
 ```
 
-`Event` 類別主要包含事件的時間和後設資訊，而 `Calendar` 類別包含了事件，你可以在 `Calendar` 新增一個或多個 `Event`，也可以刪除他們
+`Event` 類別主要包含了關於事件的時間和 Metadata，而 `Calendar` 類別則包含這些事件，你可以在 `Calendar` 新增一個或多個 `Event` 類別的實例，也可以刪除它們
 
 ```js=
 class Calender {
@@ -77,14 +77,14 @@ class Calendar {
 }
 ```
 
-可以發現，這個 `Calendar` 的複雜度越來越高，同時也衍生了，高耦合度、測試困難、擴充性差等問題。
+接著會發現，這個 `Calendar` 的複雜度越來越高，同時也衍生了，高耦合度、測試困難、擴充性差等問題。
 
 如果今天需要更改其中的功能，像是需要修改事件的儲存方式，可能會引發連鎖反應，
-影響到 `addEvent`、`removeEvent`、`getEventBetween`方法，再更糟可能影響到輸出格式的功能。
+影響到 `addEvent`、`removeEvent`、`getEventBetween`方法，甚至可能影響到輸出格式的功能。
 
-而這些就是潛在風險，只要有變更就會有新的 Bug，而 SRP 有做好的話就能避免不必要的變更，減少 Bug 出現的風險。
+而這些就是潛在風險，只要有變更都有可能引入新的 Bug，而 SRP 有做好的話就能避免不必要的變更，減少 Bug 出現的風險。
 
-如果將不同職責的功能拆開並封裝，可以寫成：
+如果將不同職責的功能拆開並封裝，可以重構成以下的結構：
 
 ```js=
 class EventManager {
@@ -113,9 +113,11 @@ class Calendar {
 }
 ```
 
-這樣的結構使得每個類別都有明確的單一職責，降低了變更帶來的風險，提高了程式碼的可維護性和可擴充性。
+這樣的結構也更符合單一職責原則，使每個抽象更具凝聚力，也更易於維護與擴充。
 
-不過 SRP 比較難實現的地方在於，什麼時候該劃分職責，這個劃分時機的定義通常會因為需求或環境而改變，如果硬是要實現 SRP 也可能會讓程式碼更複雜，所以 SRP 其實很難完美的在專案中實現。
+不過上面看起來似乎不難（？
+
+其實 SRP 比較難實現的地方在於，什麼時候該劃分職責，這個劃分時機的定義通常會因為需求或環境而改變，如果硬是要實現 SRP 也可能會讓程式碼更複雜，所以其實很難完美的在專案中實現。
 
 
 ## 開放封閉原則 ( Open–Closed Principle，OCP )
@@ -133,7 +135,7 @@ class Calendar {
 
 **＂當需求變化時，應該透過加入新的程式碼來擴充該系統的功能，而不是去修改現有的程式碼。＂**
 
-這裡用一個例子解釋：
+這裡用一個處理支付方式的例子解釋：
 
 ```js=
 class PaymentProcessor {
@@ -154,9 +156,9 @@ processor.processPayment('credit_card', 100);
 processor.processPayment('paypal', 50);
 ```
 
-在這個例子中，如果要新增新的支付方式，就必須更改 `PaymentProcessor`，這可能造成現有的邏輯被破壞，也可能衍生像是版控合併、測試困難等問題
+在這個例子中，如果要新增新的支付方式，就必須更改 `PaymentProcessor`，這可能造成現有的邏輯被破壞，也可能會有後續像是版控合併、測試困難等問題
 
-如果使用 OCP 改寫的話：
+使用 OCP 重構的話：
 
 ```js=
 class PaymentProcessor {
@@ -205,7 +207,7 @@ processor.registerPaymentMethod('apple_pay', new ApplePayPayment());
 processor.processPayment('apple_pay', 75);
 ```
 
-在這例子中，如果需要擴充新的支付方式，只需要創建一個新的類別，並註冊到 `PaymentProcessor` 中，不需要修改現有的程式碼。
+在這例子中，實現了 OCP 的對外擴展開放，對內修改封閉的原則，如果需要擴充新的支付方式，只需要創建一個新的類別，並註冊到 `PaymentProcessor` 中，不需要修改現有的程式碼。
 
 ## 里氏替換原則 ( Liskov Substitution Principle，LSP )
 
@@ -215,16 +217,19 @@ processor.processPayment('apple_pay', 75);
 
 該定義指出，**所有類別都應該能夠被子類別替換，且不影響原有的功能**
 
-從定義來看有點含糊，這裡直接用例子搭配程式碼來解釋：
+從定義來看有點含糊，這裡直接用計算各種形狀面積的例子，並搭配程式碼來解釋
 
-假設我們有一個類別 `Rectangle`，提供一些基本的方法，像是：`setWidth()` 和 `setHeight()`，然後我們設計了 `Square` 類別繼承了 `Rectangle`，
-但是 `Square` 因為自己的需求需要修改兩邊的長度，所以需要 override，但這就違反了 `Rectangle` 的定義，因為在 `Rectangle` 裡兩邊可以有不同的長度
+假設我們有一個類別 `Rectangle`，提供一些基本的方法，像是：
+
+`setWidth()` 和 `setHeight()`，然後我們設計了 `Square` 類別繼承了 `Rectangle`，
+但是 `Square` 因為自己的需求需要修改兩邊的長度，所以需要 override，但這就違反了 `Rectangle` 的定義，因為在 `Rectangle` 裡兩邊可以有不同的長度。
 
 而這會造成其他繼承 `Rectangle` 的子類別無法正確地使用 `Rectangle` 成員函式
 
 這就是違反了 LSP
 
 ```js=
+// 長方形
 class Rectangle {
     constructor(width, height) {
         this.width = width;
@@ -240,7 +245,7 @@ class Rectangle {
         return this.width * this.height;
     }
 }
-
+// 方形
 class Square extends Rectangle {
     constructor(size) {
         super(size, size);
@@ -272,42 +277,37 @@ class Shape {
         throw new Error("Method 'area()' must be implemented.");
     }
 }
-
+// 長方形
 class Rectangle extends Shape {
     constructor(width, height) {
         super();
         this.width = width;
         this.height = height;
     }
-
     setWidth(width) {
         this.width = width;
     }
-
     setHeight(height) {
         this.height = height;
     }
-
     area() {
         return this.width * this.height;
     }
 }
-
+// 方形
 class Square extends Shape {
     constructor(size) {
         super();
         this.size = size;
     }
-
     setSize(size) {
         this.size = size;
     }
-
     area() {
         return this.size ** 2;
     }
 }
-
+// 印出面積
 function printArea(shape) {
     console.log(`Area: ${shape.area()}`);
 }
@@ -333,7 +333,7 @@ shapes.forEach(shape => printArea(shape));
 
 該原則和「單一職責原則 SRP」有點類似，目標都是確保建立具高凝聚力的抽象
 
-不過在 ISP 有幾個關注點：
+在 ISP 中有幾個關注點：
 * 一個類別或介面不應該強迫其客戶端（使用該類別或介面的其他類別）依賴於它們不需要的方法。
 * 介面應該是小而專注的，而不是大而全面的。
 * 客戶端應該只需要知道它們實際使用的方法，而不是被迫了解整個大型介面。
