@@ -1,0 +1,150 @@
+---
+title: 'React 加快開發的小技巧'
+description: '平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個 Emmet 加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。'
+pubDate: 'August 12 2024'
+heroImage: '/React-Image1.png'
+tags: ['Notes', 'React', 'Emmet']
+category: 'React'
+---
+
+平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個 Emmet 加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。
+
+## Component
+
+通常在建立一個元件時，需要寫一個元件名稱的函式，然後再把它匯出
+
+如果要將一個畫面拆成 5 個元件就要做 5 次重複的動作
+
+這裡提供三種實用的 Emmet 快捷，幫你快速生成元件結構
+
+* rfc
+* rfce
+* rafce
+
+### `rfc` (React Functional Component)
+
+生成一個簡單的無狀態功能型元件，不帶有 export。
+
+```jsx=
+import React from 'react'
+
+export default function Sidebar() {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+```
+
+### `rfce` (React Functional Component with Export)
+
+生成一個帶有 export 的 React 功能型元件。
+
+```jsx=
+import React from 'react'
+
+function Sidebar() {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
+export default Sidebar
+```
+
+### `rafce` (React Arrow Function Component with Export)
+
+生成一個使用箭頭函式定義的 React 功能型元件，並帶有 export 直接匯出。
+
+```jsx=
+import React from 'react'
+
+const Sidebar = () => {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
+export default Sidebar
+```
+
+## Reducer / Redux
+### Reducer
+`rxreducer`
+```jsx=
+const initialState = {
+
+}
+
+export default (state = initialState, { type, payload }) => {
+  switch (type) {
+
+  case typeName:
+    return { ...state, ...payload }
+
+  default:
+    return state
+  }
+}
+```
+### Redux
+因為 Emmet 內並沒有 Redux 快速建立的方法，雖然有 ReactClassComponentRedux 但使用情境也比較少，這邊會推薦使用 Redux Toolkit。
+
+Redux Toolkit 是官方推薦的方式，用來簡化 Redux 的開發流程。而 Redux Toolkit 也提供了許多快捷來快速生成 actions、reducers、store 等結構。
+
+使用前需要先安裝 Redux Toolkit
+```bash=
+npm install @reduxjs/toolkit react-redux
+```
+
+安裝完成後就可以使用 `createSlice` 來快速長出 Redux 結構
+
+```jsx=
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = { value: 0 }
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment(state) {
+      state.value++
+    },
+    decrement(state) {
+      state.value--
+    },
+    incrementByAmount(state, action) {
+      state.value += action.payload
+    },
+  },
+})
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export default counterSlice.reducer
+```
+
+## 其他快捷鍵
+
+### 重寫變數
+
+`Ctrl + D` 自動選取下一個相同名稱項目
+
+都全選到後就可以直接修改內容了。
+
+### 移動部分程式碼
+
+反白選取你想移動的程式區塊，長按 `Alt` 後使用上下移動鍵就可以移動程式碼區塊
+
+最常用的情境就是當你想將 A 區塊內的程式拆開時，你會在外面建立一個 B 函式，你就可以選取你想移動的程式碼後，按住 `Alt` 將程式從 A 移動到 B，就也不需要剪下再貼上了。
+
+### 快速排版
+
+`Ctrl + Shift + P` 輸入 `format` 按下 `Enter` 就可以幫你快速完成排版囉！
+
+也能確保程式縮排和間隔的一致性。
