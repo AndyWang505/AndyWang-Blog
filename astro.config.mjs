@@ -24,6 +24,6 @@ export default defineConfig({
     react(),
     tailwind()
   ],
-  site: 'https://andywang505.github.io',
+  site: 'https://andywangtw.dev',
   base: '',
 });
