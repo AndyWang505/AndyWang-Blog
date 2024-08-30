@@ -8,7 +8,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://andywangtw.dev',
   integrations: [
     mdx({
       systaxHighlight: false,
@@ -24,6 +24,5 @@ export default defineConfig({
     react(),
     tailwind()
   ],
-  site: 'https://andywangtw.dev',
   base: '',
 });
