@@ -14,12 +14,6 @@ const dynamicDescription = description === undefined ? SITE_DESCRIPTION : descri
 <html lang="zh_TW">
 	<head>
 		<BaseHead title={dynamicTitle} description={dynamicDescription} image={image}/>
-	</head>
-
-	<body>
-		<Header />
-			<slot />
-		<Footer />
 		<script is:inline lang="ts">
 			if (typeof window !== "undefined") {
 				const theme = localStorage.getItem('theme');
@@ -28,5 +22,11 @@ const dynamicDescription = description === undefined ? SITE_DESCRIPTION : descri
 				}
 			}
 		</script>
+	</head>
+
+	<body>
+		<Header />
+			<slot />
+		<Footer />
 	</body>
 </html>
