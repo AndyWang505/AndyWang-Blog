@@ -17,8 +17,12 @@ const dynamicDescription = description === undefined ? SITE_DESCRIPTION : descri
 		<script is:inline lang="ts">
 			if (typeof window !== "undefined") {
 				const theme = localStorage.getItem('theme');
-				if (theme === 'dark' || theme === 'light') {
-					document.documentElement.classList.add(theme);
+				if (theme === 'dark') {
+					document.documentElement.classList.add('dark');
+					document.documentElement.classList.remove('light');
+				} else if (theme === 'light') {
+					document.documentElement.classList.add('light');
+					document.documentElement.classList.remove('dark');
 				}
 			}
 		</script>
