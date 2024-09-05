@@ -1,13 +1,13 @@
 ---
-title: 'React 加快開發的小技巧'
-description: '平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個 Emmet 加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。'
+title: 'React 開發上的小技巧'
+description: '平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個快捷鍵加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。'
 pubDate: 'August 12 2024'
 heroImage: '/React-Image1.png'
-tags: ['Notes', 'React', 'Emmet']
+tags: ['Notes', 'React']
 category: 'React'
 ---
 
-平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個 Emmet 加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。
+平時在撰寫 React 最常做的動作不外乎就是建立元件、匯入 Hook 或其他 lib，本篇分享幾個快捷鍵加快開發的小技巧，另外也會提到幾個快捷鍵重寫變數、快速調整程式碼排版等等。
 
 ## Component
 
@@ -15,7 +15,7 @@ category: 'React'
 
 如果要將一個畫面拆成 5 個元件就要做 5 次重複的動作
 
-這裡提供三種實用的 Emmet 快捷，幫你快速生成元件結構
+這裡提供三種實用快捷，幫你快速生成元件結構
 
 * rfc
 * rfce
@@ -73,36 +73,32 @@ const Sidebar = () => {
 export default Sidebar
 ```
 
-## Reducer / Redux
-### Reducer
-`rxreducer`
-```jsx=
-const initialState = {
+## Hooks
 
-}
+React Hooks 可以透過 ES7+ React/Redux/React-Native snippets 這類擴展工具，幫助你快速生成你需要的 Hooks。
 
-export default (state = initialState, { type, payload }) => {
-  switch (type) {
+像是：
 
-  case typeName:
-    return { ...state, ...payload }
+* `useEffect`：只需要輸入 `uef` 就可以幫你生成 useEffect Template，其中也包括 import 直接幫你匯入。
+* `useState`：只需要輸入 `usf`，也會同樣幫你生成 useState Template。
 
-  default:
-    return state
-  }
-}
-```
-### Redux
-因為 Emmet 內並沒有 Redux 快速建立的方法，雖然有 ReactClassComponentRedux 但使用情境也比較少，這邊會推薦使用 Redux Toolkit。
+如果不記得具體快捷鍵，輸入 use 關鍵字後，應該也會出現很多選擇。
 
-Redux Toolkit 是官方推薦的方式，用來簡化 Redux 的開發流程。而 Redux Toolkit 也提供了許多快捷來快速生成 actions、reducers、store 等結構。
+這樣，只要知道有哪些 React Hooks 可以使用，輸入對應的快捷鍵，它就會自動幫你帶入相關的 import 部分，簡化開發流程。
+
+## Redux
+
+因為 React 本身並沒有 Redux 快速建立的方法，雖然有 ReactClassComponentRedux 但使用情境也比較少，這邊會推薦使用 Redux Toolkit。
+
+[Redux Toolkit](https://redux-toolkit.js.org/) 是官方推薦的方式，用來簡化 Redux 的開發流程。而 Redux Toolkit 也提供了許多快捷來快速生成 actions、reducers、store 等結構。
 
 使用前需要先安裝 Redux Toolkit
+
 ```bash=
 npm install @reduxjs/toolkit react-redux
 ```
 
-安裝完成後就可以使用 `createSlice` 來快速長出 Redux 結構
+安裝完成後就可以使用 `createSlice` 來快速長出 Redux Slice 結構
 
 ```jsx=
 import { createSlice } from '@reduxjs/toolkit'
@@ -129,7 +125,7 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
-## 其他快捷鍵
+## 其他開發上常見快捷鍵
 
 ### 重寫變數
 
