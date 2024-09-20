@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Playball&family=Satisfy&display=swap');
 
 :root {
 	--accent: #2337ff;
@@ -25,6 +26,17 @@ body {
 	color: rgb(var(--gray-dark));
 	line-height: 1.5;
 	transition: background-color 0.3s ease;
+}
+
+.dark footer, footer {
+	background-image: url('/public/back-footer/cave.foothold1.1.0.png');
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+}
+
+.dark footer {
+	background-image: url('/public/back-footer/enH1.1.png');
 }
 
 .dark body {

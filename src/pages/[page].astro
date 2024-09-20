@@ -81,12 +81,12 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
       <ul class="mx-auto flex justify-center">
 				{currentPage > 1 && (
 					<li>
-						<a class="p-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-orange-500 dark:text-orange-200" href={`/${currentPage - 1}`}>&lt;&lt; Previous</a>
+						<a class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-orange-400 hover:text-orange-600" href={`/${currentPage - 1}`}>&lt;&lt; Previous</a>
 					</li>
 				)}
 				{currentPage < totalPages && (
 					<li>
-						<a class="p-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-blue-500 dark:text-blue-200" href={`/${currentPage + 1}`}>Next &gt;&gt;</a>
+						<a class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-blue-400 hover:text-blue-600" href={`/${currentPage + 1}`}>Next &gt;&gt;</a>
 					</li>
 				)}
 			</ul>
