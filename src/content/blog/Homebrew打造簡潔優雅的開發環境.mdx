@@ -126,6 +126,24 @@ brew install git pnpm node
     brew cleanup
     ```
 
+## 移植到新環境
+
+首先，可以在舊的環境，輸入以下指令來生成已安裝的套件列表
+
+```bash=
+brew bundle dump --file=~/Brewfile
+```
+
+輸入完後會在根目錄中創建一個名為 Brewfile 的文件，裡面記錄了所有已安裝的 Homebrew 套件、casks，以及 taps
+
+接著在新環境裝好 Homebrew 後，將剛剛打包的 Brewfile 複製到新環境
+
+輸入以下指令，它就會根據 Brewfile 安裝所有套件
+
+```bash=
+brew bundle --file=~/Brewfile
+```
+
 ### 參考來源
 
 * [Homebrew](https://brew.sh/zh-tw/)
