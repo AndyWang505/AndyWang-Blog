@@ -10,11 +10,40 @@ import MobileNav from '../components/MobileNav.astro';
 		<section class="lg:col-span-3 bg-white dark:bg-zinc-800 dark:text-neutral-300 shadow-md rounded-lg overflow-hidden p-6 md:px-12 md:py-6">
 			<h2 class="text-2xl font-bold mb-4">About</h2>
 			<FormattedDate date={new Date('December 06 2022')} />
-			<p class="py-4">
-				hihi~ 我是 AndyWang 也可以叫我 Weiwei！歡迎來到我的部落格～
-				<br>
-				hihi~ I'm AndyWang, and you can call me Weiwei！Welcome to my Blog～
-			</p>
+			<div class="grid gap-4 mt-2 mb-6">
+				<h3 class="text-xl font-bold">Andy Wang</h3>
+				<p>
+					Currently working as a Front-End Engineer in the software development department of a major e-commerce company. 
+				</p>
+				<p>
+					In my free time, I enjoy working on fun and interesting projects and discussing a wide range of topics. During leisure hours, I like playing PC games and creating digital artwork.
+				</p>
+			</div>
+			<div class="grid gap-4 mt-2 mb-6">
+				<h2 class="text-xl font-bold">Life Philosophy</h2>
+				<p>
+					每隔幾個月或隔年都會做一次複盤，回頭看自己進步了多少或這些日子得到了些什麼，當然也時常會懷疑自己是不是當初做的決定是錯的。但若回到當時的時間，我也一定會做相同的決定，因為那已經是當下最好的決定了。
+				</p>
+				<p>
+					賈伯斯曾以自身經歷提到「Connecting the dots」的概念，每段人生都有它的意義，可能當時你並不知道自己在幹嘛，但總有那麼一天它會派上用場，幫助未來的自己。
+				</p>
+				<p>
+					「每個點（經歷）都有它的價值，雖然當下可能看不清楚，但未來回頭看時，它們會串聯成意義。」所以勇敢去做吧！
+				</p>
+			</div>
+			<img src="/public/about/about-img.jpg" class="mb-6" alt="">
+			<div class="grid gap-4 mt-2 mb-6">
+				<h2 class="text-xl font-bold">About Blog</h2>
+				<p>
+					在早期，這個部落格是使用 Jekyll 架設的，中間也嘗試了幾個不同的 theme，可以參考這篇<a href="https://andywangtw.dev/post/%E8%87%AA%E5%B7%B1%E7%9A%84%E9%83%A8%E8%90%BD%E6%A0%BC%E8%87%AA%E5%B7%B1%E6%9E%B6/" class="text-blue-500" target="_blank">文章</a>有簡短的介紹。
+				</p>
+				<p>
+					到了 2024 年中，決定將部落格重構。現在的部落格是使用 Astro、React 和 Tailwind 開發。如果有興趣，可以參考 @devaslife 在 YouTube 上的示範影片。另外，我也在這篇<a href="https://andywangtw.dev/post/%E9%97%9C%E6%96%BC%E6%88%91%E9%87%8D%E6%A7%8B%E9%83%A8%E8%90%BD%E6%A0%BC%E9%80%99%E6%AA%94%E4%BA%8B/" class="text-blue-500" target="_blank">短文</a>中分享了關於重構部落格的一些心得。
+				</p>
+				<p>
+					不知道未來會不會又搬家，但可以確定的是，未來會將這邊慢慢優化成自己喜歡的樣子！
+				</p>
+			</div>
 			<div class="flex mb-4">
 				<a href="https://x.com/andywang890505" target="_blank" class="mr-2">
 					<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24"
@@ -38,12 +67,6 @@ import MobileNav from '../components/MobileNav.astro';
 					</svg>
 				</a>
 			</div>
-			<ul class="pl-4 list-disc">
-				<li class="mb-1">網站名稱：AndyWang's Blog</li>
-				<li class="mb-1">關鍵字：AndyWang's Blog / AndyWang505</li>
-				<li class="mb-1">網站介紹：這裡是 AndyWang 的部落格，或者也可以叫我 weiwei，這裡記錄著我的開發經驗以及技術筆記相關文章。</li>
-				<li class="mb-1">網站狀況：持續更新中...</li>
-			</ul>
 		</section>
 		<Aside />
 		<MobileNav />
