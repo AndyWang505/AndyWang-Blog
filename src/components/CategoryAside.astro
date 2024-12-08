@@ -34,11 +34,13 @@ const categoriesArray = Object.values(categoriesCount);
       Categories
     </a>
   </h3>
-  <ul class="ml-3">
+  <ul>
     {categoriesArray.map(category => (
-      
       <li class="text-neutral-500">
-        <a class="inline-block hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href={`/post/category/${category.category}`}>
+        <a class="inline-block hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 flex items-center categories-item" href={`/post/category/${category.category}`}>
+          <svg width="16" height="16" class="mr-2 categories-item-icon duration-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           {category.category}&nbsp
           <span class="text-neutral-400">({category.count})</span>
         </a>
