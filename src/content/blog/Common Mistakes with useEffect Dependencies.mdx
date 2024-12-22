@@ -1,0 +1,147 @@
+---
+title: 'Common Mistakes with useEffect Dependencies'
+description: 'useEffect 作為 cleanup function，是個強大的副作用處理函式，但如果加了錯誤的依賴，可能導致效能變差，或發生無法預期的行為。此外也談談一些對 useEffect 的誤解。'
+pubDate: 'November 22 2024'
+heroImage: '/React-Image1.png'
+tags: ['Notes', 'React']
+category: 'React'
+---
+
+useEffect 作為 cleanup function，是個強大的副作用處理函式，但如果加了錯誤的依賴，可能導致效能變差，或發生無法預期的行為。此外也談談一些對 useEffect 的誤解。
+
+## 重新認識 useEffect
+
+首先，React 的核心概念是透過資料驅動畫面，而最常見的做法就是使用 `useState` 來管理元件的狀態。當狀態改變時，React 會自動重新渲染元件，讓畫面與資料保持同步。
+
+但有時候，我們需要處理的效果不僅僅是畫面的更新，比如與瀏覽器 API 的互動、資料的請求或手動管理某些資源，這些操作通常稱為「副作用（side effects）」，它們與元件的渲染過程並不直接相關，但卻是必須進行的。
+
+這時候就需要 `useEffect` 來幫我們在 React 的渲染週期之外執行副作用，另外 `useEffect` 也提供了 Dependencies Array，確保副作用僅在必要的時候去執行。
+
+但儘管如此，在還不了解他底層原理的情況下還是經常被誤用，過去在學習也只是知道他會在元件初始化與卸載被觸發，可以透過加上 Dependencies Array 確保只在需要的時候被執行，所以這篇文章要來考古他是怎麼被設計的。
+
+> 補充：副作用（Effect）是什麼？副作用指的是那些改變了程式外部狀態或環境的操作，而這些操作並不是由函式的輸入（例如參數）直接引起的。例如：Web API（setTimeout、localStorage）、DOM 操作、Data Fetching、Event Subscription。
+
+### React Class Component
+
+在過去還是 Class Component 的年代，設計和運作方式很多時候都是不直觀的，像是 React 生命週期的方法就有三種來處理不同的渲染時機的邏輯：
+
+* componentDidMount：元件初次渲染後執行的方法。
+* componentDidUpdate：元件更新（重新渲染）後執行的方法。
+* componentWillUnmount：元件卸載前執行的方法，用於清理資源。
+
+![image](/useEffect.png)
+
+這些方法將元件的渲染時機劃分得非常明確，開發者需要明確地在這些方法中撰寫相關邏輯。然而，這種方式有幾個缺點：
+
+1. 每個時機點的邏輯分散在不同的方法中，容易導致程式碼攏長、不直觀。
+2. 如果多個生命周期方法中有相似的邏輯，容易造成程式碼重複性高且難以維護。
+
+這對於初學者來說，是一個學習曲線比較高的地方，特別是當僅僅需要一個「純渲染狀態的元件」（stateless component）時，使用 Class Component 就顯得不必要地複雜，且通常也需要撰寫更多的樣板程式碼（boilerplate）。
+
+所以後來就有了 Function Component 和 Hook，它們的存在就是為了解決這些問題，讓邏輯更集中，程式碼更簡潔。
+
+回到現在的 useEffect，它是 React 引入 Function Component 後的一個關鍵功能，旨在解決過去 Class Component 中生命週期方法的局限性，不需要分別撰寫 `componentDidMount`、`componentDidUpdate` 和 `componentWillUnmount`，`useEffect` 可以在一個地方同時處理初始化、更新以及清理的邏輯。
+
+> 補充：`useEffect` 非生命週期方法，而是類似生命週期功能，與傳統生命週期方法的設計理念不同，React 的核心是聲明式（declarative）的渲染，而 useEffect 的設計是為了讓副作用在聲明式的框架下運行，與命令式（imperative）的生命週期方法不同。
+
+## Dependencies 是一種效能最佳化，而非邏輯控制
+
+過去在使用 useEffect 腦中的想法都是，「我希望這段程式在特定時候被執行」，像是：我希望在元件載入時執行，或某個資料狀態變更時執行，但這種想法其實不太對。
+
+### 為什麼會需要 Dependencies？
+
+React 的基本概念是「資料驅動畫面」，當元件的狀態或 props 改變時，React 會觸發 re-render，在這個過程中，所有的副作用預設情況下都會被重新執行，對於不需要重新執行的副作用而言，這種行為會導致效能浪費。
+
+為了解決這個問題，React 提供了 Dependencies Array，讓我們可以告訴 React，只有在某些特定資料變更時才重新執行 useEffect。這樣就能避免在不需要的時候重複執行副作用，從而提高效能。
+
+正確的效能優化：使用 Dependencies
+
+假設我們有一個元件會根據 `searchTerm` 的改變來觸發搜尋 API，但我們也同時有一個無關的 count state。
+
+```js=
+import { useState, useEffect } from "react";
+
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log(`Searching for: ${searchTerm}`);
+    // 模擬 API 請求
+  }, [searchTerm]); // 依賴 searchTerm
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search here..."
+      />
+      <button onClick={() => setCount(count + 1)}>Click Me: {count}</button>
+    </div>
+  );
+}
+```
+
+這段程式碼會在每次 `searchTerm` 改變時，執行 `useEffect`，因為 Dependencies Array 中包含了 `searchTerm`。
+
+但如果我們點擊按鈕增加 `count`，這會觸發元件的 re-render，但 `useEffect` 不會執行，因為 `searchTerm` 沒有改變。
+
+而錯誤的用法：試圖用 Dependencies 控制執行時機
+
+如果我們把非依賴的 `count` 放進 Dependencies Array：
+
+```js=
+useEffect(() => {
+  console.log(`Searching for: ${searchTerm}`);
+}, [searchTerm, count]); // count 不應該是依賴
+```
+
+這樣每次按下按鈕，useEffect 都會執行，即使 searchTerm 沒有改變。這樣的做法會讓 React 無法正確判斷是否需要重新執行副作用。
+
+因此，「Dependencies 是為了讓 React 知道在資料沒有發生改變時，可以安全地跳過執行，而不是用來控制 effect 什麼時候執行。」
+
+所以「你應該對 Dependencies 誠實」，欺騙 Dependencies 將無關的資料加進 Dependencies Array，會導致不必要的渲染和副作用執行，並可能引發難以追蹤的錯誤。
+
+## 避免傳入參考
+
+在 JavaScript 中，物件和陣列都是參考型別（reference type），這表示當你傳遞物件或陣列時，傳遞的是對該物件或陣列的「參考」，而非真正的值。
+
+這可能會導致每當物件或陣列的內容發生變化時，即使資料本身沒有改變（例如內部的某個屬性或元素變動），也會觸發 `useEffect` 重新執行，糟糕的情況可能導致畫面一直重複 re-render。
+
+```js=
+function Example() {
+  const [user, setUser] = useState({ name: "Alice", age: 30 });
+
+  useEffect(() => {
+    console.log(`User changed: ${user.name}, ${user.age}`);
+  }, [user]); // user 是參考型別
+
+  const updateUser = () => {
+    setUser({ name: "Bob", age: 25 }); // 創建一個新的物件
+  };
+
+  return (
+    <div>
+      <p>{user.name}</p>
+      <button onClick={updateUser}>Update User</button>
+    </div>
+  );
+}
+```
+
+每次我們調用 `setUser` 更新 `user` 時，React 會認為 `user` 變更了，並執行 `useEffect`。即使 `name` 和 `age` 的值沒有實際變化，因為 `setUser` 實際上是傳入一個新的物件，這會導致 `useEffect` 被不必要地重新執行。
+
+### 解決方法
+
+為了避免這種情況，我們應該盡量使用「簡單型別」作為依賴項目，如 string、number、boolean 等，這些型別的變動能夠更精確地反映資料的變化，並且不會受到參考型別的影響。
+
+如果需要在 `useEffect` 中處理物件或陣列，則應該使用「物件深比較」或「記錄物件狀態的關鍵屬性」來作為依賴，像是：`user.name`。或者是可以使用 `useMemo` 或 `useCallback` 進一步優化。
+
+### 參考來源
+
+* [[React] 對 hooks 的 dependencies 誠實，以維護資料流的連動](https://medium.com/@linyawun031/react-%E5%B0%8D-hooks-%E7%9A%84-dependencies-%E8%AA%A0%E5%AF%A6-%E4%BB%A5%E7%B6%AD%E8%AD%B7%E8%B3%87%E6%96%99%E6%B5%81%E7%9A%84%E9%80%A3%E5%8B%95-e8036cb7efe8)
+* [[Day 21] useEffect 其實不是 function component 的生命週期 API](https://ithelp.ithome.com.tw/articles/10305220)
+* [[Day 24] useEffect dependencies 的經典錯誤用法](https://ithelp.ithome.com.tw/articles/10306703)
+* [Removing unnecessary object dependencies](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies)
