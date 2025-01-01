@@ -71,7 +71,7 @@ h6 {
 	border-bottom: 1px solid #e4e4e7;
 }
 
-.dark .prose h2 {
+.dark .prose h2, .dark .prose h3 {
 	color: rgb(244 244 245 / var(--tw-text-opacity));
 }
 
@@ -131,6 +131,10 @@ h6 {
 	border-bottom: 1px solid #d4d4d8;
 }
 
+.dark .prose thead {
+	background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
+}
+
 .prose table th {
 	border-left: 1px solid #d4d4d8;
 	border-right: 1px solid #d4d4d8;
@@ -154,7 +158,8 @@ td {
 
 code {
 	padding: 2px 5px;
-	background-color: rgb(228, 228, 228);
+	background-color: rgb(240, 240, 240);
+	border: 1px solid rgb(209, 209, 209);
 	border-radius: 4px;
 	margin: 0 3px;
 }
@@ -170,14 +175,24 @@ pre {
 	background-color: rgb(26, 26, 28) !important;
 }
 
+.dark code {
+	border: 1px solid rgb(107, 114, 128);
+}
+
 pre>code {
 	all: unset;
+	border: none ! important;
 }
 
 blockquote {
+	background-color: #f7f7f7;
 	border-left: 4px solid #e4e4e7;
 	padding: 0 0 0 20px;
 	margin: 0px;
+}
+
+.dark blockquote {
+	background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
 }
 
 /* mobile style */
