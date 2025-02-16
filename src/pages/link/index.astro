@@ -1,271 +1,284 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-
+import Layout from "../../layouts/Layout.astro";
 ---
+
 <html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weiwei Link</title>
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/favicon-16x16.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weiwei Link</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon-16x16.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
 
-  <style>
-    html,
-    body,
-    a,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    span,
-    ul,
-    ol,
-    li {
-      margin: 0;
-      padding: 0;
-      font: inherit;
-      font-family: "Roboto Slab", serif;
-      font-weight: 400;
-      vertical-align: baseline;
-      text-decoration: none;
-      list-style: none;
-      line-height: 1.5;
-      color: rgb(235, 235, 235);
-    }
+    <style>
+      html,
+      body,
+      a,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      span,
+      ul,
+      ol,
+      li {
+        margin: 0;
+        padding: 0;
+        font: inherit;
+        font-family: "Roboto Slab", serif;
+        font-weight: 400;
+        vertical-align: baseline;
+        text-decoration: none;
+        list-style: none;
+        line-height: 1.5;
+        color: rgb(235, 235, 235);
+      }
 
-    img {
-      display: inline-block;
-    }
+      img {
+        display: inline-block;
+      }
 
-    main {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      overflow: hidden;
-      justify-content: center;
-      align-items: center;
-    }
+      main {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+      }
 
-    main::before {
-      content: '';
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-image: url(https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true);
-      background-position: center;
-      background-size: cover;
-      background-attachment: fixed;
-      transform: scale(1);
-      transition: transform 0.2s ease-in-out;
-      z-index: -1;
-    }
+      main::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: url(https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true);
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+        transform: scale(1);
+        transition: transform 0.2s ease-in-out;
+        z-index: -1;
+      }
 
-    /* Keyframes animation */
-    @keyframes increase {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.5); }
-    }
+      /* Keyframes animation */
+      @keyframes increase {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.5);
+        }
+      }
 
-    /* Apply animation to main::before */
-    main::before {
-      animation: increase 60s linear infinite;
-    }
+      /* Apply animation to main::before */
+      main::before {
+        animation: increase 60s linear infinite;
+      }
 
-    section {
-      position: absolute;
-      padding: 2rem;
-      margin: 0 0.3rem;
-      backdrop-filter: blur(10px);
-      background-color: transparent;
-      border: 1.5px solid rgb(230, 230, 230);
-      border-radius: 10px;
-      z-index: 100;
-    }
+      section {
+        position: absolute;
+        padding: 2rem;
+        margin: 0 0.3rem;
+        backdrop-filter: blur(10px);
+        background-color: transparent;
+        border: 1.5px solid rgb(230, 230, 230);
+        border-radius: 10px;
+        z-index: 100;
+      }
 
-    header {
-      text-align: center;
-    }
+      header {
+        text-align: center;
+      }
 
-    header img {
-      border-radius: 9999px;
-      width: 6rem;
-      height: 6rem;
-    }
+      header img {
+        border-radius: 9999px;
+        width: 6rem;
+        height: 6rem;
+      }
 
-    header h1 {
-      font-size: 1.5em;
-      margin: 5px auto;
-    }
+      header h1 {
+        font-size: 1.5em;
+        margin: 5px auto;
+      }
 
-    .address {
-      margin-bottom: 12px;
-    }
+      .address {
+        margin-bottom: 12px;
+      }
 
-    .address i {
-      margin-right: 0.6rem;
-    }
+      .address i {
+        margin-right: 0.6rem;
+      }
 
-    li {
-      margin: 2rem auto;
-    }
+      li {
+        margin: 2rem auto;
+      }
 
-    li a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-    }
+      li a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    li h2 {
-      padding: 0 0.6rem;
-    }
+      li h2 {
+        padding: 0 0.6rem;
+      }
 
-    li i {
-      font-size: 26px;
-    }
+      li i {
+        font-size: 26px;
+      }
 
-    a:hover h2, a:hover i {
-      color: rgb(95, 95, 95);
-    }
+      a:hover h2,
+      a:hover i {
+        color: rgb(95, 95, 95);
+      }
 
-    footer {
-      text-align: center;
-    }
+      footer {
+        text-align: center;
+      }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-  </style>
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="app">
+        <header>
+          <img
+            src="https://github.com/AndyWang505/link/blob/main/img/IMG_6598.jpg?raw=true"
+            alt="head shot"
+            loading="lazy"
+          />
+          <h1>Weiwei</h1>
+          <p class="address">
+            <i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City
+          </p>
+          <p>hi, you can call me weiwei. I enjoy solving issues ~</p>
+        </header>
+        <ul>
+          <li>
+            <a href="https://andywangtw.dev" target="_blank">
+              <i class="fa-solid fa-code"></i>
+              <h2>Blog</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/AndyWang505" target="_blank">
+              <i class="fa-brands fa-github"></i>
+              <h2>GitHub</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.pixiv.net/users/39278115" target="_blank">
+              <i class="fa-brands fa-pixiv"></i>
+              <h2>Pivix</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://x.com/andywang890505" target="_blank">
+              <i class="fa-brands fa-twitter"></i>
+              <h2>Twitter</h2>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:andywang890505@gmail.com" target="_blank">
+              <i class="fa-solid fa-envelope"></i>
+              <h2>Email</h2>
+            </a>
+          </li>
+        </ul>
+        <footer>Copyright © 2024 - AndyWang.</footer>
+      </section>
+    </main>
+    <canvas id="starryCanvas"></canvas>
 
-</head>
-<body>
-  <main>
-    <section id="app">
-      <header>
-        <img src="https://github.com/AndyWang505/link/blob/main/img/IMG_6598.jpg?raw=true" alt="head shot">
-        <h1>Weiwei</h1>
-        <p class="address"><i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City</p>
-        <p>hi, you can call me weiwei. I enjoy solving issues ~</p>
-      </header>
-      <ul>
-        <li>
-          <a href="https://andywangtw.dev" target="_blank">
-            <i class="fa-solid fa-code"></i>
-            <h2>Blog</h2>
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/AndyWang505" target="_blank">
-            <i class="fa-brands fa-github"></i>
-            <h2>GitHub</h2>
-          </a>
-        </li>
-        <li>
-          <a href="https://www.pixiv.net/users/39278115" target="_blank">
-            <i class="fa-brands fa-pixiv"></i>
-            <h2>Pivix</h2>
-          </a>
-        </li>
-        <li>
-          <a href="https://x.com/andywang890505" target="_blank">
-            <i class="fa-brands fa-twitter"></i>
-            <h2>Twitter</h2>
-          </a>
-        </li>
-        <li>
-          <a href="mailto:andywang890505@gmail.com" target="_blank">
-            <i class="fa-solid fa-envelope"></i>
-            <h2>Email</h2>
-          </a>
-        </li>
-      </ul>
-      <footer>
-        Copyright © 2024 - AndyWang.
-      </footer>
-    </section>
-  </main>
-  <canvas id="starryCanvas"></canvas>
+    <script is:inline lang="ts">
+      const canvas = document.getElementById("starryCanvas");
+      const ctx = canvas.getContext("2d");
 
-  <script is:inline lang="ts">
-    const canvas = document.getElementById('starryCanvas');
-    const ctx = canvas.getContext('2d');
+      // Set canvas size
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-    // Set canvas size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+      // Array to store stars
+      const stars = [];
+      const numStars = 500; // Number of stars
 
-    // Array to store stars
-    const stars = [];
-    const numStars = 500; // Number of stars
-
-    function createStar() {
+      function createStar() {
         return {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 1.5 + 0.5, // Size of the star
-            speed: Math.random() * 0.2 + 0.1, // Falling speed (slower)
-            opacity: Math.random() * 0.5 + 0.5 // Random opacity (between 0.5 and 1)
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 1.5 + 0.5, // Size of the star
+          speed: Math.random() * 0.2 + 0.1, // Falling speed (slower)
+          opacity: Math.random() * 0.5 + 0.5, // Random opacity (between 0.5 and 1)
         };
-    }
+      }
 
-    // Initialize stars
-    for (let i = 0; i < numStars; i++) {
+      // Initialize stars
+      for (let i = 0; i < numStars; i++) {
         stars.push(createStar());
-    }
+      }
 
-    function drawStars() {
+      function drawStars() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        stars.forEach(star => {
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`; // Apply opacity
-            ctx.fill();
-        });
-    }
 
-    function updateStars() {
-        stars.forEach(star => {
-            star.y += star.speed; // Move the star downwards
-            if (star.y > canvas.height) {
-                // Reset the star to the top if it goes off screen
-                star.y = 0;
-                star.x = Math.random() * canvas.width;
-                star.size = Math.random() * 1.5 + 0.5; // Random size
-                star.speed = Math.random() * 0.2 + 0.1; // Random speed
-                star.opacity = Math.random() * 0.5 + 0.5; // Random opacity
-            }
+        stars.forEach((star) => {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`; // Apply opacity
+          ctx.fill();
         });
-    }
+      }
 
-    function animate() {
+      function updateStars() {
+        stars.forEach((star) => {
+          star.y += star.speed; // Move the star downwards
+          if (star.y > canvas.height) {
+            // Reset the star to the top if it goes off screen
+            star.y = 0;
+            star.x = Math.random() * canvas.width;
+            star.size = Math.random() * 1.5 + 0.5; // Random size
+            star.speed = Math.random() * 0.2 + 0.1; // Random speed
+            star.opacity = Math.random() * 0.5 + 0.5; // Random opacity
+          }
+        });
+      }
+
+      function animate() {
         drawStars();
         updateStars();
         requestAnimationFrame(animate);
-    }
+      }
 
-    animate(); // Start the animation
+      animate(); // Start the animation
 
-    // Adjust canvas size on window resize
-    window.addEventListener('resize', () => {
+      // Adjust canvas size on window resize
+      window.addEventListener("resize", () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-    });
-  </script>
-</body>
+      });
+    </script>
+  </body>
 </html>
