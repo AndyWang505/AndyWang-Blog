@@ -31,7 +31,7 @@ category: 'Kubernetes'
 
 2. 資源浪費：當某台伺服器的應用資源需求較低時，閒置的資源無法共享給其他應用程式，導致資源浪費。
 
-於是前人就開始思考，是否能在同一台伺服器為不同的應用程式提供「虛擬隔離」，以提高資源使用率，最終就催生了「虛擬化技術」。
+於是開發者開始思考一種方法，是否能在同一台伺服器為不同的應用程式提供「虛擬隔離」，以提高資源使用率，最終就催生了「虛擬化技術」。
 
 後來虛擬化技術也被漸漸引入，允許在單個物理伺服器上運行多個虛擬環境，且應用程式與應用程式之前也被不同虛擬環境隔離，可以讓資源更有效的被利用，也減少了硬體設備的成本。
 
@@ -51,7 +51,7 @@ category: 'Kubernetes'
 * 如何動態的分配資源、維持系統穩定性
 * 如何應對應用程式的擴展需求，e.g. 高併發流量
 
-而 Kubernetes 不僅是一個容器管理工具，最關鍵的是 **微服務架構的管理系統**，讓它能夠在多台機器上自動化部署、管理、擴展和監控容器，簡單的說，Kubernetes 透過更高層次的抽象來簡化容器運行與管理的方式。
+而 Kubernetes 不僅是一個容器管理工具，更是 **微服務架構的核心管理系統**，讓它能夠在多台機器上實現自動化部署、管理、擴展和監控容器。
 
 如果進到 Kubernetes 官網也可以看到簡單的介紹：
 
@@ -61,7 +61,7 @@ category: 'Kubernetes'
 
 ## Blue-Green Deployment & Rolling Update Deployment
 
-另外，Kubernetes 提供多種 Zero Downtime Deployment 的策略來確保應用更新時不影響用戶體驗，其中最常見的兩種方式是 Blue-Green Deployment 和 Rolling Update Deployment。
+另外，Kubernetes 也提供多種 Zero Downtime Deployment 的策略來確保應用更新時不影響用戶體驗，其中最常見的兩種方式是 Blue-Green Deployment 和 Rolling Update Deployment。
 
 ### Blue-Green Deployment
 
