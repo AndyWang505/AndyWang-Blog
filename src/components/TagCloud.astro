@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { calculateTagSize } from '../utils/tagSizeCalculator';
+import { getRandomTagColor } from '../utils/tagColorGenerator';
 
 const blog = await getCollection('blog');
 const tagsSet = new Set();
@@ -10,24 +12,19 @@ blog.forEach(post => {
 });
 const tagsArray = Array.from(tagsSet);
 
-/**
- * Colors for tag cloud
- * Using Tailwind color classes
- */
-const colors = [
-  'text-red-500 hover:text-red-600',
-  'text-blue-500 hover:text-blue-600',
-  'text-green-500 hover:text-green-600',
-  'text-yellow-500 hover:text-yellow-600',
-  'text-purple-500 hover:text-purple-600',
-  'text-pink-500 hover:text-pink-600',
-  'text-indigo-500 hover:text-indigo-600',
-  'text-teal-500 hover:text-teal-600'
-];
+const tagCounts = new Map();
+blog.forEach(post => {
+  post.data.tags.forEach(tag => {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  });
+});
+
+const counts = Array.from(tagCounts.values()).sort((a, b) => a - b);
 
 const tagColors = tagsArray.map(tag => ({
   tag,
-  color: colors[Math.floor(Math.random() * colors.length)]
+  color: getRandomTagColor(),
+  size: calculateTagSize(tagCounts.get(tag), counts)
 }));
 ---
 
@@ -41,8 +38,8 @@ const tagColors = tagsArray.map(tag => ({
     </a>
   </h3>
   <ul>
-    {tagColors.map(({ tag, color }) => (
-      <li class={`inline-block text-sm dark:hover:text-neutral-300 ${color}`}>
+    {tagColors.map(({ tag, color, size }) => (
+      <li class={`inline-block dark:hover:text-neutral-300 ${color} ${size}`}>
         <a href={`/post/tag/${tag}`}>&nbsp{tag}&nbsp</a>
       </li>
     ))}
