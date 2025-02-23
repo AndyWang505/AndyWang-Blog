@@ -9,8 +9,29 @@ blog.forEach(post => {
   });
 });
 const tagsArray = Array.from(tagsSet);
+
+/**
+ * Colors for tag cloud
+ * Using Tailwind color classes
+ */
+const colors = [
+  'text-red-500 hover:text-red-600',
+  'text-blue-500 hover:text-blue-600',
+  'text-green-500 hover:text-green-600',
+  'text-yellow-500 hover:text-yellow-600',
+  'text-purple-500 hover:text-purple-600',
+  'text-pink-500 hover:text-pink-600',
+  'text-indigo-500 hover:text-indigo-600',
+  'text-teal-500 hover:text-teal-600'
+];
+
+const tagColors = tagsArray.map(tag => ({
+  tag,
+  color: colors[Math.floor(Math.random() * colors.length)]
+}));
 ---
-<div class="w-full rounded-lg bg-white dark:bg-zinc-800 shadow-md p-6">
+
+<div class="w-full rounded-lg bg-white dark:bg-zinc-800 drop-shadow p-6">
   <h3 class="mb-2">
     <a class="flex items-center gap-1 dark:text-neutral-300" href="/post/tag/">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,9 +41,9 @@ const tagsArray = Array.from(tagsSet);
     </a>
   </h3>
   <ul>
-    {tagsArray.map(tag => (
-      <li class="inline-block text-neutral-500 text-sm hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300">
-        <a href={`/post/tag/${tag}`}>#{tag}&nbsp</a>
+    {tagColors.map(({ tag, color }) => (
+      <li class={`inline-block text-sm dark:hover:text-neutral-300 ${color}`}>
+        <a href={`/post/tag/${tag}`}>&nbsp{tag}&nbsp</a>
       </li>
     ))}
   </ul>
