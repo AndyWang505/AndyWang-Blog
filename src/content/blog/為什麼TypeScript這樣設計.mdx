@@ -1,0 +1,186 @@
+---
+title: '為什麼 TypeScript 不做更強的型別推導'
+description: '關於 TypeScript 為何不做更強的型別推導的這個問題，其實背後牽涉到型別系統的哲學，簡單來說，就是一個「型別安全與靈活性之間」的取捨。'
+pubDate: 'February 27 2025'
+heroImage: '/TS-Image.png'
+tags: ['Notes', 'TypeScript', '心得']
+category: 'TypeScript'
+---
+
+關於 TypeScript 為何不做更強的型別推導的這個問題，其實背後牽涉到型別系統的哲學，簡單來說就是一個「型別安全與靈活性之間」的取捨。
+
+## 前言
+
+TypeScript 背後設計的主要目標是：
+
+> 提供靜態型別檢查，讓你在編譯的階段就能提前找到潛在錯誤。
+
+這點跟 JavaScript 最大的差別就在這裡：
+
+- JavaScript 是完全動態的。
+- TypeScript 是提前分析的。
+
+這就讓 TypeScript 有能力幫我們補上「型別安全」，但這份「安全感」，其實並不是免費的。
+
+## 問題背景
+
+這篇文章主要是針對 [TypeScript Issue #13219](https://github.com/microsoft/TypeScript/issues/13219) 的討論延伸。
+
+這個 Issue 也是其中很多 TypeScript 開發者所關注的議題，就是：
+
+> 為什麼 TypeScript 不幫 `Object.assign` 提供更強的型別推導？
+
+舉個例子：
+
+```ts=
+const result = Object.assign({}, { a: 1 }, { b: 'hello' });
+```
+
+你可能會預期這個結果的型別是：
+
+```ts=
+{ a: number; b: string }
+```
+
+但實際上 TypeScript 的型別推導非常保守，他只會看第一個參數的型別。
+
+這也因此讓許多開發者感到失望，甚至有人覺得這是「TypeScript 的 Bug」。
+
+> ### 為什麼只看第一個參數的型別？
+> 如果TypeScript要保證「型別安全」，它只能保守地看第一個參數的型別，因為那是你唯一100%可以控制的東西。後面的參數，有可能來自 API 回傳、有可能是 any，甚至來自 user input，這種TypeScript無法提前知道，它就不敢亂推斷。
+
+
+而後來 TypeScript 的團隊專案負責人 Ryan Cavanaugh 最後也發了一篇非常詳細的回應，核心重點可以拆成以下幾點：
+
+1. `Object.assign` 本身在 JS 世界就很亂
+
+    `Object.assign` 是非常「自由奔放」的函式，它的行為有很多不明確或邊界模糊的地方：
+    * 如果來源物件有 getter，怎麼辦？
+    * 如果來源物件有 readonly 屬性，怎麼辦？
+    * 如果來源有兩個物件有同名屬性，怎麼辦？
+    * 如果目標物件本身已經有同名屬性，怎麼辦？
+
+    這些行為其實都不是「型別系統」應該要負責的事。因為 JS 的實際行為非常動態，這些衝突只能靠執行階段才知道結果。
+
+2. TypeScript 的哲學是「pay-for-play」
+
+    TypeScript 團隊不想讓型別系統變得太過聰明，反而希望保持：
+    > 你要精確型別，請自己包一層函式，明確描述型別。
+    > 如果你直接用標準函式，TS 只會提供「安全但保守」的型別。
+
+    這是為了避免型別系統「猜錯」，反而讓人覺得 TS 不可靠。
+
+3. 真正的型別地獄
+
+    假設真的要幫 `Object.assign` 提供超強的型別推導，那要處理的情境非常複雜：
+    * 支援多個來源物件合併
+    * 支援每個來源物件的 readonly 或 getter 屬性
+    * 支援每個來源的屬性衝突
+    * 支援不同編譯目標（ES5/ES6的行為不同）
+    
+4. 社群需求 vs 設計堅持
+
+    這個 Issue 從 2016 年一路討論到 2023 年，社群熱度非常高。但 TS 團隊認為：
+
+    > 這不是型別系統該做的事。
+    > 即便硬做，也會帶來無法接受的維護成本。
+
+
+原文（來自 RyanCavanaugh）：
+
+> After reviewing all the comments here over the years and much discussion internally, we don't think that the JavaScript runtime or overall ec
+> osystem provide a platform on which to build this feature in a way that would meet user expectations. Per popular request to either add the feature or close this issue for clarity, we're opting for the latter. As with Minification (#8), we're implementing a two-week cool-down period on further comments (ends 5/3).
+
+總之，結論就是：
+
+「JavaScript這個語言本身，跟整個生態系，根本不適合實現這種需求。」
+
+為了避免大家一直吵下去，他們選擇直接關閉這個Issue。
+
+這種「爭議性問題關閉策略」，跟他們處理「Minification (#8)」的方式一樣。
+
+還設了一個「2週冷卻期」，在這段時間不准再留言，讓整件事真正沉澱。
+
+## 為什麼 TypeScript 不幫你擦屁股？
+
+這背後其實就是一個核心理念：
+
+> TypeScript 不想成為「JavaScript 的守護神」，而是「讓你主動選擇型別保護的工具」。
+
+你想要方便？
+
+用標準函式，TS 會給你保守型別。
+
+你想要嚴謹？
+
+請自己寫 wrapper 函式或明確註記型別，描述完整型別細節，TS 會相信你。
+
+這種設計，跟其他強型別語言，像是 Haskell 或 Scala 完全不同。
+
+| 語言 | 型別系統設計 |
+| --- | --- |
+| TypeScript | 以靈活為主，型別是輔助，不強制 |
+| Rust | 以型別安全為最高優先，所有型別必須明確 |
+| Haskell | 以強型別+型別推導為核心，甚至鼓勵型別開發 |
+
+TypeScript 的設計是比較像是
+
+> 「這是你的程式，不是我的程式。我幫你看守門口，但要不要上鎖，還是你決定。」
+
+## 型別系統設計的複雜度
+
+另外再探討一個問題，就是型別系統設計的複雜度，究竟是複雜度太高太困難，還是 TypeScript 根本沒有想清楚。
+
+1. 型別推導越強，效能越差
+
+    這裡指的是編譯速度，「型別推導」其實就是一種程式分析，分析得越深入，編譯速度越慢，尤其大型專案會直接炸掉。」
+    設想一下，幾十萬行的 codebase，1% 編譯速度的差異，可能就是幾分鐘的等待時間了。
+    
+2. 型別推導越強，越難維護
+
+    人類的理解力有限，如果型別系統「推導結果超複雜」，那即便 TS 推對了，開發者也看不懂，那就沒意義了。
+    
+    這也是為什麼 TypeScript 不做過於進階的型別運算（例如 type-level programming），因為這對 90% 的普通開發者來說，都是負擔。
+
+3. 推導越強，預期越混亂
+
+    當一個函式的型別推導，跟你想的完全不一樣時，你的信心就會崩壞。
+
+    TypeScript 優先考慮「預期一致性」，不做黑魔法，不做黑箱，你不明確描述，TS 就只是選擇保守型別。
+
+4. TypeScript 的型別系統是要服務真實世界的 JS
+
+    TypeScript 不是設計給完美的 FP 世界或靜態語言玩家，而是服務那些：
+    - 每天用 lodash、jQuery、axios 的工程師
+    - 需要跟 legacy codebase 打交道的團隊
+    - 在 JavaScript 既有的「奇形怪狀生態」中生存的開發者
+
+5. 型別安全 vs. 靈活度的取捨
+
+    - 如果 TypeScript 要像 Rust 一樣強型別，所有的 any 和 as 這樣的 Type Assertion 都要封殺，TS 開發者遲早會崩潰。
+    - 但如果 TypeScript 完全不管型別安全，那還要 TypeScript 幹嘛？
+
+    所以 TypeScript 選擇了一條務實的中庸之道：
+    - 你想要強型別，我給你。如果你想亂來，我放你一馬，但你自己要承擔後果。
+
+    這種「信任開發者」的設計理念，也讓 TypeScript 成為目前業界接受度最高的靜態型別解決方案。
+
+> TypeScript：你寫的還是 JavaScript，我只是幫你套上一層保護。
+
+## 結論
+
+總結來說，TypeScript 的設計哲學是為了提供合理且安全的型別，且不破壞 JavaScript 的原生行為和特性，最終讓開發者可以自己決定要多嚴謹。
+
+這種設計的好處就是，讓 TypeScript 可以更好維護，更貼近 JavaScript 本身，最重要的是能有一致的預期結果。
+
+這也是為什麼 TypeScript 到今天有很多人喜歡，但也很多人罵的原因。
+
+另外，如果對關於 TypeScript 設計哲學和型別系統的議題有興趣的，也可以不妨看看 [dotJS 2018 - Anders Hejlsberg - TypeScript: Static types for JavaScript](https://www.youtube.com/watch?v=ET4kT88JRXs)。
+
+裡面也有講到為什麼 TypeScript 在型別推導方面選擇比較保守的設計。
+
+## 參考來源
+
+- [TypeScript Issue #13219](https://github.com/microsoft/TypeScript/issues/13219)
+- [TypeScript Design Goals](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals)
+- [ TypeScript FAQ](https://github.com/microsoft/TypeScript/wiki/FAQ)

@@ -1,0 +1,190 @@
+---
+title: 'Vitest with React Testing'
+description: '撰寫測試一直都是確保程式碼可靠性的一個重要環節，通常在 React 中，我們可以選擇使用 Jest 或 Vitest 根據專案需求來撰寫 Unit Test，不過 Vitest 在 Vite 專案中整合較為容易。'
+pubDate: 'February 8 2025'
+heroImage: '/Vitest.png'
+tags: ['Notes', 'Vitest', 'Unit Test']
+category: 'Testing'
+---
+
+撰寫測試一直都是確保程式碼可靠性的一個重要環節，通常在 React 中，我們可以選擇使用 Jest 或 Vitest 根據專案需求來撰寫 Unit Test，不過 Vitest 在 Vite 專案中整合較為容易。
+
+## 前言
+
+為何選用 Vitest 而不是 Jest？
+
+通常在 React 專案中，使用 Jest 一直是最常見的 Unit Test 工具，不過隨著 Vite 崛起之後，Vitest 就漸漸變成 React 社群中熱門的 Unit Test 工具。
+
+主要是因為它與 Vite 有著極好的整合性，如果是 Jest 的話，需要額外安裝 `jest-vite` 等等工具，才能夠在 Vite 專案中使用，如果你的專案又整合了許多套件，那環境設定的複雜度又會再提升。
+
+而 Vitest 則只需要安裝 `vitest` 就能夠在 Vite 專案中使用，能夠更快速地運行測試並且擁有與 Jest 相似的 API，你可以把它當成 Jest 的 Pro 版。
+
+## 安裝 Vitest
+
+安裝可以搭配 [官方文件](https://vitest.dev/guide/) 來進行。
+
+使用 npm 安裝：
+```bash
+npm install -D vitest
+```
+
+或是使用 pnpm 安裝：
+```bash
+pnpm add -D vitest
+```
+
+## 設定環境
+
+安裝完 Vitest 後，接下來需要在 Vite 配置檔案中設定一些選項，讓 Vite 知道如何運行測試。打開你的 `vite.config.ts` 或 `vite.config.js` 檔案，並加入以下配置：
+
+```ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true, // 啟用全域測試的 API，避免每次都需要 import
+    environment: 'jsdom', // 模擬瀏覽器環境來運行測試
+    setupFiles: './src/vitest.setup.ts', // 你的初始化檔案，用來設置測試環境
+  },
+});
+```
+
+接著，在 src 資料夾中創建一個 `vitest.setup.ts` 檔案，並在裡面加入 `jest-dom`，這可以提供更多的 DOM 斷言方法。
+
+```ts
+import '@testing-library/jest-dom';
+```
+
+安裝完 Vitest 後，接下來設定一下 script 為了之後方便執行測試，我們可以在 `package.json` 中加入以下：
+
+```json
+"scripts": {
+  "test": "vitest"
+}
+```
+
+直接跑 `npm run test` 或 `pnpm test` 就可以看到測試結果了。
+
+如果有 husky 的話，也可以在 `package.json` 中加入以下：
+
+```json
+"husky": {
+  "hooks": {
+    "pre-commit": "vitest"
+  }
+}
+```
+
+這樣每次在 commit 之前都會先執行測試了。
+
+## 盤點測試範圍和測試目標
+
+首先撰寫測試之前需要先搞清楚這次測試範圍涵蓋和測試目標，例如：
+
+* 測試應該模擬使用者與介面互動，而不是實作細節。
+* 需要測試不同狀態，e.g. loading、error、success。
+* 需要測試 Side Effect，e.g. useEffect、useCallback、useMemo，確認元件能正確 onMount 或 onUnmount。
+* 測試 Event Handlers，e.g. onClick、onChange、onSubmit 等能如預期運行。
+* 測試 Error Boundaries 能正確 catch error，並顯示 fallback。
+
+諸如此類
+
+建議可以看看 Kent C. Dodds 大大的 [《Testing JavaScript》](https://www.testingjavascript.com/) 這篇文章，教你如何有效地撰寫測試，提升程式碼品質，其中也關注 TDD 和 BDD 流程。
+
+## 撰寫測試
+
+開始撰寫測試需要先建立 `__tests__` 資料夾，並在裡面建立 `.test.ts` 檔案，這樣 Vitest 才會知道要跑哪些測試。
+
+命名原則通常參考 Component 或 Hooks 的命名，例如 `Button.test.ts`、`useCounter.test.ts`，至於資料夾沒有硬性規定要建在哪，可以根據專案結構來決定就好了。
+
+簡單的範例如下：
+
+```ts
+// __tests__/Button.test.ts
+import { describe, it, expect } from 'vitest';
+
+describe('My Component', () => {
+  it('should render correctly', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+});
+```
+
+由於 Vitest 是基於 Jest 開發，所以也可以使用 Jest 的一些語法。
+
+像是 `describe`、`it`、`expect` 等等，這些都是 Jest 的 API，可以參考 Jest 的文件來撰寫測試。
+
+不過現在 AI 工具很方便，以 cursor 為例，你可以先擬好 test case，然後讓它幫你生成測試，提高撰寫測試的效率。
+
+## 測試工具
+
+### Snapshot Testing
+
+Snapshot Testing 是一種測試方式，它會將元件的渲染結果保存成快照，下次運行測試時，如果發現快照有變動，就會顯示差異，這樣可以避免 regressions。
+
+在 Vitest 中，可以使用 `toMatchSnapshot` 來進行 Snapshot Testing。
+
+```ts
+// __tests__/Button.test.ts
+import { describe, it, expect, render, screen } from 'vitest';
+
+describe('My Component', () => {
+  it('should render correctly', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toMatchSnapshot();
+  });
+});
+```
+
+跑完之後會看到在該資料夾下生成一個 `__snapshots__/Button.test.ts.snap` 檔案。
+
+### Mocking
+
+Mocking 也是一種測試方式，它會模擬某些行為，例如 API response、第三方套件行為等等，這樣可以避免測試受到外部因素的影響。
+
+在 Vitest 中，可以使用 `vi.mock` 來進行 Mocking。
+
+```ts
+// __tests__/Button.test.ts
+import { describe, it, expect, vi, render, screen } from 'vitest';
+import axios from 'axios';
+
+vi.mock('axios', () => ({
+  get: vi.fn(),
+}));
+
+describe('My Component', () => {
+  it('should render correctly', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toMatchSnapshot();
+  });
+});
+```
+
+### Coverage
+
+Coverage 能夠計算測試的覆蓋率，例如函式的覆蓋率、分支的覆蓋率等等。
+
+在 Vitest 中，可以使用 `vitest coverage` 來查看覆蓋率。
+
+```bash
+npm run test -- --coverage
+```
+
+或是使用 pnpm 來查看：
+```bash
+pnpm test -- --coverage
+```
+
+## 總結
+
+如果是要找和 Vite 整合性好的測試工具，Vitest 大概是首選，不過 Vitest 的 API 與 Jest 還是有些許不同，需要花時間熟悉一下，不過整體來說，Vitest 的學習曲線比 Jest 平緩許多，尤其是對於已經使用 Vite 的開發者來說，它的設定與整合過程更加順暢。
+
+## 參考來源
+
+* [Vitest](https://vitest.dev/)
+* [Testing JavaScript](https://www.testingjavascript.com/)
+* [別再用 1+1=2 學測試了！這次就讓我們從 Vitest 開始學單元測試吧！](https://israynotarray.com/vitest/20230420/4055762937/)
