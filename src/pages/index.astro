@@ -19,13 +19,13 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 ---
 
 <Layout>
-	<main class="max-w-6xl mx-auto p-3 md:p-6 lg:p-12">
+	<main class="max-w-6xl mx-auto p-3 md:p-6 lg:p-6">
 		<div class="flex grid lg:grid-cols-4">
 			<section class="col-span-3">
 				<ul>
 					{
 						paginatedPosts.map(post => (
-							<li class="w-full drop-shadow rounded-lg overflow-hidden mb-6 transition-hover-link title-hover-link">
+							<li class="w-full drop-shadow rounded-lg overflow-hidden mb-4 transition-hover-link title-hover-link">
 								<a class="sm:flex min-h-44" href={`/post/${post.slug}/`}>
 									<div class="sm:w-64 overflow-hidden">
 										<img class="w-full h-52 sm:h-full object-cover transition-hover-img" src={post.data.heroImage} alt="" />
