@@ -5,55 +5,55 @@ import ThemeToggle from './ThemeToggle';
 ---
 
 <header class="dark:bg-zinc-800 dark:text-zinc-100 sticky top-0 z-50 drop-shadow">
-	<nav class="max-w-6xl py-3 mx-auto">
-		<h2 class="flex items-center">
-			<a href="/" class="text-xl italic py-1 mr-1">{SITE_TITLE}</a>
-			<div class="hidden lg:flex">
-				<HeaderLink href="/about">About</HeaderLink>
-				<HeaderLink href="/post">Archive</HeaderLink>
-			</div>
-		</h2>
-		<div>
-			<ThemeToggle client:visible />
-		</div>
-	</nav>
+  <nav class="max-w-6xl py-3 mx-auto">
+    <h2 class="flex items-center">
+      <a href="/" class="text-xl italic py-1 mr-1">{SITE_TITLE}</a>
+      <div class="hidden lg:flex">
+        <HeaderLink href="/about">About</HeaderLink>
+        <HeaderLink href="/post">Archive</HeaderLink>
+      </div>
+    </h2>
+    <div>
+      <ThemeToggle client:visible />
+    </div>
+  </nav>
 </header>
 
 <style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
+  header {
+    margin: 0;
+    padding: 0 1em;
+    background: white;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1em;
+  }
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		margin-left: 1rem;
-		color: var(--black);
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
-	}
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav a {
+    margin-left: 1rem;
+    color: var(--black);
+    text-decoration: none;
+  }
+  nav a.active {
+    text-decoration: none;
+  }
+  .social-links,
+  .social-links a {
+    display: flex;
+  }
+  @media (max-width: 720px) {
+    .social-links {
+      display: none;
+    }
+  }
 </style>

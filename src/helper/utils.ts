@@ -23,10 +23,13 @@ interface Options {
   limit?: number;
 }
 
-export function formatBlogPosts(posts: Post[], {
-  // sortByDate = true,
-  limit,
-}: Options = {}): Post[] {
+export function formatBlogPosts(
+  posts: Post[],
+  {
+    // sortByDate = true,
+    limit,
+  }: Options = {}
+): Post[] {
   const filteredPosts = posts.reduce((acc: Post[], post: Post) => {
     // add post to acc
     acc.push(post);
@@ -41,7 +44,7 @@ export function formatBlogPosts(posts: Post[], {
   // }
 
   // limit if number is passed
-  if (typeof limit === "number") {
+  if (typeof limit === 'number') {
     return filteredPosts.slice(0, limit);
   }
   return filteredPosts;

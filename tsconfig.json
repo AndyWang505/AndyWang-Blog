@@ -4,12 +4,7 @@
     "strictNullChecks": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
-    "types": [
-      "katex"
-    ]
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["katex"]
   }
 }

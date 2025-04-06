@@ -7,30 +7,30 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const post = Astro.params;
 const dynamicTitle = post.slug === undefined ? SITE_TITLE : post.slug;
-const {image, description } = Astro.props;
+const { image, description } = Astro.props;
 const dynamicDescription = description === undefined ? SITE_DESCRIPTION : description;
-
 ---
-<html lang="zh_TW">
-	<head>
-		<BaseHead title={dynamicTitle} description={dynamicDescription} image={image}/>
-		<script is:inline lang="ts">
-			if (typeof window !== "undefined") {
-				const theme = localStorage.getItem('theme');
-				if (theme === 'dark') {
-					document.documentElement.classList.add('dark');
-					document.documentElement.classList.remove('light');
-				} else if (theme === 'light') {
-					document.documentElement.classList.add('light');
-					document.documentElement.classList.remove('dark');
-				}
-			}
-		</script>
-	</head>
 
-	<body>
-		<Header />
-			<slot />
-		<Footer />
-	</body>
+<html lang="zh_TW">
+  <head>
+    <BaseHead title={dynamicTitle} description={dynamicDescription} image={image} />
+    <script is:inline lang="ts">
+      if (typeof window !== 'undefined') {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else if (theme === 'light') {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
 </html>

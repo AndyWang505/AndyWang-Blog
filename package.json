@@ -30,6 +30,8 @@
     "typescript": "^5.5.3"
   },
   "devDependencies": {
-    "@types/katex": "^0.16.7"
+    "@types/katex": "^0.16.7",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }

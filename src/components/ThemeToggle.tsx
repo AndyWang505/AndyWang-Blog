@@ -1,46 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { IoSunny, IoMoon } from 'react-icons/io5'
+import React, { useEffect, useState } from 'react';
+import { IoSunny, IoMoon } from 'react-icons/io5';
 
-const themes = ['light', 'dark']
+const themes = ['light', 'dark'];
 
 export default function ThemeToggle() {
-  const [isMounted, setIsMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (import.meta.env.SSR) {
-      return undefined
+      return undefined;
     }
     if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme')
+      return localStorage.getItem('theme');
     }
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark'
+      return 'dark';
     }
-    return 'light'
-  })
-  
+    return 'light';
+  });
+
   const toggleTheme = () => {
-    const t = theme === 'light' ? 'dark' : 'light'
-    localStorage.setItem('theme', t)
-    setTheme(t)
-  }
+    const t = theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', t);
+    setTheme(t);
+  };
 
   useEffect(() => {
-    const root = document.documentElement
+    const root = document.documentElement;
     if (theme === 'light') {
-      root.classList.remove('dark')
+      root.classList.remove('dark');
     } else {
-      root.classList.add('dark')
+      root.classList.add('dark');
     }
-  }, [theme])
+  }, [theme]);
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   return isMounted ? (
     <div className="inline-flex items-center p-0.5 rounded-3xl bg-orange-200 dark:bg-zinc-600">
-      {themes.map(t => {
-        const checked = t === theme
+      {themes.map((t) => {
+        const checked = t === theme;
         return (
           <button
             key={t}
@@ -50,12 +50,12 @@ export default function ThemeToggle() {
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            {t === 'light' ? <IoSunny className='dark:text-white'/> : <IoMoon />}
+            {t === 'light' ? <IoSunny className="dark:text-white" /> : <IoMoon />}
           </button>
-        )
+        );
       })}
     </div>
   ) : (
     <div />
-  )
+  );
 }

@@ -6,7 +6,7 @@ export const TAG_COLORS = [
   'text-purple-500 hover:text-purple-600',
   'text-pink-500 hover:text-pink-600',
   'text-indigo-500 hover:text-indigo-600',
-  'text-teal-500 hover:text-teal-600'
+  'text-teal-500 hover:text-teal-600',
 ] as const;
 
 export function getRandomTagColor(): string {
