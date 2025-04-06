@@ -10,7 +10,7 @@ const posts = (blog).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const postsPerPage = 6;
+const postsPerPage = 8;
 const currentPage = 1;
 const totalPages = Math.ceil(posts.length / postsPerPage);
 const startIndex = (currentPage - 1) * postsPerPage;
