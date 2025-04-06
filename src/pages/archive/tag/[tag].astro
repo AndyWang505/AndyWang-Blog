@@ -9,20 +9,20 @@ const blog = await getCollection('blog');
 
 export async function getStaticPaths() {
   const blog = await getCollection('blog');
-  const categoriesSet = new Set();
+  const tagsSet = new Set<string>();
   blog.forEach((post) => {
-    categoriesSet.add(post.data.category);
+    post.data.tags.forEach((tag) => tagsSet.add(tag));
   });
-  const cateArray = Array.from(categoriesSet);
-  return cateArray.map((category) => ({
-    params: { slug: category },
+  const tagsArray = Array.from(tagsSet);
+  return tagsArray.map((tag) => ({
+    params: { tag },
   }));
 }
 
-const { slug } = Astro.params;
+const { tag } = Astro.params;
 
-const avaliableCurrentCategoryPosts = blog
-  .filter((post) => post.data.category === slug)
+const avaliableCurrentTagPosts = blog
+  .filter((post) => post.data.tags.includes(tag as string))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
@@ -32,7 +32,7 @@ const avaliableCurrentCategoryPosts = blog
       class="col-span-3 bg-white dark:bg-zinc-800 dark:text-neutral-300 shadow-md rounded-lg overflow-hidden py-6"
     >
       <h2 class="flex gap-2 text-2xl font-bold mb-4 ml-6 md:ml-12">
-        <a class="flex items-center gap-1.5" href="/post/category/">
+        <a class="flex items-center gap-1.5" href="/archive/tag/">
           <svg
             width="24"
             height="24"
@@ -41,20 +41,20 @@ const avaliableCurrentCategoryPosts = blog
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M13 7L11.8845 4.76892C11.5634 4.1268 11.4029 3.80573 11.1634 3.57116C10.9516 3.36373 10.6963 3.20597 10.4161 3.10931C10.0992 3 9.74021 3 9.02229 3H5.2C4.0799 3 3.51984 3 3.09202 3.21799C2.71569 3.40973 2.40973 3.71569 2.21799 4.09202C2 4.51984 2 5.0799 2 6.2V7M2 7H17.2C18.8802 7 19.7202 7 20.362 7.32698C20.9265 7.6146 21.3854 8.07354 21.673 8.63803C22 9.27976 22 10.1198 22 11.8V16.2C22 17.8802 22 18.7202 21.673 19.362C21.3854 19.9265 20.9265 20.3854 20.362 20.673C19.7202 21 18.8802 21 17.2 21H6.8C5.11984 21 4.27976 21 3.63803 20.673C3.07354 20.3854 2.6146 19.9265 2.32698 19.362C2 18.7202 2 17.8802 2 16.2V7Z"
+              d="M6.5 19C4.01472 19 2 16.9853 2 14.5C2 12.1564 3.79151 10.2313 6.07974 10.0194C6.54781 7.17213 9.02024 5 12 5C14.9798 5 17.4522 7.17213 17.9203 10.0194C20.2085 10.2313 22 12.1564 22 14.5C22 16.9853 19.9853 19 17.5 19C13.1102 19 10.3433 19 6.5 19Z"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"></path>
           </svg>
-          Categories
+          Tags
         </a>
         &gt;
-        <a class="text-orange-400" href="">{slug}</a>
+        <a class="text-orange-400" href="">{tag}</a>
       </h2>
       <ul class="pl-10 md:pl-16">
         {
-          avaliableCurrentCategoryPosts.map((post) => {
+          avaliableCurrentTagPosts.map((post) => {
             return (
               <li class="mb-2 list-disc">
                 <a href={`/post/${post.slug}/`}>
