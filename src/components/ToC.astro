@@ -1,0 +1,45 @@
+---
+// src/components/TableOfContents.astro
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const { headings } = Astro.props;
+
+// only get h2 and h3
+const toc = headings.filter((heading: Heading) => heading.depth <= 3);
+---
+
+<nav class="bg-white dark:bg-zinc-800 rounded-lg drop-shadow p-6">
+  <h2 class="text-lg mb-4 dark:text-neutral-300">Table of Contents</h2>
+  <ul class="space-y-2">
+    {
+      toc.map((heading: Heading) => (
+        <li class={`toc-item depth-${heading.depth}`}>
+          <a
+            href={`#${heading.slug}`}
+            class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 transition-all duration-200 block hover:translate-x-1"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .toc-item {
+    @apply transition-all duration-200;
+  }
+
+  .toc-item.depth-2 {
+    @apply pl-4;
+  }
+
+  .toc-item.depth-3 {
+    @apply pl-8;
+  }
+</style>

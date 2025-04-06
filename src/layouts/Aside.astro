@@ -3,11 +3,37 @@ import PersonalInfo from '../components/PersonalInfo.astro';
 import CategoryAside from '../components/CategoryAside.astro';
 import TagCloud from '../components/TagCloud.astro';
 import RecentPosts from '../components/RecentPosts.astro';
+import ToC from '../components/ToC.astro';
+
+const { headings = [] } = Astro.props;
+const isPost = Astro.url.pathname.includes('/post/');
 ---
 
 <aside class="hidden lg:block lg:col-span-1 ml-4">
-  <PersonalInfo />
-  <RecentPosts />
-  <CategoryAside />
-  <TagCloud />
+  {
+    isPost ? (
+      <>
+        <RecentPosts />
+        <div class="sticky top-20">
+          <ToC headings={headings} />
+        </div>
+      </>
+    ) : (
+      <>
+        <PersonalInfo />
+        <RecentPosts />
+        <CategoryAside />
+        <TagCloud />
+      </>
+    )
+  }
 </aside>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>

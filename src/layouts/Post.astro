@@ -7,8 +7,12 @@ import Aside from './Aside.astro';
 import MobileNav from '../components/MobileNav.astro';
 import BaseHead from '../components/BaseHead.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
-const { title, pubDate, updatedDate, heroImage, description, category, tags } = Astro.props;
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { title, pubDate, updatedDate, heroImage, description, category, tags } = entry.data;
 
 const blog = await getCollection('blog');
 // Tags
@@ -18,6 +22,9 @@ blog.forEach((post) => {
     tagsSet.add(tag);
   });
 });
+
+// Get headings from the ToC
+const { headings } = await entry.render();
 ---
 
 <Layout image={heroImage} description={description}>
@@ -93,7 +100,7 @@ blog.forEach((post) => {
         <slot />
       </div>
     </article>
-    <Aside />
+    <Aside headings={headings} isPost={true} />
     <MobileNav />
   </main>
 </Layout>
