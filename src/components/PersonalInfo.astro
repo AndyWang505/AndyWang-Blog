@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { DEFAULT_AVATAR } from '../consts';
 
 const blog = await getCollection('blog');
 const posts = blog.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -22,7 +23,7 @@ const categoriesCount = categoriesSet.size;
 <div class="w-full rounded-lg bg-white dark:bg-zinc-800 drop-shadow py-6 px-4 mb-4 text-center">
   <img
     class="rounded-full h-24 w-24 mx-auto mb-4 transition-transform duration-1000 hover:rotate-180"
-    src="https://avatars.githubusercontent.com/u/71600455?v=4"
+    src={DEFAULT_AVATAR}
     alt="head shot"
   />
   <h1 class="text-md dark:text-neutral-200 mb-2">Andy Wang</h1>

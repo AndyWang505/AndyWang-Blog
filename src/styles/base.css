@@ -12,6 +12,8 @@
   --box-shadow:
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
     0 16px 32px rgba(var(--gray), 33%);
+  --footer-bg-light: url('/public/back-footer/cave.foothold1.1.0.png');
+  --footer-bg-dark: url('/public/back-footer/enH1.1.png');
 }
 
 body {
@@ -33,14 +35,14 @@ body {
 
 .dark footer,
 footer {
-  background-image: url('/public/back-footer/cave.foothold1.1.0.png');
+  background-image: var(--footer-bg-light);
   background-repeat: repeat-x;
   background-size: contain;
   background-position: center;
 }
 
 .dark footer {
-  background-image: url('/public/back-footer/enH1.1.png');
+  background-image: var(--footer-bg-dark);
 }
 
 .dark body {

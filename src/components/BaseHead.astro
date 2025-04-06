@@ -2,6 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/base.css';
+import { DEFAULT_BLOG_IMAGE } from '../consts';
 
 interface Props {
   title: string;
@@ -11,7 +12,7 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/Algo-Image1.png' } = Astro.props;
+const { title, description, image = DEFAULT_BLOG_IMAGE } = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -35,7 +36,7 @@ const { title, description, image = '/Algo-Image1.png' } = Astro.props;
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
