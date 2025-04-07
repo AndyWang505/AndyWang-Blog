@@ -1,0 +1,207 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<div class="container max-w-6xl mx-auto p-3 md:p-6 lg:p-6">
+  <div class="error-content">
+    <h1 class="error-emoji">:(</h1>
+    <h2>
+      Your PC ran into a problem and needs to restart. We're just collecting some error info, and
+      then we'll restart for you.
+    </h2>
+    <div class="error-details">
+      <p>For more information about this issue and possible fixes, visit https://andywangtw.dev</p>
+      <p>If you call a support person, give them this info:</p>
+      <p>Stop code: 404 PAGE_NOT_FOUND</p>
+    </div>
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      <div class="percentage">0% complete</div>
+    </div>
+    <div class="qr-section">
+      <div class="qr-code">
+        <Image
+          src="https://memeprod.sgp1.digitaloceanspaces.com/user-resource-thumbnail/a575c6954a205dc243b453fd46dc0c99.png"
+          alt="QR Code"
+          width={150}
+          height={150}
+        />
+      </div>
+      <div class="qr-text">
+        <p>Scan this QR code to visit my website</p>
+        <a href="https://andywangtw.dev" class="website-link">https://andywangtw.dev</a>
+      </div>
+    </div>
+  </div>
+  <div class="error-footer">
+    <p>Copyright © 2025 Andy Wang. All rights reserved.</p>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #0078d7;
+    color: #fff;
+    font-family:
+      'Segoe UI',
+      system-ui,
+      -apple-system,
+      sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .error-emoji {
+    font-size: 24vh;
+    margin: 0;
+    line-height: 1;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    margin: 1rem 0;
+    line-height: 1.4;
+  }
+
+  .error-details {
+    margin: 2rem 0;
+  }
+
+  .error-details p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .progress-container {
+    margin: 2rem 0;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: 0.5rem;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress {
+    width: 0%;
+    height: 100%;
+    background: #fff;
+    animation: progress 2s infinite;
+    position: relative;
+  }
+
+  .progress::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 0 0 10px #fff;
+  }
+
+  .percentage {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-align: right;
+    animation: percentage 2s infinite;
+  }
+
+  .qr-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  .qr-code {
+    flex-shrink: 0;
+  }
+
+  .qr-text {
+    flex-grow: 1;
+  }
+
+  .website-link {
+    color: #fff;
+    text-decoration: underline;
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  .error-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  @keyframes progress {
+    0% {
+      width: 0%;
+    }
+    50% {
+      width: 100%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+
+  @keyframes percentage {
+    0% {
+      content: '0% complete';
+    }
+    25% {
+      content: '25% complete';
+    }
+    50% {
+      content: '50% complete';
+    }
+    75% {
+      content: '75% complete';
+    }
+    100% {
+      content: '100% complete';
+    }
+  }
+</style>
+
+<script>
+  // update progress percentage
+  const percentageElement = document.querySelector('.percentage');
+  if (percentageElement) {
+    let progress = 0;
+
+    setInterval(() => {
+      progress = (progress + 1) % 101;
+      percentageElement.textContent = `${progress}% complete`;
+    }, 50);
+  }
+</script>
