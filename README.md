@@ -1,4 +1,4 @@
-# Andy Wang's Blog
+# AndyWang's Blog
 
 My personal blog built with Astro, sharing thoughts and experiences.
 
