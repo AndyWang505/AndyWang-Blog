@@ -12,7 +12,11 @@ import { Image } from 'astro:assets';
     <div class="error-details">
       <p>For more information about this issue and possible fixes, visit https://andywangtw.dev</p>
       <p>If you call a support person, give them this info:</p>
-      <p>Stop code: 404 PAGE_NOT_FOUND</p>
+      <p class="stop-code">Stop code: CRITICAL_PROCESS_DIED</p>
+      <p class="error-message">
+        The critical system process C:\Windows\system32\404.exe terminated unexpectedly with status
+        code 0x00000001.
+      </p>
     </div>
     <div class="progress-container">
       <div class="progress-bar">
@@ -190,6 +194,19 @@ import { Image } from 'astro:assets';
     100% {
       content: '100% complete';
     }
+  }
+
+  .stop-code {
+    font-family: 'Consolas', monospace;
+    color: #ff6b6b;
+    margin: 1rem 0;
+  }
+
+  .error-message {
+    font-family: 'Consolas', monospace;
+    color: #ffd700;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
   }
 </style>
 
