@@ -4,7 +4,7 @@ import { SITE_TITLE } from '../consts';
 import ThemeToggle from './ThemeToggle';
 ---
 
-<header class="dark:bg-zinc-800 dark:text-zinc-100 sticky top-0 z-50 drop-shadow">
+<header class="bg-white/80 dark:bg-zinc-800/80 dark:text-zinc-100 sticky top-0 z-50 drop-shadow">
   <nav class="max-w-6xl py-3 mx-auto">
     <h2 class="flex items-center">
       <a href="/" class="text-xl italic py-1 mr-1">{SITE_TITLE}</a>
@@ -23,7 +23,8 @@ import ThemeToggle from './ThemeToggle';
   header {
     margin: 0;
     padding: 0 1em;
-    background: white;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Safari 支援 */
   }
   h2 {
     margin: 0;
