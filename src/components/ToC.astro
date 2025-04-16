@@ -31,6 +31,7 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
           <a
             href={`#${heading.slug}`}
             class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 transition-all duration-200 block hover:translate-x-1"
+            data-heading-id={heading.slug}
           >
             {heading.text}
           </a>
@@ -52,4 +53,39 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
   .toc-item.depth-3 {
     @apply pl-8;
   }
+
+  .toc-item a.active {
+    @apply text-neutral-800 dark:text-neutral-200 font-medium;
+  }
 </style>
+
+<script>
+  // get all heading elements
+  const headings = document.querySelectorAll('h2[id], h3[id]');
+  const tocLinks = document.querySelectorAll('.toc-item a');
+
+  // create an IntersectionObserver to watch the visibility of the headings
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+
+          // find the link that matches the heading id
+          const activeLink = document.querySelector(
+            `.toc-item a[data-heading-id="${entry.target.id}"]`
+          );
+          if (activeLink) {
+            activeLink.classList.add('active');
+          }
+        }
+      });
+    },
+    {
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0,
+    }
+  );
+
+  headings.forEach((heading) => observer.observe(heading));
+</script>
