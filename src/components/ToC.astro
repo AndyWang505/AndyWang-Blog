@@ -6,8 +6,6 @@ interface Heading {
 }
 
 const { headings } = Astro.props;
-
-// only get h2 and h3
 const toc = headings.filter((heading: Heading) => heading.depth <= 3);
 ---
 
@@ -59,9 +57,38 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
 </style>
 
 <script>
-  const headings = document.querySelectorAll('h2[id], h3[id]');
-  const tocLinks = document.querySelectorAll('.toc-item a');
+  interface HeadingElement extends HTMLElement {
+    id: string;
+  }
+
   const HEADER_HEIGHT = 60;
+  const SCROLL_DEBOUNCE = 60;
+  const SCROLL_THRESHOLD = 20;
+
+  const headings = document.querySelectorAll<HeadingElement>('h2[id], h3[id]');
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-item a');
+  const tocMap = new Map<string, HTMLAnchorElement>();
+
+  // Initialize toc map for faster lookups
+  tocLinks.forEach((link) => {
+    const headingId = link.getAttribute('data-heading-id');
+    if (headingId) {
+      tocMap.set(headingId, link);
+    }
+  });
+
+  function updateActiveLink(activeLink: HTMLAnchorElement) {
+    tocLinks.forEach((link) => link.classList.remove('active'));
+    activeLink.classList.add('active');
+  }
+
+  function scrollToHeading(heading: HeadingElement) {
+    const targetPosition = heading.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth',
+    });
+  }
 
   function handleClick(e: Event) {
     e.preventDefault();
@@ -69,63 +96,45 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
     const targetId = clickedLink.getAttribute('href')?.slice(1);
     if (!targetId) return;
 
-    // find the target heading
-    const targetHeading = document.getElementById(targetId);
+    const targetHeading = document.getElementById(targetId) as HeadingElement;
     if (targetHeading) {
-      // calculate the scroll position
-      const targetPosition =
-        targetHeading.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth',
-      });
+      scrollToHeading(targetHeading);
       updateActiveLink(clickedLink);
     }
   }
 
-  // update the active
-  function updateActiveLink(activeLink: HTMLAnchorElement) {
-    tocLinks.forEach((link) => link.classList.remove('active'));
-    activeLink.classList.add('active');
-  }
-
   function handleScroll() {
     const viewportTop = window.scrollY + HEADER_HEIGHT;
-    let activeHeading = null;
+    let activeHeading: HeadingElement | null = null;
     let minDistance = Infinity;
 
     headings.forEach((heading) => {
       const headingTop = heading.getBoundingClientRect().top + window.scrollY;
       const distance = Math.abs(headingTop - viewportTop);
 
-      // if the heading is in the viewport or just passed the viewport top
-      if (headingTop <= viewportTop + 20 && distance < minDistance) {
+      if (headingTop <= viewportTop + SCROLL_THRESHOLD && distance < minDistance) {
         minDistance = distance;
         activeHeading = heading;
       }
     });
 
-    // update the corresponding toc item
     if (activeHeading) {
-      const activeLink = document.querySelector(
-        `.toc-item a[data-heading-id="${activeHeading.id}"]`
-      ) as HTMLAnchorElement;
+      const activeLink = tocMap.get(activeHeading.id);
       if (activeLink) {
         updateActiveLink(activeLink);
       }
     }
   }
 
-  tocLinks.forEach((link) => {
-    link.addEventListener('click', handleClick);
-  });
+  // Add event listeners
+  tocLinks.forEach((link) => link.addEventListener('click', handleClick));
 
-  // use debounce to handle the scroll event
   let scrollTimeout: number;
   window.addEventListener('scroll', () => {
     clearTimeout(scrollTimeout);
-    scrollTimeout = window.setTimeout(handleScroll, 60);
+    scrollTimeout = window.setTimeout(handleScroll, SCROLL_DEBOUNCE);
   });
 
+  // Initial state
   handleScroll();
 </script>
