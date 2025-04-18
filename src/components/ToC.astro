@@ -1,5 +1,4 @@
 ---
-// src/components/TableOfContents.astro
 interface Heading {
   depth: number;
   slug: string;
@@ -60,22 +59,73 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
 </style>
 
 <script>
+  const headings = document.querySelectorAll('h2[id], h3[id]');
   const tocLinks = document.querySelectorAll('.toc-item a');
+  const HEADER_HEIGHT = 60;
 
-  // handle click event
   function handleClick(e: Event) {
-    tocLinks.forEach((link) => link.classList.remove('active'));
+    e.preventDefault();
     const clickedLink = e.currentTarget as HTMLAnchorElement;
-    clickedLink.classList.add('active');
+    const targetId = clickedLink.getAttribute('href')?.slice(1);
+    if (!targetId) return;
+
+    // find the target heading
+    const targetHeading = document.getElementById(targetId);
+    if (targetHeading) {
+      // calculate the scroll position
+      const targetPosition =
+        targetHeading.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth',
+      });
+      updateActiveLink(clickedLink);
+    }
   }
 
-  // add click event listener to each toc item
+  // update the active
+  function updateActiveLink(activeLink: HTMLAnchorElement) {
+    tocLinks.forEach((link) => link.classList.remove('active'));
+    activeLink.classList.add('active');
+  }
+
+  function handleScroll() {
+    const viewportTop = window.scrollY + HEADER_HEIGHT;
+    let activeHeading = null;
+    let minDistance = Infinity;
+
+    headings.forEach((heading) => {
+      const headingTop = heading.getBoundingClientRect().top + window.scrollY;
+      const distance = Math.abs(headingTop - viewportTop);
+
+      // if the heading is in the viewport or just passed the viewport top
+      if (headingTop <= viewportTop + 20 && distance < minDistance) {
+        minDistance = distance;
+        activeHeading = heading;
+      }
+    });
+
+    // update the corresponding toc item
+    if (activeHeading) {
+      const activeLink = document.querySelector(
+        `.toc-item a[data-heading-id="${activeHeading.id}"]`
+      ) as HTMLAnchorElement;
+      if (activeLink) {
+        updateActiveLink(activeLink);
+      }
+    }
+  }
+
   tocLinks.forEach((link) => {
     link.addEventListener('click', handleClick);
   });
 
-  // initial state: activate the first toc item
-  if (tocLinks.length > 0) {
-    tocLinks[0].classList.add('active');
-  }
+  // use debounce to handle the scroll event
+  let scrollTimeout: number;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = window.setTimeout(handleScroll, 60);
+  });
+
+  handleScroll();
 </script>
