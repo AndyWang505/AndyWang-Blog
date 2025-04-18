@@ -57,9 +57,7 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
 </style>
 
 <script>
-  interface HeadingElement extends HTMLElement {
-    id: string;
-  }
+  type HeadingElement = HTMLElement & { id: string };
 
   const HEADER_HEIGHT = 60;
   const SCROLL_DEBOUNCE = 60;
@@ -77,12 +75,12 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
     }
   });
 
-  function updateActiveLink(activeLink: HTMLAnchorElement) {
+  function updateActiveLink(activeLink: HTMLAnchorElement): void {
     tocLinks.forEach((link) => link.classList.remove('active'));
     activeLink.classList.add('active');
   }
 
-  function scrollToHeading(heading: HeadingElement) {
+  function scrollToHeading(heading: HeadingElement): void {
     const targetPosition = heading.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
     window.scrollTo({
       top: targetPosition,
@@ -90,20 +88,21 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
     });
   }
 
-  function handleClick(e: Event) {
+  function handleClick(e: Event): void {
     e.preventDefault();
     const clickedLink = e.currentTarget as HTMLAnchorElement;
     const targetId = clickedLink.getAttribute('href')?.slice(1);
+
     if (!targetId) return;
 
-    const targetHeading = document.getElementById(targetId) as HeadingElement;
+    const targetHeading = document.getElementById(targetId) as HeadingElement | null;
     if (targetHeading) {
       scrollToHeading(targetHeading);
       updateActiveLink(clickedLink);
     }
   }
 
-  function handleScroll() {
+  function findActiveHeading(): HeadingElement | null {
     const viewportTop = window.scrollY + HEADER_HEIGHT;
     let activeHeading: HeadingElement | null = null;
     let minDistance = Infinity;
@@ -118,6 +117,11 @@ const toc = headings.filter((heading: Heading) => heading.depth <= 3);
       }
     });
 
+    return activeHeading;
+  }
+
+  function handleScroll(): void {
+    const activeHeading = findActiveHeading();
     if (activeHeading) {
       const activeLink = tocMap.get(activeHeading.id);
       if (activeLink) {
