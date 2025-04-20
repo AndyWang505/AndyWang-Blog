@@ -12,7 +12,7 @@ import Layout from '../../layouts/Layout.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Roboto+Slab:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+TC:wght@100..900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playball&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap"
       rel="stylesheet"
     />
     <link
@@ -38,8 +38,8 @@ import Layout from '../../layouts/Layout.astro';
         margin: 0;
         padding: 0;
         font: inherit;
-        font-family: 'Roboto Slab', serif;
-        font-weight: 400;
+        font-family: 'Playfair Display', cursive;
+        font-weight: 500;
         vertical-align: baseline;
         text-decoration: none;
         list-style: none;
@@ -72,8 +72,15 @@ import Layout from '../../layouts/Layout.astro';
         background-size: cover;
         background-attachment: fixed;
         transform: scale(1);
-        transition: transform 0.2s ease-in-out;
+        transition:
+          transform 0.2s ease-in-out,
+          opacity 1.5s ease-in-out;
         z-index: -1;
+        opacity: 0;
+      }
+
+      main.loaded::before {
+        opacity: 1;
       }
 
       /* Keyframes animation */
@@ -100,6 +107,12 @@ import Layout from '../../layouts/Layout.astro';
         border: 1.5px solid rgb(230, 230, 230);
         border-radius: 10px;
         z-index: 100;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+      }
+
+      main.loaded section {
+        opacity: 1;
       }
 
       header {
@@ -114,7 +127,7 @@ import Layout from '../../layouts/Layout.astro';
 
       header h1 {
         font-size: 1.5em;
-        margin: 5px auto;
+        margin: 8px auto;
       }
 
       .address {
@@ -160,6 +173,11 @@ import Layout from '../../layouts/Layout.astro';
         height: 100%;
         z-index: 1;
       }
+
+      header p,
+      h1 {
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
@@ -171,11 +189,11 @@ import Layout from '../../layouts/Layout.astro';
             alt="head shot"
             loading="lazy"
           />
-          <h1>Weiwei</h1>
+          <h1>AndyWang</h1>
           <p class="address">
             <i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City
           </p>
-          <p>hi, you can call me weiwei. I enjoy solving issues ~</p>
+          <p>hi, you can call me weiwei. I enjoy solving issues.</p>
         </header>
         <ul>
           <li>
@@ -215,6 +233,7 @@ import Layout from '../../layouts/Layout.astro';
     <canvas id="starryCanvas"></canvas>
 
     <script is:inline lang="ts">
+      // Starry background animation
       const canvas = document.getElementById('starryCanvas');
       const ctx = canvas.getContext('2d');
 
@@ -279,6 +298,18 @@ import Layout from '../../layouts/Layout.astro';
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       });
+
+      // Background image fade-in effect
+      const mainElement = document.querySelector('main');
+      if (mainElement) {
+        const backgroundImage = new Image();
+        backgroundImage.src =
+          'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
+
+        backgroundImage.onload = () => {
+          mainElement.classList.add('loaded');
+        };
+      }
     </script>
   </body>
 </html>
