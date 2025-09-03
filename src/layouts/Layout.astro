@@ -6,8 +6,8 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const post = Astro.params;
-const dynamicTitle = post.slug === undefined ? SITE_TITLE : post.slug;
-const { image, description } = Astro.props;
+const { title, image, description } = Astro.props;
+const dynamicTitle = title || (post.slug === undefined ? SITE_TITLE : post.slug);
 const dynamicDescription = description === undefined ? SITE_DESCRIPTION : description;
 ---
 
