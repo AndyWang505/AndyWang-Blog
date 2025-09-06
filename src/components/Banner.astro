@@ -1,2 +1,60 @@
 ---
-<div></div>
+import { BANNER_CONFIG, BANNER_HEIGHT_EXTEND } from '../constants/banner';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  position?: 'top' | 'center' | 'bottom';
+  showCredit?: boolean;
+}
+
+const { 
+  src = BANNER_CONFIG.src, 
+  alt = "Blog banner image", 
+  position = BANNER_CONFIG.position as 'top' | 'center' | 'bottom',
+  showCredit = BANNER_CONFIG.credit.enable 
+} = Astro.props;
+
+const imageStyle = `object-position: ${position}`;
+---
+
+{BANNER_CONFIG.enable && (
+  <div 
+    id="banner-wrapper" 
+    class="absolute z-10 w-full transition-all duration-700 overflow-hidden" 
+    style="top: 0"
+  >
+    <div 
+      id="banner" 
+      class="w-full h-full transition-all duration-700 opacity-100 scale-100 relative"
+    >
+      <!-- Banner 圖片 -->
+      <img 
+        src={src}
+        alt={alt}
+        class="w-full h-full object-cover"
+        style={imageStyle}
+        loading="eager"
+      />
+      
+      <!-- 版權信息 -->
+      {showCredit && BANNER_CONFIG.credit.text && (
+        <a 
+          href={BANNER_CONFIG.credit.url} 
+          id="banner-credit" 
+          target="_blank" 
+          rel="noopener" 
+          aria-label="Visit image source"
+          class="group absolute flex justify-center items-center rounded-full px-3 right-4 -bottom-[3.25rem] bg-black/60 hover:bg-black/70 h-9 transition-all"
+        >
+          <div class="text-white/75 text-xs">{BANNER_CONFIG.credit.text}</div>
+          {BANNER_CONFIG.credit.url && (
+            <svg class="ml-1 w-3 h-3 text-white/75 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+            </svg>
+          )}
+        </a>
+      )}
+    </div>
+  </div>
+)}

@@ -20,7 +20,7 @@ export async function getStaticPaths({ paginate }: { paginate: any }) {
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
   return paginate(posts, {
-    pageSize: 12,
+    pageSize: 10,
   });
 }
 
@@ -36,8 +36,8 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 
 <Layout>
   <!-- Main content wrapper with fuwari-style layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto px-0 md:px-4">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
+  <div class="relative max-w-[var(--page-width)] mx-auto">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
       <MobileNav />
       

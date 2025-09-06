@@ -9,7 +9,7 @@ import CardItem from '../components/CardItem.astro';
 const blog = await getCollection('blog');
 const posts = blog.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const postsPerPage = 12;
+const postsPerPage = 10;
 const currentPage = 1;
 const totalPages = Math.ceil(posts.length / postsPerPage);
 const startIndex = (currentPage - 1) * postsPerPage;
@@ -19,8 +19,8 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 
 <Layout>
   <!-- Main content wrapper with fuwari-style layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto px-0 md:px-4">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
+  <div class="relative max-w-[var(--page-width)] mx-auto">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
       <!-- mobile nav -->
       <MobileNav />

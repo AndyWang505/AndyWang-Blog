@@ -2,22 +2,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Playball&family=Satisfy&display=swap');
 
 :root {
+  /* 色彩系統 */
+  --hue: 250; /* 預設色調 */
   --accent: #2337ff;
   --accent-dark: #000d8a;
+  --primary: oklch(0.6 0.14 var(--hue));
+  
+  /* 灰階系統 */
   --black: 15, 18, 25;
   --gray: 96, 115, 159;
   --gray-light: 229, 233, 240;
   --gray-dark: 34, 41, 57;
   --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+  
+  /* 背景色系 */
+  --page-bg: oklch(0.95 0.01 var(--hue));
+  --card-bg: white;
+  --sidebar-bg: oklch(0.98 0.005 var(--hue));
+  
+  /* 深色模式背景 */
+  --page-bg-dark: oklch(0.16 0.014 var(--hue));
+  --card-bg-dark: oklch(0.23 0.015 var(--hue));
+  --sidebar-bg-dark: oklch(0.19 0.015 var(--hue));
+  
+  /* 陰影系統 */
   --box-shadow:
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
     0 16px 32px rgba(var(--gray), 33%);
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --card-shadow-hover: 0 4px 12px 0 rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  
+  /* Footer 背景 */
   --footer-bg-light: url('/public/back-footer/cave.foothold1.1.0.png');
   --footer-bg-dark: url('/public/back-footer/enH1.1.png');
-  --footer-bg-dark: url('/public/back-footer/enH1.1.png');
+  
+  /* 代碼塊 */
   --codeblock-bg: #0b0b0c;
   --codeblock-topbar-bg: #111827;
-  --primary: #60a5fa;
 }
 
 body {
@@ -28,13 +49,15 @@ body {
   margin: 0;
   padding: 0;
   text-align: left;
-  background: #e7eff0 linear-gradient(0deg, rgba(240, 248, 255, 0.06), rgba(220, 240, 255, 0.06));
+  /* Fuwari 風格的背景 */
+  background: var(--page-bg);
   background-attachment: fixed;
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: rgb(var(--gray-dark));
   line-height: 1.5;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
 }
 
 .dark footer,
@@ -49,12 +72,69 @@ footer {
   background-image: var(--footer-bg-dark);
 }
 
+/* 深色模式樣式 - Fuwari 風格 */
 .dark body {
-  background: oklch(.16 .014 360);
+  background: var(--page-bg-dark);
+  color: oklch(0.85 0.008 var(--hue));
 }
 
+/* 深色模式文字顏色 */
+.dark {
+  --gray-dark: 229, 233, 240;
+}
+
+/* 全局樣式 */
 svg {
   display: inline-block;
+}
+
+/* Fuwari 風格的卡片和內容區域 */
+.card-bg {
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.card-bg:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.dark .card-bg {
+  background: var(--card-bg-dark);
+}
+
+/* 側邊欄背景 */
+.sidebar-bg {
+  background: var(--sidebar-bg);
+}
+
+.dark .sidebar-bg {
+  background: var(--sidebar-bg-dark);
+}
+
+/* 內容容器 */
+.content-container {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+.dark .content-container {
+  background: var(--card-bg-dark);
+}
+
+/* 導航欄背景 - 毛玻璃效果 */
+.navbar-bg {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .navbar-bg {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* mdx style */

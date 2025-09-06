@@ -8,38 +8,96 @@ import FormattedDate from '../../components/FormattedDate.astro';
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+
+// Group posts by year
+const groupedPosts = posts.reduce((acc, post) => {
+  const year = post.data.pubDate.getFullYear();
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+
+const yearGroups = Object.keys(groupedPosts).map((yearStr) => ({
+  year: parseInt(yearStr, 10),
+  posts: groupedPosts[parseInt(yearStr, 10)],
+})).sort((a, b) => b.year - a.year);
+
+function formatDate(date: Date) {
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${month}-${day}`;
+}
 ---
 
 <Layout>
   <!-- Main content wrapper with fuwari-style layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto px-0 md:px-4">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
+  <div class="relative max-w-[var(--page-width)] mx-auto ">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
       <!-- mobile nav -->
       <MobileNav />
       <main class="col-span-2 lg:col-span-1 overflow-hidden">
         <div class="onload-animation">
-          <section class="dark:bg-zinc-800 bg-white shadow-md rounded-lg overflow-hidden py-6">
-      <div class="text-2xl mb-4 ml-6 md:ml-12 dark:text-neutral-200">
+          <section class="dark:bg-zinc-900 bg-white shadow-md rounded-lg overflow-hidden py-6">
+      <div class="text-2xl mb-8 ml-6 md:ml-12 dark:text-neutral-200">
         <h2>Archive</h2>
         <h3 class="text-xl">共 {posts.length} 筆文章</h3>
       </div>
-      <ul class="pl-10 md:pl-16">
-        {
-          posts.map((post) => (
-            <li class="mb-2 list-disc dark:text-neutral-200">
-              <a href={`/post/${post.slug}/`}>
-                <p class="text-sm text-neutral-400 inline-block">
-                  <FormattedDate date={post.data.pubDate} />
-                </p>
-                <h4 class="ml-2 inline-block hover:underline hover:underline-offset-2">
-                  {post.data.title}
-                </h4>
+      
+      <!-- Fuwari-style Timeline -->
+      <div class="px-3">
+        {yearGroups.map((group) => (
+          <div class="mb-8">
+            <!-- Year Header -->
+            <div class="flex flex-row w-full items-center h-[3.75rem]">
+              <div class="w-[15%] md:w-[10%] text-2xl font-bold text-right text-neutral-600 dark:text-neutral-300">
+                {group.year}
+              </div>
+              <div class="w-[15%] md:w-[10%]">
+                <div class="h-3 w-3 bg-transparent rounded-full border-2 border-blue-500 mx-auto z-10 relative"></div>
+              </div>
+              <div class="w-[70%] md:w-[80%] text-left text-neutral-500 dark:text-neutral-400">
+                {group.posts.length} {group.posts.length === 1 ? 'post' : 'posts'}
+              </div>
+            </div>
+
+            <!-- Posts in this year -->
+            {group.posts.map((post, index) => (
+              <a 
+                href={`/post/${post.slug}/`}
+                class="group block w-full rounded-lg hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-all duration-200"
+              >
+                <div class="flex flex-row justify-start items-center h-10">
+                  <!-- Date -->
+                  <div class="w-[15%] md:w-[10%] text-sm text-right text-neutral-400 dark:text-neutral-500">
+                    {formatDate(post.data.pubDate)}
+                  </div>
+
+                  <!-- Timeline dot and line -->
+                  <div class="w-[15%] md:w-[10%] relative h-full flex items-center">
+                    <!-- Vertical line -->
+                    <div class="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-200 dark:bg-zinc-700 -translate-x-1/2"></div>
+                    <!-- Dot -->
+                    <div class="mx-auto w-1 h-1 rounded-full bg-neutral-400 dark:bg-neutral-500 group-hover:h-5 group-hover:bg-blue-500 transition-all duration-200 z-10 relative bg-white dark:bg-zinc-900 outline outline-2 outline-white dark:outline-zinc-900 group-hover:outline-neutral-50 dark:group-hover:outline-zinc-800"></div>
+                  </div>
+
+                  <!-- Post title -->
+                  <div class="w-[70%] md:max-w-[65%] md:w-[65%] text-left font-medium group-hover:translate-x-1 transition-all group-hover:text-blue-600 dark:group-hover:text-blue-400 text-neutral-700 dark:text-neutral-200 pr-8 truncate">
+                    {post.data.title}
+                  </div>
+
+                  <!-- Tags (hidden on mobile) -->
+                  <div class="hidden md:block md:w-[15%] text-left text-sm text-neutral-400 dark:text-neutral-500 truncate">
+                    {post.data.tags && post.data.tags.slice(0, 2).map(tag => `#${tag}`).join(' ')}
+                  </div>
+                </div>
               </a>
-            </li>
-          ))
-        }
-          </ul>
+            ))}
+          </div>
+        ))}
+      </div>
           </section>
         </div>
       </main>
