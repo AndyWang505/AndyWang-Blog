@@ -3,7 +3,7 @@
 
 :root {
   /* 色彩系統 */
-  --hue: 250; /* 預設色調 */
+  --hue: 360; /* 預設色調 */
   --accent: #2337ff;
   --accent-dark: #000d8a;
   --primary: oklch(0.6 0.14 var(--hue));

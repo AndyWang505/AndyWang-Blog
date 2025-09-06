@@ -7,7 +7,19 @@ import MobileNav from '../components/MobileNav.astro';
 import CardItem from '../components/CardItem.astro';
 
 const blog = await getCollection('blog');
-const posts = blog.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 獲取文章內容用於計算字數
+const postsWithContent = await Promise.all(
+  blog.map(async (post) => {
+    const { Content } = await post.render();
+    return {
+      ...post,
+      content: post.body // 使用原始 markdown 內容
+    };
+  })
+);
+
+const posts = postsWithContent.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const postsPerPage = 10;
 const currentPage = 1;
@@ -37,6 +49,7 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
               category={post.data.category}
               tags={post.data.tags}
               description={post.data.description}
+              content={post.content}
             />
           ))}
 

@@ -2,7 +2,7 @@
 title: '關於 cherry-pick 時機與常見誤區'
 description: '在還沒有實際遇到分支管理問題之前，其實很少用到 cherry-pick，第一次真正使用到它，是在剛入職一段時間處理 hotfix 的時候。按照正常流程，hotfix 應該要從 master 開 branch，修完之後合回 master，再 sync 回 release。'
 pubDate: 'May 30 2025'
-heroImage: '/GitFlow.png'
+heroImage: ''
 tags: ['Git', '心得']
 category: 'Git'
 ---
