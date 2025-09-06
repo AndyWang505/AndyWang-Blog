@@ -20,7 +20,7 @@ export async function getStaticPaths({ paginate }: { paginate: any }) {
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
   return paginate(posts, {
-    pageSize: 8,
+    pageSize: 12,
   });
 }
 
@@ -35,9 +35,15 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 ---
 
 <Layout>
-  <main class="max-w-6xl mx-auto p-3 md:p-6 lg:p-6">
-    <div class="flex grid lg:grid-cols-4">
-      <section class="col-span-3">
+  <!-- Main content wrapper with fuwari-style layout -->
+  <div class="relative max-w-[var(--page-width)] mx-auto px-0 md:px-4">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
+      <Aside />
+      <MobileNav />
+      
+      <main class="col-span-2 lg:col-span-1 overflow-hidden">
+        <div class="onload-animation">
+          <section>
         <ul>
           {
             paginatedPosts.map((post) => (
@@ -50,7 +56,7 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
                       alt=""
                     />
                   </div>
-                  <div class="flex-1 p-6 bg-white dark:bg-zinc-800">
+                  <div class="flex-1 p-6 bg-white dark:bg-zinc-900">
                     <h4 class="text-xl font-semibold mb-2 dark:text-neutral-200 title-hover">
                       {post.data.title}
                     </h4>
@@ -120,38 +126,39 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
               </li>
             ))
           }
-        </ul>
-      </section>
-      <Aside />
+            </ul>
+            
+            <nav class="my-6">
+              <ul class="mx-auto flex justify-center">
+                {
+                  currentPage > 1 && (
+                    <li>
+                      <a
+                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-orange-400 hover:text-orange-600 transition-colors"
+                        href={`/${currentPage - 1}`}
+                      >
+                        &lt;&lt; Previous
+                      </a>
+                    </li>
+                  )
+                }
+                {
+                  currentPage < totalPages && (
+                    <li>
+                      <a
+                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-blue-400 hover:text-blue-600 transition-colors"
+                        href={`/${currentPage + 1}`}
+                      >
+                        Next &gt;&gt;
+                      </a>
+                    </li>
+                  )
+                }
+              </ul>
+            </nav>
+          </section>
+        </div>
+      </main>
     </div>
-    <nav class="my-6">
-      <ul class="mx-auto flex justify-center">
-        {
-          currentPage > 1 && (
-            <li>
-              <a
-                class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-orange-400 hover:text-orange-600"
-                href={`/${currentPage - 1}`}
-              >
-                &lt;&lt; Previous
-              </a>
-            </li>
-          )
-        }
-        {
-          currentPage < totalPages && (
-            <li>
-              <a
-                class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-md text-blue-400 hover:text-blue-600"
-                href={`/${currentPage + 1}`}
-              >
-                Next &gt;&gt;
-              </a>
-            </li>
-          )
-        }
-      </ul>
-    </nav>
-    <MobileNav />
-  </main>
+  </div>
 </Layout>

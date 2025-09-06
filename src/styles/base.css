@@ -50,7 +50,7 @@ footer {
 }
 
 .dark body {
-  background: #18181b linear-gradient(0deg, rgba(90, 80, 125, 0.06), rgba(40, 40, 70, 0.06));
+  background: oklch(.16 .014 360);
 }
 
 svg {

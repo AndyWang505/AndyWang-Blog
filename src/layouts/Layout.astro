@@ -10,11 +10,15 @@ export interface Props {
   title?: string;
   image?: string;
   description?: string;
+  banner?: string;
 }
 
-const { title, image, description } = Astro.props;
+const { title, image, description, banner } = Astro.props;
 const dynamicTitle = title || SITE_TITLE;
 const dynamicDescription = description || SITE_DESCRIPTION;
+
+// No banner: use fixed top margin
+const mainPanelTop = "5.5rem";
 ---
 
 <html lang="zh_TW">
@@ -40,17 +44,33 @@ const dynamicDescription = description || SITE_DESCRIPTION;
         }
       })();
     </script>
+    
+    <style define:vars={{
+      'page-width': '75rem',
+      'main-panel-top': mainPanelTop,
+    }}>
+      :root {
+        --page-width: var(--page-width);
+        --main-panel-top: var(--main-panel-top);
+      }
+    </style>
   </head>
 
   <body class="transition-colors duration-300">
-    <Header />
-    <main class="transition-swup-fade">
+    <!-- Header -->
+    <div class="header-wrapper">
+      <Header />
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content transition-swup-fade" style={`margin-top: var(--main-panel-top);`}>
       <slot />
     </main>
+    
     <Footer />
     
     <!-- Page height extend for smooth transitions -->
-    <div id="page-height-extend" class="hidden h-[200vh]"></div>
+    <div id="page-height-extend" class="hidden h-[300vh]"></div>
   </body>
 </html>
 
@@ -82,6 +102,12 @@ function initPageTransitions() {
       if (mainContent) {
         mainContent.classList.add('content-container');
       }
+      
+      // Keep page height extend visible during transition  
+      const heightExtend = document.getElementById('page-height-extend');
+      if (heightExtend) {
+        heightExtend.classList.remove('hidden');
+      }
     });
 
     // Handle visit end
@@ -92,7 +118,7 @@ function initPageTransitions() {
         if (heightExtend) {
           heightExtend.classList.add('hidden');
         }
-      }, 100);
+      }, 200);
     });
   };
 
@@ -179,4 +205,8 @@ function initPhotoSwipe() {
 
 // Initialize PhotoSwipe on page load
 initPhotoSwipe();
+</script>
+
+<script>
+// no-op
 </script>

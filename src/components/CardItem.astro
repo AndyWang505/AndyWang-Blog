@@ -1,45 +1,25 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
-import Layout from './Layout.astro';
-import Aside from './Aside.astro';
-import MobileNav from '../components/MobileNav.astro';
-import BaseHead from '../components/BaseHead.astro';
+import FormattedDate from './FormattedDate.astro';
 
-interface Props {
-  entry: CollectionEntry<'blog'>;
+export interface Props {
+  slug: string;
+  title: string;
+  heroImage: string;
+  pubDate: Date;
+  category: string;
+  tags: string[];
+  description: string;
 }
 
-const { entry } = Astro.props;
-const { title, pubDate, updatedDate, heroImage, description, category, tags } = entry.data;
-
-const blog = await getCollection('blog');
-// Tags
-const tagsSet = new Set();
-blog.forEach((post) => {
-  post.data.tags.forEach((tag) => {
-    tagsSet.add(tag);
-  });
-});
-
-// Get headings from the ToC
-const { headings } = await entry.render();
+const { slug, title, heroImage, pubDate, category, tags, description } = Astro.props;
 ---
 
-<Layout title={title} image={heroImage} description={description}>
-  <!-- Main content wrapper with fuwari-style layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto px-0 md:px-4">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
-      <Aside headings={headings} />
-      <MobileNav />
-      
-      <main class="col-span-2 lg:col-span-1 overflow-hidden">
-        <div class="onload-animation">
-          <article class="bg-white shadow-md rounded-lg p-6 dark:bg-zinc-900">
-      <h1 class="text-3xl font-semibold mb-4 dark:text-zinc-100">{title}</h1>
-      <div class="block sm:flex items-center gap-1 mb-4">
-        <div class="flex gap-1 items-center text-sm text-neutral-500 mr-1 dark:text-zinc-300">
+<li class="w-full drop-shadow rounded-lg overflow-hidden mb-4 transition-hover-link title-hover-link">
+  <a class="sm:flex min-h-44" href={`/post/${slug}/`}>
+    <div class="flex-1 p-6 bg-white dark:bg-zinc-900">
+      <h4 class="text-xl font-semibold mb-2 dark:text-neutral-200 title-hover">{title}</h4>
+      <div class="block md:flex mb-4 text-xs gap-1">
+        <div class="flex gap-1 items-center text-neutral-500 dark:text-neutral-300 mr-1 flex-shrink-0">
           <svg
             width="16"
             height="16"
@@ -52,19 +32,13 @@ const { headings } = await entry.render();
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
-              stroke-linejoin="round"></path>
+              stroke-linejoin="round"
+            />
           </svg>
           <FormattedDate date={pubDate} />
-          {
-            updatedDate && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updatedDate} />
-              </div>
-            )
-          }
         </div>
-        <div class="flex gap-1">
-          <span class="flex gap-1 items-center text-sm text-neutral-500 mr-1 dark:text-zinc-300">
+        <div class="flex flex-nowrap gap-1">
+          <div class="flex gap-1 items-center text-neutral-500 dark:text-neutral-300 mr-1 flex-shrink-0">
             <svg
               width="16"
               height="16"
@@ -77,11 +51,12 @@ const { headings } = await entry.render();
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"></path>
+                stroke-linejoin="round"
+              />
             </svg>
             {category}
-          </span>
-          <span class="text-sm text-neutral-500 dark:text-neutral-300">
+          </div>
+          <span class="text-neutral-500 dark:text-neutral-300 flex-grow">
             <svg
               width="16"
               height="16"
@@ -94,21 +69,22 @@ const { headings } = await entry.render();
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"></path>
+                stroke-linejoin="round"
+              />
             </svg>
-            {tags.join('。')}
+            {tags.join(' • ')}
           </span>
         </div>
       </div>
-      <div class="mx-auto mb-6">
-        {heroImage && <img class="w-full block" src={heroImage} alt="" />}
-      </div>
-            <div class="prose md:px-6 dark:text-neutral-300">
-              <slot />
-            </div>
-          </article>
-        </div>
-      </main>
+      <p class="text-md mb-2 line-clamp-2 md:line-clamp-3 dark:text-neutral-300">{description}</p>
     </div>
-  </div>
-</Layout>
+    <div class="sm:w-[18rem] overflow-hidden">
+      <img
+        class="w-full h-52 sm:h-full object-cover transition-hover-img"
+        src={heroImage}
+        alt=""
+      />
+    </div>
+  </a>
+</li>
+

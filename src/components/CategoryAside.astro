@@ -10,7 +10,7 @@ interface CategoryCount {
 
 const blog = await getCollection('blog');
 // get categories data
-const categoriesCount = blog.reduce((acc: CategoryCount, post) => {
+const categoriesCount = blog.reduce((acc: CategoryCount, post: any) => {
   if (acc[post.data.category]) {
     acc[post.data.category].count++;
   } else {
@@ -25,7 +25,7 @@ const categoriesCount = blog.reduce((acc: CategoryCount, post) => {
 const categoriesArray = Object.values(categoriesCount);
 ---
 
-<div class="w-full rounded-lg bg-white dark:bg-zinc-800 drop-shadow p-6 mb-4">
+<div class="w-full rounded-lg bg-white dark:bg-zinc-900 drop-shadow p-6">
   <h3 class="mb-2">
     <a class="flex items-center gap-1.5 dark:text-neutral-300" href="/archive/category/">
       <svg
