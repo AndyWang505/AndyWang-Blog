@@ -17,7 +17,7 @@ category: 'TypeScript'
 
 結構可能會長這樣：
 
-```json=
+```json
 {
   "categories": [
     {

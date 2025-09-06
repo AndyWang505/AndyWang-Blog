@@ -11,43 +11,86 @@ import remarkToc from 'remark-toc';
 import remarkGfm from 'remark-gfm';
 import swup from '@swup/astro';
 
+import ExpressiveCode from 'astro-expressive-code';
+import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import { pluginLanguageBadge } from './plugins/expressive-code/language-badge';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://andywangtw.dev',
-  integrations: [
-    swup({
-      theme: false,
-      animationClass: "transition-swup-",
-      containers: ["main"],
-      smoothScrolling: true,
-      cache: true,
-      preload: true,
-      accessibility: true,
-      updateHead: true,
-      updateBodyClass: false,
-      globalInstance: true,
-    }),
-    mdx({
-      systaxHighlight: false,
-      remarkPlugins: [
-        remarkMath,
-        remarkGfm,
-        [remarkToc, { heading: 'Table of Contents', maxDepth: 3 }],
-      ],
-      rehypePlugins: [
-        rehypeSlug,
-        [rehypeAutolinkHeadings, {
-          behavior: 'append',
-          properties: {
-            class: 'heading-link',
-          },
-        }],
-        rehypeMathjax,
-      ],
-    }),
-    sitemap(),
-    react(),
-    tailwind()
-  ],
+  integrations: [swup({
+    theme: false,
+    animationClass: "transition-swup-",
+    containers: ["main"],
+    smoothScrolling: true,
+    cache: true,
+    preload: true,
+    accessibility: true,
+    updateHead: true,
+    updateBodyClass: false,
+    globalInstance: true,
+  }), ExpressiveCode(
+    {
+      themes: ['github-dark'],
+      plugins: [
+				pluginCollapsibleSections(),
+				pluginLineNumbers(),
+        pluginLanguageBadge(),
+			],
+      defaultProps: {
+				wrap: true,
+				overridesByLang: {
+					'shellsession': {
+						showLineNumbers: false,
+					},
+				},
+			},
+      styleOverrides: {
+				codeBackground: "var(--codeblock-bg)",
+				borderRadius: "0.75rem",
+				borderColor: "none",
+				codeFontSize: "0.875rem",
+				codeFontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+				codeLineHeight: "1.5rem",
+				frames: {
+					editorBackground: "var(--codeblock-bg)",
+					terminalBackground: "var(--codeblock-bg)",
+					terminalTitlebarBackground: "var(--codeblock-topbar-bg)",
+					editorTabBarBackground: "var(--codeblock-topbar-bg)",
+					editorActiveTabBackground: "none",
+					editorActiveTabIndicatorBottomColor: "var(--primary)",
+					editorActiveTabIndicatorTopColor: "none",
+					editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
+					terminalTitlebarBorderBottomColor: "none"
+				},
+        textMarkers: {
+					delHue: 0,
+					insHue: 180,
+					markHue: 250
+				}
+			},
+      frames: {
+				showCopyToClipboardButton: true,
+			}
+    }
+  ), mdx({
+    syntaxHighlight: false,
+    remarkPlugins: [
+      remarkMath,
+      remarkGfm,
+      [remarkToc, { heading: 'Table of Contents', maxDepth: 3 }],
+    ],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, {
+        behavior: 'append',
+        properties: {
+          class: 'heading-link',
+        },
+      }],
+      rehypeMathjax,
+    ],
+  }), sitemap(), react(), tailwind()],
   base: '',
 });
