@@ -2,16 +2,23 @@
 const today = new Date();
 ---
 
-<footer class="text-zinc-100">
-  <p>
-    Copyright &copy; 2021-{today.getFullYear()} AndyWang.
-  </p>
-  <p>MapleStory and all related images are © Nexon Corporation.</p>
+<footer class="text-zinc-600 dark:text-zinc-400 bg-white/30 dark:bg-black/20 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50">
+  <div class="max-w-6xl mx-auto px-4">
+    <p>
+      Copyright &copy; 2021-{today.getFullYear()} AndyWang.
+    </p>
+    <span class="mt-2 flex items-center justify-center gap-2 text-xs">
+      Content licensed under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hant" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-80">CC BY-SA 4.0</a>
+      unless otherwise noted.
+    </span>
+  </div>
 </footer>
 <style>
   footer {
     padding: 2em 1em 4em 1em;
     text-align: center;
+    margin-top: auto;
   }
   .social-links {
     display: flex;

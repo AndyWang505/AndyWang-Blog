@@ -58,7 +58,7 @@ React 的基本概念是「資料驅動畫面」，當元件的狀態或 props �
 
 假設我們有一個元件會根據 `searchTerm` 的改變來觸發搜尋 API，但我們也同時有一個無關的 count state。
 
-```js=
+```js
 import { useState, useEffect } from "react";
 
 function SearchComponent() {
@@ -92,7 +92,7 @@ function SearchComponent() {
 
 如果我們把非依賴的 `count` 放進 Dependencies Array：
 
-```js=
+```js
 useEffect(() => {
   console.log(`Searching for: ${searchTerm}`);
 }, [searchTerm, count]); // count 不應該是依賴
@@ -110,7 +110,7 @@ useEffect(() => {
 
 這可能會導致每當物件或陣列的內容發生變化時，即使資料本身沒有改變（例如內部的某個屬性或元素變動），也會觸發 `useEffect` 重新執行，糟糕的情況可能導致畫面一直重複 re-render。
 
-```js=
+```js
 function Example() {
   const [user, setUser] = useState({ name: "Alice", age: 30 });
 

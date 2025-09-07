@@ -1,0 +1,183 @@
+---
+import FormattedDate from './FormattedDate.astro';
+
+export interface Props {
+  slug: string;
+  title: string;
+  heroImage: string;
+  pubDate: Date;
+  category: string;
+  tags: string[];
+  description: string;
+  content?: string;
+}
+
+const { slug, title, heroImage, pubDate, category, tags, description, content } = Astro.props;
+
+// 計算文章內容的字數（移除 HTML 標籤和 Markdown 語法）
+function getWordCount(text: string): number {
+  if (!text) return 0;
+  
+  // 移除 HTML 標籤
+  const withoutHtml = text.replace(/<[^>]*>/g, ' ');
+  
+  // 移除 Markdown 語法
+  const withoutMarkdown = withoutHtml
+    .replace(/#{1,6}\s/g, '') // 標題
+    .replace(/\*\*([^*]+)\*\*/g, '$1') // 粗體
+    .replace(/\*([^*]+)\*/g, '$1') // 斜體
+    .replace(/`([^`]+)`/g, '$1') // 行內代碼
+    .replace(/```[\s\S]*?```/g, '') // 代碼塊
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 連結
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1') // 圖片
+    .replace(/>\s/g, '') // 引用
+    .replace(/[-*+]\s/g, '') // 列表
+    .replace(/\d+\.\s/g, ''); // 有序列表
+  
+  // 計算中文字符和英文單詞
+  const chineseChars = (withoutMarkdown.match(/[\u4e00-\u9fff]/g) || []).length;
+  const englishWords = (withoutMarkdown.match(/[a-zA-Z]+/g) || []).length;
+  
+  // 中文按字符計算，英文按單詞計算
+  return chineseChars + englishWords;
+}
+
+// 計算閱讀時間（中文250字/分鐘，英文200詞/分鐘的平均速度）
+function getReadingTime(wordCount: number): number {
+  if (wordCount === 0) return 1;
+  
+  // 平均閱讀速度：中文250字/分鐘
+  const readingTime = Math.ceil(wordCount / 250);
+  return Math.max(1, readingTime);
+}
+
+const wordCount = content ? getWordCount(content) : getWordCount(description);
+const readingTime = getReadingTime(wordCount);
+const hasCover = heroImage !== undefined && heroImage !== null && heroImage !== "";
+const coverWidth = "28%";
+---
+
+<div class="w-full rounded-xl overflow-hidden relative mb-4 bg-white
+              dark:bg-zinc-900 shadow-sm dark:shadow-gray-900/20 
+              hover:shadow-lg dark:hover:shadow-gray-900/40 transition duration-300 ease-out">
+  
+  {hasCover && 
+    <a href={`/post/${slug}/`} 
+       class="group block md:hidden w-full h-[150px] relative overflow-hidden">
+      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/20 transition-colors duration-300 ease-out"></div>
+      <img class="w-full h-full object-cover" src={heroImage} alt={title} />
+    </a>
+  }
+  
+  <div class={`px-4 py-4 md:pl-9 md:pr-2 md:pt-7 md:pb-6 relative ${hasCover ? 'md:w-[calc(100%_-_var(--coverWidth)_-_12px)]' : 'md:w-[calc(100%_-_52px_-_12px)]'}`}>
+    <a href={`/post/${slug}/`}
+       class="group w-full block font-bold mb-2 md:mb-3 text-lg md:text-3xl 
+       text-zinc-900 dark:text-zinc-100
+       hover:text-blue-600 dark:hover:text-blue-400
+       active:text-blue-700 dark:active:text-blue-300
+       before:w-1 before:h-5 before:rounded-md before:bg-blue-600
+       before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
+       leading-snug transition-colors duration-200 ease-out">
+      {title}
+      <svg class="text-blue-600 dark:text-blue-400 text-[2rem] hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200 ease-out" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+      </svg>
+    </a>
+
+    <!-- metadata -->
+    <div class="flex flex-wrap text-gray-500 dark:text-gray-400 items-center gap-2 md:gap-4 mb-3 md:mb-4">
+      <!-- publish date -->
+      <div class="flex items-center">
+        <div class="flex items-center justify-center w-6 h-6 bg-gray-100 dark:bg-gray-500/20 rounded-md mr-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600 dark:text-gray-400">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <span class="text-xs md:text-sm font-medium"><FormattedDate date={pubDate} /></span>
+      </div>
+
+      <!-- categories - hidden on mobile -->
+      <div class="hidden md:flex items-center">
+        <div class="flex items-center justify-center w-6 h-6 bg-sky-100 dark:bg-sky-900/20 rounded-md mr-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-600 dark:text-sky-400">
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"></path>
+          </svg>
+        </div>
+        <div class="flex flex-row flex-nowrap items-center">
+          <a href={`/archive/category/${category.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer whitespace-nowrap">
+            {category}
+          </a>
+        </div>
+      </div>
+
+      <!-- tags - simplified on mobile -->
+      <div class="flex items-center">
+        <div class="flex items-center justify-center w-6 h-6 bg-green-100 dark:bg-green-900/20 rounded-md mr-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600 dark:text-green-400" style="transform: translateY(-0.5px);">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+          </svg>
+        </div>
+        <div class="flex flex-row flex-nowrap items-center">
+          {tags && tags.length > 0 && tags.slice(0, 2).map((tag, i) => (
+            <>
+              {i > 0 && <div class="mx-1 md:mx-1.5 text-neutral-400 text-xs md:text-sm">/</div>}
+              <a href={`/archive/tag/${tag.replace(/\s+/g, '-')}/`} class="text-xs md:text-sm font-medium hover:text-green-600 dark:hover:text-green-400 cursor-pointer whitespace-nowrap">
+                {tag.trim()}
+              </a>
+            </>
+          ))}
+          {tags && tags.length > 2 && (
+            <span class="ml-1 text-xs text-neutral-400">+{tags.length - 2}</span>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- description -->
+    <div class="text-neutral-600 dark:text-neutral-300 mb-2 md:mb-3.5 pr-0 md:pr-4 line-clamp-2 md:line-clamp-3 text-sm md:text-base leading-relaxed">
+      {description}
+    </div>
+
+    <!-- word count and reading time - simplified for mobile -->
+    <div class="text-xs md:text-sm text-black/30 dark:text-white/30 flex gap-3 md:gap-4">
+      <div>{readingTime} {readingTime === 1 ? 'min' : 'mins'} read</div>
+      <div class="hidden md:block">|</div>
+      <div class="hidden md:block">{wordCount} {wordCount === 1 ? 'word' : 'words'}</div>
+    </div>
+  </div>
+
+  <!-- Desktop images -->
+  {hasCover && 
+    <a href={`/post/${slug}/`} 
+       class="group hidden md:block md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95 transition-transform ease-out">
+      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition-colors duration-300 ease-out"></div>
+      <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
+        <svg class="opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl transition-all" width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+        </svg>
+      </div>
+      <img class="w-full h-full object-cover transition-transform duration-500 ease-out" src={heroImage} alt={title} />
+    </a>
+  }
+
+  {!hasCover &&
+    <a href={`/post/${slug}/`}
+       class="hidden md:flex items-center justify-center w-[3.25rem] absolute right-3 top-3 bottom-3 rounded-xl 
+       bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 
+       active:bg-neutral-300 dark:active:bg-neutral-600 active:scale-95 
+       transition-all ease-out">
+      <svg class="text-blue-600 dark:text-blue-400 text-4xl" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+      </svg>
+    </a>
+  }
+</div>
+
+<style define:vars={{coverWidth}}>
+/* 只保留必要的 CSS 變數 */
+</style>
+

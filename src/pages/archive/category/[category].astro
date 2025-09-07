@@ -4,6 +4,7 @@ import FormattedDate from '../../../components/FormattedDate.astro';
 import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
+import CardItem from '../../../components/CardItem.astro';
 
 const blog = await getCollection('blog');
 
@@ -27,51 +28,64 @@ const avaliableCurrentCategoryPosts = blog
 ---
 
 <Layout>
-  <main class="max-w-6xl mx-auto p-3 md:p-6 flex grid lg:grid-cols-4">
-    <section
-      class="col-span-3 bg-white dark:bg-zinc-800 dark:text-neutral-300 shadow-md rounded-lg overflow-hidden py-6"
-    >
-      <h2 class="flex gap-2 text-2xl font-bold mb-4 ml-6 md:ml-12">
-        <a class="flex items-center gap-1.5" href="/archive/category/">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M13 7L11.8845 4.76892C11.5634 4.1268 11.4029 3.80573 11.1634 3.57116C10.9516 3.36373 10.6963 3.20597 10.4161 3.10931C10.0992 3 9.74021 3 9.02229 3H5.2C4.0799 3 3.51984 3 3.09202 3.21799C2.71569 3.40973 2.40973 3.71569 2.21799 4.09202C2 4.51984 2 5.0799 2 6.2V7M2 7H17.2C18.8802 7 19.7202 7 20.362 7.32698C20.9265 7.6146 21.3854 8.07354 21.673 8.63803C22 9.27976 22 10.1198 22 11.8V16.2C22 17.8802 22 18.7202 21.673 19.362C21.3854 19.9265 20.9265 20.3854 20.362 20.673C19.7202 21 18.8802 21 17.2 21H6.8C5.11984 21 4.27976 21 3.63803 20.673C3.07354 20.3854 2.6146 19.9265 2.32698 19.362C2 18.7202 2 17.8802 2 16.2V7Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
+  <!-- Main content wrapper with same layout as index.astro -->
+  <div class="relative max-w-[var(--page-width)] mx-auto">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
+      <Aside />
+      <!-- mobile nav -->
+      <MobileNav />
+      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
+        <div class="onload-animation">
+          <section class="space-y-4">
+      <!-- Header -->
+      <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6">
+        <nav class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+          <a href="/archive/" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+            Archive
+          </a>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
           </svg>
-          Categories
-        </a>
-        &gt;
-        <a class="text-orange-400" href="">{category}</a>
-      </h2>
-      <ul class="pl-10 md:pl-16">
-        {
-          avaliableCurrentCategoryPosts.map((post) => {
-            return (
-              <li class="mb-2 list-disc">
-                <a href={`/post/${post.slug}/`}>
-                  <p class="text-sm text-neutral-400 inline-block">
-                    <FormattedDate date={post.data.pubDate} />
-                  </p>
-                  <h4 class="ml-2 inline-block hover:underline hover:underline-offset-2">
-                    {post.data.title}
-                  </h4>
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </section>
-    <Aside />
-    <MobileNav />
-  </main>
+          <a href="/archive/category/" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+            Categories
+          </a>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+          </svg>
+          <span class="text-zinc-900 dark:text-zinc-100 font-medium">{category}</span>
+        </nav>
+        
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-sky-100 dark:bg-sky-900/20 rounded-lg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-sky-600 dark:text-sky-400">
+              <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100">{category}</h1>
+            <p class="text-neutral-500 dark:text-neutral-400">{avaliableCurrentCategoryPosts.length} posts in this category</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts List -->
+      <div>
+        {avaliableCurrentCategoryPosts.map((post) => (
+          <CardItem 
+            slug={post.slug}
+            title={post.data.title}
+            heroImage={post.data.heroImage || ''}
+            pubDate={post.data.pubDate}
+            category={post.data.category}
+            tags={post.data.tags}
+            description={post.data.description}
+            content={post.body}
+          />
+        ))}
+      </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
 </Layout>

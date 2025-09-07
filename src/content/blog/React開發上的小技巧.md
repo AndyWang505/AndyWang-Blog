@@ -25,7 +25,7 @@ category: 'React'
 
 生成一個簡單的無狀態功能型元件，不帶有 export。
 
-```jsx=
+```jsx
 import React from 'react'
 
 export default function Sidebar() {
@@ -41,7 +41,7 @@ export default function Sidebar() {
 
 生成一個帶有 export 的 React 功能型元件。
 
-```jsx=
+```jsx
 import React from 'react'
 
 function Sidebar() {
@@ -59,7 +59,7 @@ export default Sidebar
 
 生成一個使用箭頭函式定義的 React 功能型元件，並帶有 export 直接匯出。
 
-```jsx=
+```jsx
 import React from 'react'
 
 const Sidebar = () => {
@@ -94,13 +94,13 @@ React Hooks 可以透過 ES7+ React/Redux/React-Native snippets 這類擴展工�
 
 使用前需要先安裝 Redux Toolkit
 
-```bash=
+```bash
 npm install @reduxjs/toolkit react-redux
 ```
 
 安裝完成後就可以使用 `createSlice` 來快速長出 Redux Slice 結構
 
-```jsx=
+```jsx
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = { value: 0 }

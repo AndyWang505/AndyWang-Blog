@@ -77,12 +77,12 @@ clean code 中有引用到一句話來解釋，出自英國經濟學家查爾斯
 像是，每當發現到語言的新特性時，就會想馬上在專案中直接使用，但卻忽略了這段程式碼對於未來維護或擴充上真的有幫助嗎？
 
 1. 舉例：
-    ```js=
+    ```js
     const complexFunc = arr => arr.map(x => x * x).filter(x => x % 2 === 0).reduce((a, b) => a + b, 0);
     ```
 
 2. clean code 書中範例：
-    ```js=
+    ```js
     function showNotification(message) {
       hasUserEnabledNotifications() && (
         new Notification(message).show() &&
@@ -93,7 +93,7 @@ clean code 中有引用到一句話來解釋，出自英國經濟學家查爾斯
 
     更好的做法應該是用更常規且清楚的方法表示：
 
-    ```js=
+    ```js
     function showNotification(message) {
       if (hasUserEnabledNotifications()) {
         new Notification(message).show();

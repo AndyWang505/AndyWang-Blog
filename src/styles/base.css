@@ -2,18 +2,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Playball&family=Satisfy&display=swap');
 
 :root {
+  /* 色彩系統 */
+  --hue: 360; /* 預設色調 */
   --accent: #2337ff;
   --accent-dark: #000d8a;
+  --primary: oklch(0.6 0.14 var(--hue));
+  
+  /* 灰階系統 */
   --black: 15, 18, 25;
   --gray: 96, 115, 159;
   --gray-light: 229, 233, 240;
   --gray-dark: 34, 41, 57;
   --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+  
+  /* 背景色系 */
+  --page-bg: oklch(0.95 0.01 var(--hue));
+  --card-bg: white;
+  --sidebar-bg: oklch(0.98 0.005 var(--hue));
+  
+  /* 深色模式背景 */
+  --page-bg-dark: oklch(0.16 0.014 var(--hue));
+  --card-bg-dark: oklch(0.23 0.015 var(--hue));
+  --sidebar-bg-dark: oklch(0.19 0.015 var(--hue));
+  
+  /* 陰影系統 */
   --box-shadow:
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
     0 16px 32px rgba(var(--gray), 33%);
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --card-shadow-hover: 0 4px 12px 0 rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  
+  /* Footer 背景 */
   --footer-bg-light: url('/public/back-footer/cave.foothold1.1.0.png');
   --footer-bg-dark: url('/public/back-footer/enH1.1.png');
+  
+  /* 代碼塊 */
+  --codeblock-bg: #0b0b0c;
+  --codeblock-topbar-bg: #111827;
 }
 
 body {
@@ -24,33 +49,89 @@ body {
   margin: 0;
   padding: 0;
   text-align: left;
-  background: #e7eff0 linear-gradient(0deg, rgba(240, 248, 255, 0.06), rgba(220, 240, 255, 0.06));
+  /* Fuwari 風格的背景 */
+  background: var(--page-bg);
   background-attachment: fixed;
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: rgb(var(--gray-dark));
   line-height: 1.5;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
 }
 
 .dark footer,
 footer {
-  background-image: var(--footer-bg-light);
-  background-repeat: repeat-x;
-  background-size: contain;
-  background-position: center;
+  background-image: none;
 }
 
 .dark footer {
-  background-image: var(--footer-bg-dark);
+  background-image: none;
 }
 
+/* 深色模式樣式 - Fuwari 風格 */
 .dark body {
-  background: #18181b linear-gradient(0deg, rgba(90, 80, 125, 0.06), rgba(40, 40, 70, 0.06));
+  background: var(--page-bg-dark);
+  color: oklch(0.85 0.008 var(--hue));
 }
 
+/* 深色模式文字顏色 */
+.dark {
+  --gray-dark: 229, 233, 240;
+}
+
+/* 全局樣式 */
 svg {
   display: inline-block;
+}
+
+/* Fuwari 風格的卡片和內容區域 */
+.card-bg {
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.card-bg:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.dark .card-bg {
+  background: var(--card-bg-dark);
+}
+
+/* 側邊欄背景 */
+.sidebar-bg {
+  background: var(--sidebar-bg);
+}
+
+.dark .sidebar-bg {
+  background: var(--sidebar-bg-dark);
+}
+
+/* 內容容器 */
+.content-container {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+.dark .content-container {
+  background: var(--card-bg-dark);
+}
+
+/* 導航欄背景 - 毛玻璃效果 */
+.navbar-bg {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .navbar-bg {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* mdx style */
@@ -127,70 +208,161 @@ h6 {
   line-height: 1.75;
 }
 
+/* Fuwari 風格的現代化表格設計 */
 .prose table {
   width: 100%;
-  margin-bottom: 1rem;
+  margin: 2rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background: white;
 }
 
 .prose thead {
-  background-color: #f4f4f5;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 2px solid #e2e8f0;
 }
 
-.prose tr {
-  border-bottom: 1px solid #d4d4d8;
+.prose thead th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  border: none;
+  position: relative;
 }
 
-.dark .prose thead {
-  background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
+.prose thead th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: #e2e8f0;
 }
 
-.prose table th {
-  border-left: 1px solid #d4d4d8;
-  border-right: 1px solid #d4d4d8;
-  border-top: 1px solid #d4d4d8;
+.prose tbody tr {
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.prose tbody tr:hover {
+  background: #f8fafc;
+  transform: translateX(2px);
+}
+
+.prose tbody tr:nth-child(even) {
+  background: rgba(248, 250, 252, 0.3);
+}
+
+.prose tbody tr:nth-child(even):hover {
+  background: #f1f5f9;
 }
 
 .prose td {
-  border-left-color: #e4e4e7;
-  border-top-color: #e4e4e7;
-  border: 1px solid #ddd;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #334155;
+  vertical-align: top;
 }
 
-.prose th,
-td {
-  padding: 6px 13px;
+.prose tbody tr:first-child td {
+  border-top: none;
+}
+
+/* 深色模式 */
+.dark .prose table {
+  border-color: #374151;
+  background: #1f2937;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+}
+
+.dark .prose thead {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  border-bottom-color: #4b5563;
+}
+
+.dark .prose thead th {
+  color: #e5e7eb;
+}
+
+.dark .prose thead th:not(:last-child)::after {
+  background: #4b5563;
+}
+
+.dark .prose tbody tr:hover {
+  background: #374151;
+}
+
+.dark .prose tbody tr:nth-child(even) {
+  background: rgba(55, 65, 81, 0.3);
+}
+
+.dark .prose tbody tr:nth-child(even):hover {
+  background: #4b5563;
+}
+
+.dark .prose td {
+  color: #d1d5db;
+  border-top-color: #374151;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .prose table {
+    font-size: 0.8rem;
+    margin: 1.5rem 0;
+  }
+  
+  .prose thead th,
+  .prose td {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .prose thead th {
+    font-size: 0.75rem;
+  }
 }
 
 .prose svg {
   margin-bottom: 0.5rem;
 }
 
-code {
-  padding: 2px 5px;
-  background-color: rgb(240, 240, 240);
-  border: 1px solid rgb(209, 209, 209);
-  border-radius: 4px;
-  margin: 0 3px;
+.prose :not(pre) > code {
+  padding: 0.125rem 0.375rem;
+  background-color: rgb(246, 248, 250);
+  color: rgb(207, 34, 46);
+  border: 1px solid rgb(208, 215, 222);
+  border-radius: 6px;
+  margin: 0 0.125rem;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+  font-weight: 500;
 }
 
-pre {
+.dark :not(pre) > code {
+  background-color: rgb(22, 27, 34);
+  color: rgb(255, 123, 114);
+  border: 1px solid rgb(48, 54, 61);
+}
+
+.expressive-code {
   margin: 0 0 1.2rem;
-  padding: 1.5rem;
-  border-radius: 8px;
 }
 
-.dark code,
-.dark pre {
-  background-color: rgb(26, 26, 28) !important;
-}
-
-.dark code {
-  border: 1px solid rgb(107, 114, 128);
-}
-
-pre>code {
-  all: unset;
-  border: none !important;
+.expressive-code .frame {
+  box-shadow: none !important;
 }
 
 blockquote {

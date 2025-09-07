@@ -38,7 +38,7 @@ Throttle 也是一種常見的效能優化方式，與 Debounce 類似，但不�
 * setTimeout
 * 接收兩個參數：要執行 Throttle 的 callback function 和 delay 時間
 
-```js=
+```js
 function throttle(func, delay = 1000) {
   let timer = null;
   // ...args 用於接收所有參數
@@ -91,7 +91,7 @@ Throttle 的目的是限制某個函數在一段時間內只能執行一次
 
 建立 `/hooks` 資料夾，創建 `useThrottle.js` 檔案
 
-```js=
+```js
 import { useEffect, useRef } from 'react';
 
 function useThrottle(func, delay) {
@@ -115,7 +115,7 @@ export default useThrottle;
 
 匯入到 Component 中就可以使用了
 
-```jsx=
+```jsx
 import React, { useEffect } from 'react';
 import useThrottle from './useThrottle'; // useThrottle hook
 

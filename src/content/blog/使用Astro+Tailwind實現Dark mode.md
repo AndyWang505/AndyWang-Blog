@@ -27,7 +27,7 @@ npx astro add tailwind
 
 在剛剛安裝完後，你的 `tailwind.config.cjs` 大致上會長這樣
 
-```js=
+```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -42,7 +42,7 @@ module.exports = {
 
 只需要在 module 中多加一個 `darkMode` 就可以了
 
-```js=
+```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],

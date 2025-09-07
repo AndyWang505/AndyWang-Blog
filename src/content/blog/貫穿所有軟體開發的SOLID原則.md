@@ -47,14 +47,14 @@ SOLID 主要由 5 個設計原則組成：
 
 假如我們的任務是撰寫一個小型日曆，可能會實作兩個不同的抽象
 
-```js=
+```js
 class Calender {}
 class Event {}
 ```
 
 `Event` 類別主要包含了關於事件的時間和 Metadata，而 `Calendar` 類別則包含這些事件，你可以在 `Calendar` 新增一個或多個 `Event` 類別的實例，也可以刪除它們
 
-```js=
+```js
 class Calender {
   addEvent(event) { ... }
   removeEvent(event) { ... }
@@ -63,7 +63,7 @@ class Calender {
 
 隨著時間的推移，`Calendar` 為因應需求新增了其他功能，如：搜尋特定日期的事件，以及輸出成其他格式的功能
 
-```js=
+```js
 class Calendar {
   addEvent(event) { ... }
   removeEvent(event) { ... }
@@ -86,7 +86,7 @@ class Calendar {
 
 如果將不同職責的功能拆開並封裝，可以重構成以下的結構：
 
-```js=
+```js
 class EventManager {
   addEvent(event) { ... }
   removeEvent(event) { ... }
@@ -137,7 +137,7 @@ class Calendar {
 
 這裡用一個處理支付方式的例子解釋：
 
-```js=
+```js
 class PaymentProcessor {
   processPayment(paymentType, amount) {
     if (paymentType === 'credit_card') {
@@ -160,7 +160,7 @@ processor.processPayment('paypal', 50);
 
 使用 OCP 重構的話：
 
-```js=
+```js
 class PaymentProcessor {
   constructor() {
     this.paymentMethods = {};
@@ -228,7 +228,7 @@ processor.processPayment('apple_pay', 75);
 
 這就是違反了 LSP
 
-```js=
+```js
 // 長方形
 class Rectangle {
     constructor(width, height) {
@@ -270,7 +270,7 @@ console.log(square.area());
 
 如果用 LSP 修改後：
 
-```js=
+```js
 class Shape {
   // 定義方法
     area() {
@@ -347,7 +347,7 @@ shapes.forEach(shape => printArea(shape));
 
 這邊看程式，雖然 JS 沒有 Interface 的概念，但可以先用註解模擬介面行為：
 
-```js=
+```js
 // 多功能印表機介面
 class AllInOnePrinterInterface {
   print(document) {...}
@@ -372,7 +372,7 @@ class SimplePrinter extends AllInOnePrinterInterface {
 
 比較好的做法應該是：
 
-```js=
+```js
 // 印表機介面
 class PrinterInterface {
   print(document) {...}
@@ -432,7 +432,7 @@ class AllInOnePrinter extends PrinterInterface, ScannerInterface, FaxInterface {
 
 用簡單的咖啡機系統來舉例：
 
-```js=
+```js
 // 具體的咖啡豆類型
 class ArabicaCoffeeBean {
   grind() {
@@ -459,7 +459,7 @@ class CoffeeMachine {
 
 依賴反轉後：
 
-```js=
+```js
 // 定義咖啡豆的抽象介面
 class CoffeeBean {
   grind() {

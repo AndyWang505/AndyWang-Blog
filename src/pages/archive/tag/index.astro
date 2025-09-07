@@ -4,54 +4,141 @@ import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
 
+interface TagCount {
+  [tag: string]: {
+    tag: string;
+    count: number;
+  };
+}
+
 const blog = await getCollection('blog');
-const tagsSet = new Set();
-blog.forEach((post) => {
+// get tags data with counts
+const tagsCount = blog.reduce((acc: TagCount, post) => {
   post.data.tags.forEach((tag) => {
-    tagsSet.add(tag);
+    if (acc[tag]) {
+      acc[tag].count++;
+    } else {
+      acc[tag] = {
+        tag: tag,
+        count: 1,
+      };
+    }
   });
-});
-const tagsArray = Array.from(tagsSet);
+  return acc;
+}, {});
+
+const tagsArray = Object.values(tagsCount).sort((a, b) => b.count - a.count);
 ---
 
 <Layout>
-  <main class="max-w-6xl mx-auto p-3 md:p-6 flex grid lg:grid-cols-4">
-    <section
-      class="col-span-3 bg-white dark:bg-zinc-800 dark:text-neutral-300 shadow-md rounded-lg overflow-hidden py-6"
-    >
-      <div class="text-2xl mb-4 ml-6 md:ml-12">
-        <h2 class="flex items-center gap-1.5 font-bold">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.5 19C4.01472 19 2 16.9853 2 14.5C2 12.1564 3.79151 10.2313 6.07974 10.0194C6.54781 7.17213 9.02024 5 12 5C14.9798 5 17.4522 7.17213 17.9203 10.0194C20.2085 10.2313 22 12.1564 22 14.5C22 16.9853 19.9853 19 17.5 19C13.1102 19 10.3433 19 6.5 19Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-          Tag Cloud
-        </h2>
-        <h3 class="text-xl">共 {tagsArray.length} 個標籤</h3>
-      </div>
-      <ul class="px-6 md:px-12">
-        {
-          tagsArray.map((tag) => (
-            <li class="mb-2 ml-2 inline-block bg-slate-500 rounded-md">
-              <a class="text-neutral-100 p-1 block" href={`/archive/tag/${tag}`}>
-                #{tag}&nbsp
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-    <Aside />
-    <MobileNav />
-  </main>
+  <!-- Main content wrapper with same layout as other pages -->
+  <div class="relative max-w-[var(--page-width)] mx-auto">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
+      <Aside />
+      <!-- mobile nav -->
+      <MobileNav />
+      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
+        <div class="onload-animation">
+          <section class="space-y-4">
+            <!-- Header -->
+            <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6">
+              <nav class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                <a href="/archive/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                  Archive
+                </a>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+                </svg>
+                <span class="text-zinc-900 dark:text-zinc-100 font-medium">Tags</span>
+              </nav>
+              
+              <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-green-600 dark:text-green-400">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="7" y1="7" x2="7.01" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100">Tags</h1>
+                  <p class="text-neutral-500 dark:text-neutral-400">{tagsArray.length} tags available</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Popular Tags -->
+            <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6">
+              <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+                <div class="flex items-center justify-center w-6 h-6 bg-green-100 dark:bg-green-900/20 rounded-md">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-green-600 dark:text-green-400">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                Most Popular Tags
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {tagsArray.slice(0, 6).map((tagData, index) => (
+                  <a href={`/archive/tag/${tagData.tag.replace(/\s+/g, '-')}/`}
+                     class="group flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/10 hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 dark:hover:from-green-900/20 dark:hover:to-green-800/30 transition-all duration-300">
+                    <div class="flex-shrink-0 w-8 h-8 bg-green-200 dark:bg-green-800/30 rounded-full flex items-center justify-center">
+                      <span class="text-green-700 dark:text-green-300 text-sm font-bold">#{index + 1}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="text-green-800 dark:text-green-200 font-medium group-hover:text-green-900 dark:group-hover:text-green-100 transition-colors truncate">
+                        {tagData.tag}
+                      </div>
+                      <div class="text-green-600 dark:text-green-400 text-xs">
+                        {tagData.count} {tagData.count === 1 ? 'post' : 'posts'}
+                      </div>
+                    </div>
+                    <div class="text-green-500 group-hover:text-green-700 transition-colors">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+                      </svg>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+
+            <!-- Alternative Grid View -->
+            <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6">
+              <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+                <div class="flex items-center justify-center w-6 h-6 bg-green-100 dark:bg-green-900/20 rounded-md">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-green-600 dark:text-green-400">
+                    <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                All Tags
+              </h2>
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {tagsArray.map((tagData) => (
+                  <a href={`/archive/tag/${tagData.tag.replace(/\s+/g, '-')}/`}
+                     class="group flex flex-col items-center p-4 rounded-lg border-2 border-green-100 dark:border-green-900/30 hover:border-green-300 dark:hover:border-green-700/50 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/10 dark:hover:to-green-800/20 transition-all duration-300">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 dark:group-hover:bg-green-800/30 transition-colors">
+                      <span class="text-green-600 dark:text-green-400 font-bold text-lg">#</span>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-sm font-medium text-green-800 dark:text-green-200 group-hover:text-green-900 dark:group-hover:text-green-100 transition-colors truncate max-w-full">
+                        {tagData.tag}
+                      </div>
+                      <div class="text-xs text-green-600 dark:text-green-400 mt-1">
+                        {tagData.count} {tagData.count === 1 ? 'post' : 'posts'}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
 </Layout>

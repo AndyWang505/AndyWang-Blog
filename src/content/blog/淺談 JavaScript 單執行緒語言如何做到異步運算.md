@@ -63,7 +63,7 @@ Event Loop 主要是為了避免網頁因為處理耗時的工作而造成瀏覽
 
 在同步的過程中，JavaScript 執行時，會先將執行到的任務放入 Call Stack 中，等待執行完畢後再將任務移出，直到清空
 
-```js=
+```js
 function multiply(a, b) {
   return a * b;
 }
@@ -84,7 +84,7 @@ printSquare(4);
 
 你也可以用遞迴的方式來呼叫，想當然就是 Call Stack 有著永遠都處理不完的任務
 
-```js=
+```js
 function foo() {
   return foo();
 }
@@ -97,7 +97,7 @@ foo();
 
 下面流程圖我就用數字表示了，不然要畫太多w
 
-```js=
+```js
 console.log('1');
 
 setTimeout(function cb() {
@@ -145,7 +145,7 @@ console.log('3');
 
 範例：
 
-```js=
+```js
 console.log('1');
 
 setTimeout(function () {

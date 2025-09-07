@@ -52,7 +52,7 @@ SWR 是 Next.js 團隊 Vercel 所開發的 Custom Hook
 
 可能像這樣：
 
-```js=
+```js
 function Component() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -85,7 +85,7 @@ function Component() {
 
 不過當 API 一多重複性就高，你可能就會把它封裝成 Custom Hook
 
-```js=
+```js
 function useFetch(url) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -120,7 +120,7 @@ export default useFetch;
 
 然後在各別元件中使用
 
-```js=
+```js
 function Component() {
   const { data, error, isLoading } = useFetch('https://api.example.com/data');
 
@@ -143,13 +143,13 @@ function Component() {
 * key：唯一的鍵值，SWR 會根據 key 來做 cache，有點像快取的識別證，當 key 相同時，會直接從快取拿請求過的舊的資料。
 
 * fetcher：用來負責執行 request，並返回 response 的函式。你可以自訂這個函式，SWR 會去呼叫他來處理 Data Fetching，並將結果傳回 useSWR 的 data。
-    ```js=
+    ```js
     // 定義 fetcher 函式
     const fetcher = url => fetch(url).then(res => res.json());
     ```
 綜合範例：
 
-```js=
+```js
 function Component() {
   const fetcher = url => fetch(url).then(res => res.json());
   const { data, error } = useSWR('https://api.example.com/data', fetcher);

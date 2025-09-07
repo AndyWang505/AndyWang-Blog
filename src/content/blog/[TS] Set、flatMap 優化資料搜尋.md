@@ -17,7 +17,7 @@ category: 'TypeScript'
 
 結構可能會長這樣：
 
-```json=
+```json
 {
   "categories": [
     {
@@ -73,7 +73,7 @@ category: 'TypeScript'
 
 另外一個 product_id 已經提供，只需要從 selectedProducts 中撈出即可。
 
-```json=
+```json
 {
   "selectedProducts": [
     {
@@ -92,7 +92,7 @@ category: 'TypeScript'
 
 大致看一下結構有三層，至少需要先用三個迭代，再透過搜尋撈出特定資料後進行匹配。
 
-```ts=
+```ts
 const giveaways = productTable.categories.map((category) =>
   category.subcategories.map((subcategory) =>
     subcategory.products.filter((product) =>
@@ -116,7 +116,7 @@ const giveaways = productTable.categories.map((category) =>
 
 優化後的結果：
 
-```ts=
+```ts
 const selectedProductIds = new Set(
   productSelected.selectedProducts.map((selectedProduct) => selectedProduct.product_id)
 )
@@ -157,7 +157,7 @@ const giveaways = allProducts.filter((product) =>
 
 * 去重複：
 
-    ```ts=
+    ```ts
     const setA = [1, 2, 3, 4];
     const setB = [3, 4, 5, 6];
     const combinedData = new Set([...setA, ...setB]);
@@ -174,7 +174,7 @@ flatMap 是一個合併了 map 和 flat 操作的方法，如果是分別使用 
 
 例如： 
 
-```ts=
+```ts
 const employees = [
   { department: 'IT', members: ['Alice', 'Bob'] },
   { department: 'HR', members: ['Carol', 'David'] },

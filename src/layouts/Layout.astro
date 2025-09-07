@@ -1,14 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Banner from '../components/Banner.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { 
+  BANNER_CONFIG, 
+  BANNER_HEIGHT, 
+  BANNER_HEIGHT_EXTEND, 
+  BANNER_HEIGHT_HOME, 
+  MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
+  PAGE_WIDTH 
+} from '../constants/banner';
+import '../styles/transition.css';
+import '../styles/photoswipe.css';
 
-const post = Astro.params;
-const { title, image, description } = Astro.props;
-const dynamicTitle = title || (post.slug === undefined ? SITE_TITLE : post.slug);
-const dynamicDescription = description === undefined ? SITE_DESCRIPTION : description;
+export interface Props {
+  title?: string;
+  image?: string;
+  description?: string;
+  banner?: string;
+}
+
+const { title, image, description, banner } = Astro.props;
+const dynamicTitle = title || SITE_TITLE;
+const dynamicDescription = description || SITE_DESCRIPTION;
+
+// 檢查是否為首頁
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '';
+
+// 根據 banner 設置計算主面板頂部位置
+const mainPanelTop = BANNER_CONFIG.enable 
+  ? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)` 
+  : "5.5rem";
+
+// Banner 位置偏移設定
+const bannerOffsetByPosition = {
+  top: `${BANNER_HEIGHT_EXTEND}vh`,
+  center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
+  bottom: "0",
+};
+const bannerOffset = bannerOffsetByPosition[BANNER_CONFIG.position as keyof typeof bannerOffsetByPosition] || bannerOffsetByPosition.center;
 ---
 
 <html lang="zh_TW">
@@ -34,11 +66,410 @@ const dynamicDescription = description === undefined ? SITE_DESCRIPTION : descri
         }
       })();
     </script>
+    
+    <script is:inline define:vars={{
+      BANNER_HEIGHT_EXTEND, 
+      PAGE_WIDTH, 
+      BANNER_HEIGHT, 
+      BANNER_HEIGHT_HOME
+    }}>
+      // 計算 --banner-height-extend，確保是4的倍數以避免文字模糊
+      let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
+      offset = offset - offset % 4;
+      document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+      
+      // 設置其他 CSS 變數
+      document.documentElement.style.setProperty('--banner-height', `${BANNER_HEIGHT}vh`);
+      document.documentElement.style.setProperty('--banner-height-home', `${BANNER_HEIGHT_HOME}vh`);
+      
+      // Debug: 輸出變數值確認
+      console.log('Banner Heights:', {
+        BANNER_HEIGHT: `${BANNER_HEIGHT}vh`,
+        BANNER_HEIGHT_HOME: `${BANNER_HEIGHT_HOME}vh`,
+        BANNER_HEIGHT_EXTEND: `${offset}px`
+      });
+    </script>
+    
+    <style define:vars={{
+      'page-width': `${PAGE_WIDTH}rem`,
+      'main-panel-top': mainPanelTop,
+      bannerOffset,
+    }}>
+      :root {
+        --page-width: var(--page-width);
+        --main-panel-top: var(--main-panel-top);
+        --banner-offset: var(--bannerOffset);
+      }
+    </style>
   </head>
 
-  <body>
-    <Header />
-    <slot />
-    <Footer />
+  <body class="min-h-screen transition-colors duration-300 relative" class:list={[
+    {"lg:is-home": isHomePage, "enable-banner": BANNER_CONFIG.enable}
+  ]}>
+    <!-- Header -->
+    <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto">
+      <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
+        <Header />
+      </div>
+    </div>
+
+    <!-- Banner -->
+    <Banner />
+
+    <!-- Main Content -->
+    <div class="absolute w-full z-30 pointer-events-none" style={`top: var(--main-panel-top)`}>
+      <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
+        <div id="main-grid" class="transition-all duration-700 w-full px-0 md:px-4 flex flex-col min-h-[calc(100vh-var(--main-panel-top))]">
+          <main id="swup-container" class="transition-swup-fade overflow-hidden flex-1">
+            <div id="content-wrapper">
+              <slot />
+            </div>
+          </main>
+          
+        </div>
+      </div>
+      <!-- Full-width Footer -->
+      <div class="footer-wrapper pt-16 pointer-events-auto w-full">
+        <Footer />
+      </div>
+    </div>
+    
+    <!-- Page height extend for smooth transitions -->
+    <div id="page-height-extend" class="hidden h-[300vh]"></div>
   </body>
 </html>
+
+<!-- 動態 Banner 高度協調樣式 -->
+<style is:global define:vars={{bannerOffset}}>
+@tailwind components;
+
+@layer components {
+  /* 基本頁面樣式 - 背景已移至 base.css */
+  body {
+    @apply min-h-screen;
+  }
+
+  /* 一般頁面 banner wrapper 高度和基本位置 */
+  .enable-banner #banner-wrapper {
+    @apply h-[var(--banner-height)];
+    top: 0;
+  }
+  
+  /* 首頁 banner wrapper 高度和向上偏移 */
+  .enable-banner.lg:is-home #banner-wrapper {
+    @apply h-[var(--banner-height-home)];
+    top: calc(-1 * var(--banner-height-extend));
+  }
+
+  /* 一般頁面 banner 圖片 - 基礎設定 */
+  .enable-banner #banner {
+    @apply h-[var(--banner-height)];
+  }
+  
+  /* 首頁 banner 圖片 - 覆蓋設定 */
+  .enable-banner.lg:is-home #banner {
+    @apply h-[var(--banner-height-home)];
+  }
+
+  /* 首頁主要內容區域偏移 */
+  .enable-banner.lg:is-home #main-grid {
+    @apply translate-y-[var(--banner-height-extend)];
+  }
+
+  /* Main content 區域樣式 */
+  #main-grid {
+    /* 移除 min-h-screen，改用 flex 佈局 */
+  }
+
+  /* Top row 高度調整 */
+  .enable-banner #top-row {
+    @apply h-[calc(var(--banner-height)_-_4.5rem)] transition-all duration-300;
+  }
+
+  /* Banner 顯示動畫 */
+  .enable-banner #banner.show {
+    @apply opacity-100 scale-100;
+  }
+  
+  /* Navbar 隱藏動畫 */
+  .navbar-hidden {
+    @apply opacity-0 -translate-y-16;
+  }
+
+  /* Footer 樣式調整 */
+  .footer-wrapper {
+    @apply relative z-10 w-full;
+  }
+  
+  /* 確保內容區域有足夠的 padding */
+  #content-wrapper {
+    @apply pb-8;
+  }
+  
+  /* 讓 main content 有適當的最小高度 */
+  #swup-container {
+    @apply min-h-[50vh];
+  }
+}
+</style>
+
+<script>
+// 導入常數
+import { 
+  BANNER_CONFIG, 
+  BANNER_HEIGHT, 
+  BANNER_HEIGHT_HOME, 
+  BANNER_HEIGHT_EXTEND 
+} from '../constants/banner';
+
+// Banner 和頁面轉換初始化
+function initBannerAndTransitions() {
+  const bannerEnabled = !!document.getElementById('banner-wrapper');
+  
+  // 顯示 Banner
+  function showBanner() {
+    if (!BANNER_CONFIG.enable) return;
+    
+    const banner = document.getElementById('banner');
+    if (!banner) {
+      console.error('Banner element not found');
+      return;
+    }
+    
+    // 確保 banner 顯示
+    banner.classList.remove('opacity-0', 'scale-105');
+    banner.classList.add('opacity-100', 'scale-100');
+    console.log('Banner shown:', banner);
+  }
+
+  // 路徑相等檢查
+  function pathsEqual(path1: string, path2: string): boolean {
+    const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+    return normalize(path1) === normalize(path2);
+  }
+
+  // 設置內容延遲
+  document.documentElement.style.setProperty('--content-delay', '0ms');
+
+  const setup = () => {
+    // 點擊連結時的處理
+    (window as any).swup.hooks.on('link:click', () => {
+      // 移除內容延遲
+      document.documentElement.style.setProperty('--content-delay', '0ms');
+      
+      // 防止元素與 navbar 重疊
+      if (!bannerEnabled) return;
+      
+      const threshold = window.innerHeight * (BANNER_HEIGHT / 100) - 72 - 16;
+      const navbar = document.getElementById('navbar-wrapper');
+      
+      if (!navbar || !document.body.classList.contains('lg:is-home')) {
+        return;
+      }
+      
+      if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
+        navbar.classList.add('navbar-hidden');
+      }
+    });
+
+    // 訪問開始時的處理
+    (window as any).swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+      // 立即更改 banner 高度
+      const bodyElement = document.querySelector('body');
+      const targetUrl = new URL(visit.to.url);
+      
+      if (pathsEqual(targetUrl.pathname, '/')) {
+        bodyElement?.classList.add('lg:is-home');
+      } else {
+        bodyElement?.classList.remove('lg:is-home');
+      }
+
+      // 增加頁面高度防止滾動跳躍
+      const heightExtend = document.getElementById('page-height-extend');
+      if (heightExtend) {
+        heightExtend.classList.remove('hidden');
+      }
+    });
+
+    // 頁面視圖處理
+    (window as any).swup.hooks.on('page:view', () => {
+      // 保持頁面高度擴展可見
+      const heightExtend = document.getElementById('page-height-extend');
+      if (heightExtend) {
+        heightExtend.classList.remove('hidden');
+      }
+    });
+
+    // 訪問結束處理
+    (window as any).swup.hooks.on('visit:end', () => {
+      setTimeout(() => {
+        // 隱藏臨時高度元素
+        const heightExtend = document.getElementById('page-height-extend');
+        if (heightExtend) {
+          heightExtend.classList.add('hidden');
+        }
+      }, 200);
+    });
+  };
+
+  // 初始化設置
+  if ((window as any)?.swup?.hooks) {
+    setup();
+  } else {
+    document.addEventListener('swup:enable', setup);
+  }
+
+  // 顯示 banner
+  showBanner();
+}
+
+// 滾動處理函數
+function initScrollHandling() {
+  const bannerEnabled = !!document.getElementById('banner-wrapper');
+  const backToTopBtn = document.getElementById('back-to-top-btn');
+  const navbar = document.getElementById('navbar-wrapper');
+  
+  function scrollFunction() {
+    const bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
+    
+    // Back to top 按鈕處理
+    if (backToTopBtn) {
+      if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
+        backToTopBtn.classList.remove('hide');
+      } else {
+        backToTopBtn.classList.add('hide');
+      }
+    }
+    
+    // Navbar 隱藏處理
+    if (!bannerEnabled || !navbar) return;
+    
+    const NAVBAR_HEIGHT = 72;
+    const MAIN_PANEL_EXCESS_HEIGHT = 3.5 * 16; // 3.5rem to px
+    
+    let currentBannerHeight = BANNER_HEIGHT;
+    if (document.body.classList.contains('lg:is-home') && window.innerWidth >= 1024) {
+      currentBannerHeight = BANNER_HEIGHT_HOME;
+    }
+    
+    const threshold = window.innerHeight * (currentBannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16;
+    
+    if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
+      navbar.classList.add('navbar-hidden');
+    } else {
+      navbar.classList.remove('navbar-hidden');
+    }
+  }
+  
+  window.addEventListener('scroll', scrollFunction);
+}
+
+// 視窗大小改變處理
+function initResizeHandling() {
+  window.addEventListener('resize', () => {
+    // 重新計算 --banner-height-extend
+    let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
+    offset = offset - offset % 4;
+    document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+  });
+}
+
+// 初始化所有功能
+function init() {
+  initBannerAndTransitions();
+  initScrollHandling();
+  initResizeHandling();
+}
+
+// 當頁面載入完成時初始化
+init();
+
+// 確保 DOM 載入完成後也執行一次
+document.addEventListener('DOMContentLoaded', () => {
+  // 再次確保 banner 顯示
+  setTimeout(() => {
+    const banner = document.getElementById('banner');
+    if (banner && BANNER_CONFIG.enable) {
+      banner.classList.remove('opacity-0', 'scale-105');
+      banner.classList.add('opacity-100', 'scale-100');
+    }
+  }, 100);
+});
+</script>
+
+<script>
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/style.css";
+
+let lightbox: PhotoSwipeLightbox;
+let pswp = import("photoswipe");
+
+function createPhotoSwipe() {
+  // Only enable PhotoSwipe on post and about pages
+  const currentPath = window.location.pathname;
+  const includePath = ['/post/', '/about'];
+  const canUsePhotoSwipe = includePath.some(path => currentPath.includes(path));
+  
+  if (!canUsePhotoSwipe) {
+    return;
+  }
+
+  lightbox = new PhotoSwipeLightbox({
+    gallery: ".prose img, .markdown-content img, article img",
+    pswpModule: () => pswp,
+    closeSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/></svg>',
+    zoomSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M340-540h-40q-17 0-28.5-11.5T260-580q0-17 11.5-28.5T300-620h40v-40q0-17 11.5-28.5T380-700q17 0 28.5 11.5T420-660v40h40q17 0 28.5 11.5T500-580q0 17-11.5 28.5T460-540h-40v40q0 17-11.5 28.5T380-460q-17 0-28.5-11.5T340-500v-40Zm40 220q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l224 224q11 11 11 28t-11 28q-11 11-28 11t-28-11L532-372q-30 24-69 38t-83 14Zm0-80q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>',
+    padding: { top: 20, bottom: 20, left: 20, right: 20 },
+    wheelToZoom: true,
+    arrowPrev: false,
+    arrowNext: false,
+    imageClickAction: 'close',
+    tapAction: 'close',
+    doubleTapAction: 'zoom',
+  });
+
+  lightbox.addFilter("domItemData", (itemData, element) => {
+    if (element instanceof HTMLImageElement) {
+      itemData.src = element.src;
+      itemData.w = Number(element.naturalWidth || window.innerWidth);
+      itemData.h = Number(element.naturalHeight || window.innerHeight);
+      itemData.msrc = element.src;
+    }
+    return itemData;
+  });
+
+  lightbox.init();
+}
+
+function initPhotoSwipe() {
+  const setup = () => {
+    if (!lightbox) {
+      createPhotoSwipe();
+    }
+    
+    // Reinitialize PhotoSwipe when Swup loads new content
+    (window as any).swup.hooks.on("page:view", () => {
+      createPhotoSwipe();
+    });
+
+    // Destroy PhotoSwipe before content replacement
+    (window as any).swup.hooks.on("content:replace", () => {
+      lightbox?.destroy?.();
+    }, { before: true });
+  };
+
+  // Initialize when swup is ready
+  if ((window as any)?.swup?.hooks) {
+    setup();
+  } else {
+    document.addEventListener("swup:enable", setup);
+  }
+}
+
+// Initialize PhotoSwipe on page load
+initPhotoSwipe();
+</script>
+
+<script>
+// no-op
+</script>

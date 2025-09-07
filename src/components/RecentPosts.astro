@@ -4,28 +4,22 @@ import FormattedDate from './FormattedDate.astro';
 
 const posts = await getCollection('blog');
 const recentPosts = posts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 5);
 ---
 
-<div class="w-full rounded-lg bg-white dark:bg-zinc-800 drop-shadow p-6 mb-4">
-  <h3 class="mb-2 flex items-center gap-1.5 dark:text-neutral-300">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M22.7 11.5L20.7005 13.5L18.7 11.5M20.9451 13C20.9814 12.6717 21 12.338 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C14.8273 21 17.35 19.6963 19 17.6573M12 7V12L15 14"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"></path>
-    </svg>
-    Recent Posts
+<div class="w-full rounded-lg bg-white dark:bg-zinc-900 drop-shadow p-6">
+  <h3 class="text-md font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+    RECENT POSTS
   </h3>
   <ul>
     {
-      recentPosts.map((post) => (
-        <li class="border-b dark:border-zinc-700 py-2 last:border-0">
+      recentPosts.map((post: any) => (
+        <li class="border-b border-dashed dark:border-zinc-700 py-2 last:border-0">
           <a href={`/post/${post.slug}/`} class="flex items-center gap-2">
-            <img src={post.data.heroImage} alt="" class="w-12 h-12 rounded-md object-cover" />
+            {post.data.heroImage && (
+              <img src={post.data.heroImage} alt="" class="w-12 h-12 rounded-md object-cover" />
+            )}
             <div>
               <h4 class="text-sm mb-1 dark:text-neutral-200 font-normal hover:underline">
                 {post.data.title}

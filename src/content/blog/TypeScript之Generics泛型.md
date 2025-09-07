@@ -13,7 +13,7 @@ Generics 泛型是一種高靈活性定義行為或結構的一種方法，當�
 
 不過泛型早在 C++、Java、C# 等語言就已經有了，像是 C++ 就使用 Template 模板來撰寫處理不同類型的資料
 
-```c++=
+```c++
 #include <iostream>
 using namespace std;
 
@@ -39,7 +39,7 @@ Max of x and y: 5.5
 
 也能夠處理類別或函式
 
-```c++=
+```c++
 #include <iostream>
 using namespace std;
 
@@ -65,7 +65,7 @@ int main() {
     return 0;
 }
 ```
-```output=
+```output
 p1: 10, 20
 p2: 3.14, 2.71
 ```
@@ -86,7 +86,7 @@ Generics 泛型是指在定義 Function、Interface 或 Class 的時候，不預
 
 假設今天定義了兩個相似的介面
 
-```typescript=
+```typescript
 interface DataA {
   id: number;
   key: string;
@@ -102,7 +102,7 @@ interface DataB {
 
 而不一樣的只有 value，其他的都一樣，這時候能夠使用泛型，將 id 和 key 抽出來重構
 
-```typescript=
+```typescript
 interface GenericData<T> {
   id: number;
   key: string;
@@ -124,7 +124,7 @@ type DataB = GenericData<number>
 
   使用 `&` 來合併多個型別，使結果型別擁有所有參與合併的型別的屬性。
 
-  ```typescript=
+  ```typescript
   interface Person {
       name: string;
       age: number;
@@ -149,7 +149,7 @@ type DataB = GenericData<number>
 
   使用 `|` 來定義一個型別可以是多種型別中的一種。
 
-  ```typescript=
+  ```typescript
   function logId(id: number | string) {
       console.log(`ID: ${id}`);
   }
@@ -164,7 +164,7 @@ type DataB = GenericData<number>
 
 可能會像下面範例這樣
 
-```typescript=
+```typescript
 function sortNumbers(arr: number[]): number[] {
     return arr.sort((a, b) => a - b);
 }
@@ -185,7 +185,7 @@ const strArr = sortStrings(["banana", "apple", "cherry"]);
 
 所以這時候就適合使用泛型來解決
 
-```typescript=
+```typescript
 function sortArray<T>(arr: T[], compareFn: (a: T, b: T) => number): T[] {
     return arr.sort(compareFn);
 }
@@ -212,7 +212,7 @@ console.log(strArr);  // 輸出結果 ["apple", "banana", "cherry"]
 
 當呼叫函式或類別時，沒有提供特定型別，則會使用預設型別，這樣可以提高程式碼的穩定性，並幫助避免一些型別不匹配的錯誤。
 
-```typescript=
+```typescript
 function logValue<T = number>(value: T): void {
     console.log(value);
 }
@@ -233,7 +233,7 @@ logValue<string>("Hello"); // 指定型別為 string
 
 如下面的範例，創建一個 Person 介面，使用 extends 約束 T 必須符合 Person 的型別
 
-```typescript=
+```typescript
 interface Person {
     name: string;
     age: number;

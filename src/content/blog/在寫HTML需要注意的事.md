@@ -77,7 +77,7 @@ category: 'HTML'
 常見的列表結構：
 
 - `<ul> <li>`
-  ```html=
+  ```html
   <ul>
     <li>product 1</li>
     <li>product 2</li>
@@ -85,7 +85,7 @@ category: 'HTML'
   </ul>
   ```
 - `<ol> <li>`
-  ```html=
+  ```html
   <ol>
     <li>product 1</li>
     <li>product 2</li>
@@ -130,7 +130,7 @@ type 屬性經常使用在 `<input>` 和 `<button>` 標籤，而兩者也有些�
 能夠幫助網站增加搜尋引擎的排名，對 SEO 相當重要！
 
 範例：
-```html=
+```html
 <head>
   <!-- 編碼方式 -->
   <meta charset="UTF-8">
