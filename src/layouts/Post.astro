@@ -30,13 +30,13 @@ const { headings } = await entry.render();
 <Layout title={title} image={heroImage} description={description}>
   <!-- Main content wrapper with fuwari-style layout -->
   <div class="relative max-w-[var(--page-width)] mx-auto">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
+    <div class="w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside headings={headings} />
       <MobileNav />
       
       <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
         <div class="onload-animation">
-          <article class="bg-white shadow-lg rounded-xl p-8 dark:bg-zinc-900 border border-gray-100/50 dark:border-zinc-700/50 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/20 dark:hover:shadow-zinc-900/40">
+          <article class="bg-white shadow-lg rounded-xl p-8 dark:bg-zinc-900 border border-gray-100/50 dark:border-zinc-700/50">
       <h1 class="text-4xl font-bold mb-6 dark:text-zinc-100 bg-gradient-to-r from-gray-900 to-gray-700 dark:from-zinc-100 dark:to-zinc-300 bg-clip-text text-transparent leading-tight">{title}</h1>
       <!-- metadata - 使用 CardItem 的樣式 -->
       <div class="flex flex-wrap text-gray-500 dark:text-gray-400 items-center gap-3 md:gap-5 mb-8 p-4 bg-gray-100/70 dark:bg-zinc-800/30 rounded-lg border border-gray-300/50 dark:border-zinc-700/30 shadow-sm">
@@ -68,7 +68,7 @@ const { headings } = await entry.render();
             </svg>
           </div>
           <div class="flex flex-row flex-nowrap items-center">
-            <a href={`/archive/category/${category.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer whitespace-nowrap transition-colors">
+            <a href={`/archive/category/${category.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer whitespace-nowrap">
               {category}
             </a>
           </div>
@@ -86,7 +86,7 @@ const { headings } = await entry.render();
             {tags && tags.length > 0 && tags.map((tag, i) => (
               <>
                 {i > 0 && <div class="mx-1 text-neutral-400 text-sm">/</div>}
-                <a href={`/archive/tag/${tag.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-green-600 dark:hover:text-green-400 cursor-pointer whitespace-nowrap transition-colors">
+                <a href={`/archive/tag/${tag.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-green-600 dark:hover:text-green-400 cursor-pointer whitespace-nowrap">
                   {tag.trim()}
                 </a>
               </>
@@ -95,7 +95,7 @@ const { headings } = await entry.render();
         </div>
       </div>
       <div class="mx-auto mb-8">
-        {heroImage && <img class="w-full block rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200/50 dark:border-zinc-700/50" src={heroImage} alt="" />}
+        {heroImage && <img class="w-full block rounded-xl shadow-md border border-gray-200/50 dark:border-zinc-700/50" src={heroImage} alt="" />}
       </div>
             <div class="prose prose-lg dark:text-neutral-300 max-w-none prose-headings:scroll-mt-20 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-zinc-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-code:text-pink-600 dark:prose-code:text-pink-400 prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50/50 dark:prose-blockquote:bg-blue-900/10 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
               <slot />
