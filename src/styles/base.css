@@ -208,38 +208,131 @@ h6 {
   line-height: 1.75;
 }
 
+/* Fuwari 風格的現代化表格設計 */
 .prose table {
   width: 100%;
-  margin-bottom: 1rem;
+  margin: 2rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background: white;
 }
 
 .prose thead {
-  background-color: #f4f4f5;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 2px solid #e2e8f0;
 }
 
-.prose tr {
-  border-bottom: 1px solid #d4d4d8;
+.prose thead th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  border: none;
+  position: relative;
 }
 
-.dark .prose thead {
-  background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
+.prose thead th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: #e2e8f0;
 }
 
-.prose table th {
-  border-left: 1px solid #d4d4d8;
-  border-right: 1px solid #d4d4d8;
-  border-top: 1px solid #d4d4d8;
+.prose tbody tr {
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.prose tbody tr:hover {
+  background: #f8fafc;
+  transform: translateX(2px);
+}
+
+.prose tbody tr:nth-child(even) {
+  background: rgba(248, 250, 252, 0.3);
+}
+
+.prose tbody tr:nth-child(even):hover {
+  background: #f1f5f9;
 }
 
 .prose td {
-  border-left-color: #e4e4e7;
-  border-top-color: #e4e4e7;
-  border: 1px solid #ddd;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #334155;
+  vertical-align: top;
 }
 
-.prose th,
-td {
-  padding: 6px 13px;
+.prose tbody tr:first-child td {
+  border-top: none;
+}
+
+/* 深色模式 */
+.dark .prose table {
+  border-color: #374151;
+  background: #1f2937;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+}
+
+.dark .prose thead {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  border-bottom-color: #4b5563;
+}
+
+.dark .prose thead th {
+  color: #e5e7eb;
+}
+
+.dark .prose thead th:not(:last-child)::after {
+  background: #4b5563;
+}
+
+.dark .prose tbody tr:hover {
+  background: #374151;
+}
+
+.dark .prose tbody tr:nth-child(even) {
+  background: rgba(55, 65, 81, 0.3);
+}
+
+.dark .prose tbody tr:nth-child(even):hover {
+  background: #4b5563;
+}
+
+.dark .prose td {
+  color: #d1d5db;
+  border-top-color: #374151;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .prose table {
+    font-size: 0.8rem;
+    margin: 1.5rem 0;
+  }
+  
+  .prose thead th,
+  .prose td {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .prose thead th {
+    font-size: 0.75rem;
+  }
 }
 
 .prose svg {
