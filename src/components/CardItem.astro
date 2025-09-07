@@ -59,13 +59,12 @@ const coverWidth = "28%";
 
 <div class="w-full rounded-xl overflow-hidden relative mb-4 bg-white
               dark:bg-zinc-900 shadow-sm dark:shadow-gray-900/20 
-              hover:shadow-lg dark:hover:shadow-gray-900/40 
-              transition-all duration-300 ease-out">
+              hover:shadow-lg dark:hover:shadow-gray-900/40">
   
   {hasCover && 
     <a href={`/post/${slug}/`} 
        class="group block md:hidden w-full h-[150px] relative overflow-hidden">
-      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/20 transition-colors duration-300"></div>
+      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/20"></div>
       <img class="w-full h-full object-cover" src={heroImage} alt={title} />
     </a>
   }
@@ -76,12 +75,11 @@ const coverWidth = "28%";
        text-zinc-900 dark:text-zinc-100
        hover:text-blue-600 dark:hover:text-blue-400
        active:text-blue-700 dark:active:text-blue-300
-       transition-colors duration-300 ease-out
        before:w-1 before:h-5 before:rounded-md before:bg-blue-600
        before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
        leading-snug">
       {title}
-      <svg class="text-blue-600 dark:text-blue-400 text-[2rem] hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <svg class="text-blue-600 dark:text-blue-400 text-[2rem] hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
         <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
       </svg>
     </a>
@@ -109,7 +107,7 @@ const coverWidth = "28%";
           </svg>
         </div>
         <div class="flex flex-row flex-nowrap items-center">
-          <a href={`/archive/category/${category.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer whitespace-nowrap transition-colors duration-200">
+          <a href={`/archive/category/${category.replace(/\s+/g, '-')}/`} class="text-sm font-medium hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer whitespace-nowrap">
             {category}
           </a>
         </div>
@@ -127,7 +125,7 @@ const coverWidth = "28%";
           {tags && tags.length > 0 && tags.slice(0, 2).map((tag, i) => (
             <>
               {i > 0 && <div class="mx-1 md:mx-1.5 text-neutral-400 text-xs md:text-sm">/</div>}
-              <a href={`/archive/tag/${tag.replace(/\s+/g, '-')}/`} class="text-xs md:text-sm font-medium hover:text-green-600 dark:hover:text-green-400 cursor-pointer whitespace-nowrap transition-colors duration-200">
+              <a href={`/archive/tag/${tag.replace(/\s+/g, '-')}/`} class="text-xs md:text-sm font-medium hover:text-green-600 dark:hover:text-green-400 cursor-pointer whitespace-nowrap">
                 {tag.trim()}
               </a>
             </>
@@ -155,14 +153,14 @@ const coverWidth = "28%";
   <!-- Desktop images -->
   {hasCover && 
     <a href={`/post/${slug}/`} 
-       class="group hidden md:block md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95 transition-transform duration-200 ease-out">
-      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition-colors duration-300"></div>
+       class="group hidden md:block md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95 transition-transform ease-out">
+      <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50"></div>
       <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
-        <svg class="opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl transition-all duration-300" width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+        <svg class="opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl transition-all" width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
           <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
         </svg>
       </div>
-      <img class="w-full h-full object-cover transition-transform duration-300" src={heroImage} alt={title} />
+      <img class="w-full h-full object-cover transition-transform" src={heroImage} alt={title} />
     </a>
   }
 
@@ -171,8 +169,8 @@ const coverWidth = "28%";
        class="hidden md:flex items-center justify-center w-[3.25rem] absolute right-3 top-3 bottom-3 rounded-xl 
        bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 
        active:bg-neutral-300 dark:active:bg-neutral-600 active:scale-95 
-       transition-all duration-200 ease-out">
-      <svg class="text-blue-600 dark:text-blue-400 text-4xl transition-colors duration-200" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+       transition-all ease-out">
+      <svg class="text-blue-600 dark:text-blue-400 text-4xl" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
         <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
       </svg>
     </a>
