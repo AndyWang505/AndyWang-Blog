@@ -62,14 +62,11 @@ body {
 
 .dark footer,
 footer {
-  background-image: var(--footer-bg-light);
-  background-repeat: repeat-x;
-  background-size: contain;
-  background-position: center;
+  background-image: none;
 }
 
 .dark footer {
-  background-image: var(--footer-bg-dark);
+  background-image: none;
 }
 
 /* 深色模式樣式 - Fuwari 風格 */
