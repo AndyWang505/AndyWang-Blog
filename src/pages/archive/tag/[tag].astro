@@ -4,6 +4,7 @@ import FormattedDate from '../../../components/FormattedDate.astro';
 import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
 import MobileNav from '../../../components/MobileNav.astro';
+import CardItem from '../../../components/CardItem.astro';
 
 const blog = await getCollection('blog');
 
@@ -27,51 +28,65 @@ const avaliableCurrentTagPosts = blog
 ---
 
 <Layout>
-  <main class="max-w-6xl mx-auto p-3 md:p-6 flex grid lg:grid-cols-4">
-    <section
-      class="col-span-3 bg-white dark:bg-zinc-800 dark:text-neutral-300 shadow-md rounded-lg overflow-hidden py-6"
-    >
-      <h2 class="flex gap-2 text-2xl font-bold mb-4 ml-6 md:ml-12">
-        <a class="flex items-center gap-1.5" href="/archive/tag/">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.5 19C4.01472 19 2 16.9853 2 14.5C2 12.1564 3.79151 10.2313 6.07974 10.0194C6.54781 7.17213 9.02024 5 12 5C14.9798 5 17.4522 7.17213 17.9203 10.0194C20.2085 10.2313 22 12.1564 22 14.5C22 16.9853 19.9853 19 17.5 19C13.1102 19 10.3433 19 6.5 19Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
+  <!-- Main content wrapper with same layout as index.astro -->
+  <div class="relative max-w-[var(--page-width)] mx-auto">
+    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
+      <Aside />
+      <!-- mobile nav -->
+      <MobileNav />
+      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
+        <div class="onload-animation">
+          <section class="space-y-4">
+      <!-- Header -->
+      <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6">
+        <nav class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+          <a href="/archive/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Archive
+          </a>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
           </svg>
-          Tags
-        </a>
-        &gt;
-        <a class="text-orange-400" href="">{tag}</a>
-      </h2>
-      <ul class="pl-10 md:pl-16">
-        {
-          avaliableCurrentTagPosts.map((post) => {
-            return (
-              <li class="mb-2 list-disc">
-                <a href={`/post/${post.slug}/`}>
-                  <p class="text-sm text-neutral-400 inline-block">
-                    <FormattedDate date={post.data.pubDate} />
-                  </p>
-                  <h4 class="ml-2 inline-block hover:underline hover:underline-offset-2">
-                    {post.data.title}
-                  </h4>
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </section>
-    <Aside />
-    <MobileNav />
-  </main>
+          <a href="/archive/tag/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Tags
+          </a>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
+          </svg>
+          <span class="text-zinc-900 dark:text-zinc-100 font-medium">{tag}</span>
+        </nav>
+        
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-green-600 dark:text-green-400">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="7" y1="7" x2="7.01" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100">{tag}</h1>
+            <p class="text-neutral-500 dark:text-neutral-400">{avaliableCurrentTagPosts.length} posts with this tag</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts List -->
+      <div>
+        {avaliableCurrentTagPosts.map((post) => (
+          <CardItem 
+            slug={post.slug}
+            title={post.data.title}
+            heroImage={post.data.heroImage || ''}
+            pubDate={post.data.pubDate}
+            category={post.data.category}
+            tags={post.data.tags}
+            description={post.data.description}
+            content={post.body}
+          />
+        ))}
+      </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
 </Layout>
