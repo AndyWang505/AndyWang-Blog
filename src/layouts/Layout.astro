@@ -107,7 +107,7 @@ const bannerOffset = bannerOffsetByPosition[BANNER_CONFIG.position as keyof type
     {"lg:is-home": isHomePage, "enable-banner": BANNER_CONFIG.enable}
   ]}>
     <!-- Header -->
-    <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto">
+    <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 mx-auto">
       <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
         <Header />
       </div>
@@ -119,7 +119,7 @@ const bannerOffset = bannerOffsetByPosition[BANNER_CONFIG.position as keyof type
     <!-- Main Content -->
     <div class="absolute w-full z-30 pointer-events-none" style={`top: var(--main-panel-top)`}>
       <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
-        <div id="main-grid" class="transition-all duration-700 w-full px-0 md:px-4 flex flex-col min-h-[calc(100vh-var(--main-panel-top))]">
+        <div id="main-grid" class="transition-all duration-700 w-full px-0 flex flex-col min-h-[calc(100vh-var(--main-panel-top))]">
           <main id="swup-container" class="transition-swup-fade overflow-hidden flex-1">
             <div id="content-wrapper">
               <slot />

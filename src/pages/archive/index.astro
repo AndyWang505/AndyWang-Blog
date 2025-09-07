@@ -40,25 +40,25 @@ function formatDate(date: Date) {
       <MobileNav />
       <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
         <div class="onload-animation">
-          <section class="dark:bg-zinc-900 bg-white shadow-md rounded-lg overflow-hidden py-6">
-      <div class="text-2xl mb-8 ml-6 md:ml-12 dark:text-neutral-200">
-        <h2>Archive</h2>
-        <h3 class="text-xl">共 {posts.length} 筆文章</h3>
+          <section class="dark:bg-zinc-900 bg-white shadow-md rounded-lg overflow-hidden py-3 sm:py-6">
+      <div class="mb-4 sm:mb-8 ml-3 sm:ml-6 md:ml-12 dark:text-neutral-200">
+        <h2 class="text-lg sm:text-xl md:text-2xl">Archive</h2>
+        <h3 class="text-sm sm:text-base md:text-xl">共 {posts.length} 筆文章</h3>
       </div>
       
       <!-- Fuwari-style Timeline -->
-      <div class="px-3">
+      <div class="px-2 sm:px-3">
         {yearGroups.map((group) => (
-          <div class="mb-8">
+          <div class="mb-6 sm:mb-8">
             <!-- Year Header -->
-            <div class="flex flex-row w-full items-center h-[3.75rem]">
-              <div class="w-[15%] md:w-[10%] text-2xl font-bold text-right text-neutral-600 dark:text-neutral-300">
+            <div class="flex flex-row w-full items-center h-12 sm:h-[3.75rem]">
+              <div class="w-[20%] sm:w-[15%] md:w-[10%] text-lg sm:text-xl md:text-2xl font-bold text-right text-neutral-600 dark:text-neutral-300">
                 {group.year}
               </div>
-              <div class="w-[15%] md:w-[10%]">
-                <div class="h-3 w-3 bg-transparent rounded-full border-2 border-blue-500 mx-auto z-10 relative"></div>
+              <div class="w-[10%] sm:w-[15%] md:w-[10%]">
+                <div class="h-2 w-2 sm:h-3 sm:w-3 bg-transparent rounded-full border-2 border-blue-500 mx-auto z-10 relative"></div>
               </div>
-              <div class="w-[70%] md:w-[80%] text-left text-neutral-500 dark:text-neutral-400">
+              <div class="w-[70%] sm:w-[70%] md:w-[80%] text-left text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
                 {group.posts.length} {group.posts.length === 1 ? 'post' : 'posts'}
               </div>
             </div>
@@ -69,22 +69,22 @@ function formatDate(date: Date) {
                 href={`/post/${post.slug}/`}
                 class="group block w-full rounded-lg hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-all duration-200"
               >
-                <div class="flex flex-row justify-start items-center h-10">
+                <div class="flex flex-row justify-start items-center h-8 sm:h-10">
                   <!-- Date -->
-                  <div class="w-[15%] md:w-[10%] text-sm text-right text-neutral-400 dark:text-neutral-500">
+                  <div class="w-[20%] sm:w-[15%] md:w-[10%] text-xs sm:text-sm text-right text-neutral-400 dark:text-neutral-500">
                     {formatDate(post.data.pubDate)}
                   </div>
 
                   <!-- Timeline dot and line -->
-                  <div class="w-[15%] md:w-[10%] relative h-full flex items-center">
+                  <div class="w-[10%] sm:w-[15%] md:w-[10%] relative h-full flex items-center">
                     <!-- Vertical line -->
                     <div class="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-200 dark:bg-zinc-700 -translate-x-1/2"></div>
                     <!-- Dot -->
-                    <div class="mx-auto w-1 h-1 rounded-full bg-neutral-400 dark:bg-neutral-500 group-hover:h-5 group-hover:bg-blue-500 transition-all duration-200 z-10 relative bg-white dark:bg-zinc-900 outline outline-2 outline-white dark:outline-zinc-900 group-hover:outline-neutral-50 dark:group-hover:outline-zinc-800"></div>
+                    <div class="mx-auto w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-neutral-400 dark:bg-neutral-300 group-hover:h-3 sm:group-hover:h-5 group-hover:w-3 sm:group-hover:w-1 group-hover:bg-blue-500 transition-all duration-200 z-10 relative outline outline-2 outline-white dark:outline-zinc-800 group-hover:outline-neutral-50 dark:group-hover:outline-zinc-700"></div>
                   </div>
 
                   <!-- Post title -->
-                  <div class="w-[70%] md:max-w-[65%] md:w-[65%] text-left font-medium group-hover:translate-x-1 transition-all group-hover:text-blue-600 dark:group-hover:text-blue-400 text-neutral-700 dark:text-neutral-200 pr-8 truncate">
+                  <div class="w-[70%] sm:w-[70%] md:max-w-[65%] md:w-[65%] text-left text-sm sm:text-base font-medium group-hover:translate-x-1 transition-all group-hover:text-blue-600 dark:group-hover:text-blue-400 text-neutral-700 dark:text-neutral-200 pr-2 sm:pr-8 truncate">
                     {post.data.title}
                   </div>
 
