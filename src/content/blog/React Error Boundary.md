@@ -31,7 +31,7 @@ category: 'React'
 
 如果要寫一個過濾符合條件的式子，一般可能會去寫個迴圈遍歷整個 Array，找出符合條件的值，這就是命令式
 
-```js=
+```js
 const arr = [1,5,2,3,7,9,0];
 const target = 5;
 let result = null;
@@ -45,7 +45,7 @@ for (let i = 0; i < arr.length; i++) {
 
 而聲明式則是直接透過 HOF（High Order Function），像是 filter，告訴它我的條件，直接取得我想要的值
 
-```js=
+```js
 const arr = [1,5,2,3,7,9,0];
 const target = 5;
 const result = arr.filter(item => item === target) || null;
@@ -67,7 +67,7 @@ ErrorBoundary 是一種特殊的元件，主要來捕捉子元件樹中的錯誤
 
 該元件寫法像這樣：
 
-```js=
+```js
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -104,7 +104,7 @@ export default ErrorBoundary;
 
 然後你可以把它當 Provider Component 來使用
 
-```js=
+```js
 <ErrorBoundary>
   <Layout>
     <Home />

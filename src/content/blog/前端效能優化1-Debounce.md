@@ -34,7 +34,7 @@ Debounce 是一種常見的效能優化方式，主要用於限制高頻事件�
 
 範例：
 
-```js=
+```js
 function debounce(func, delay = 1000) {
   let timer;
   // ...args 用於接收所有參數
@@ -68,7 +68,7 @@ Debounce 技術的應用場景非常多，上述的程式碼只需要根據你�
 
 建立一個 `/hooks` 資料夾，創建 `useDebounce.js`
 
-```jsx=
+```jsx
 // ./useDebounce.js
 import { useCallback, useRef } from 'react';
 
@@ -91,7 +91,7 @@ export default useDebounce;
 
 在 Component 中直接匯入就可以使用了
 
-```jsx=
+```jsx
 import React, { useState } from 'react';
 import useDebounce from './useDebounce'; // 先前封裝的 hook
 

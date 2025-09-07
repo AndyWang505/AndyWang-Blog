@@ -4,16 +4,31 @@ import { SITE_TITLE } from '../consts';
 import ThemeToggle from './ThemeToggle';
 ---
 
-<header class="bg-white/80 dark:bg-zinc-900/80 dark:text-zinc-100 sticky top-0 z-50 drop-shadow">
-  <nav class="max-w-6xl py-3 mx-auto">
-    <h2 class="flex items-center">
-      <a href="/" class="text-xl italic py-1 mr-1">{SITE_TITLE}</a>
-      <div class="hidden lg:flex">
-        <HeaderLink href="/about">About</HeaderLink>
-        <HeaderLink href="/archive">Archive</HeaderLink>
+<header class="bg-white/80 dark:bg-zinc-900/80 dark:text-zinc-100 sticky top-0 z-50 drop-shadow border-b border-gray-200/20 dark:border-zinc-700/50 rounded-b-lg">
+  <nav class="max-w-6xl py-2 px-4 mx-auto">
+    <div class="flex items-center gap-6">
+      <!-- Home Link with Icon -->
+      <a href="/" class="flex items-center gap-2 text-md font-semibold italic py-1 hover:opacity-80 transition-all duration-200">
+        <span class="font-serif tracking-wider">{SITE_TITLE}</span>
+      </a>
+      
+      <!-- Desktop Navigation Links with Icons -->
+      <div class="hidden lg:flex items-center gap-4">
+        <HeaderLink href="/about" class="flex items-center gap-2 px-2 py-1 rounded-md hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <span class="font-medium text-sm">About</span>
+        </HeaderLink>
+        <HeaderLink href="/archive" class="flex items-center gap-2 px-2 py-1 rounded-md hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <span class="font-medium text-sm">Archive</span>
+        </HeaderLink>
+        <HeaderLink href="/archive/category" class="flex items-center gap-2 px-2 py-1 rounded-md hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <span class="font-medium text-sm">Category</span>
+        </HeaderLink>
+        <HeaderLink href="/archive/tag" class="flex items-center gap-2 px-2 py-1 rounded-md hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <span class="font-medium text-sm">Tags</span>
+        </HeaderLink>
       </div>
-    </h2>
-    <div>
+    </div>
+    <div class="flex items-center">
       <ThemeToggle client:visible />
     </div>
   </nav>
@@ -26,35 +41,23 @@ import ThemeToggle from './ThemeToggle';
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px); /* Safari 支援 */
   }
-  h2 {
-    margin: 0;
-    font-size: 1em;
-  }
-
-  h2 a,
-  h2 a.active {
-    text-decoration: none;
-  }
+  
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+  
   nav a {
-    margin-left: 1rem;
-    color: var(--black);
     text-decoration: none;
   }
+  
   nav a.active {
-    text-decoration: none;
+    font-weight: bolder;
   }
-  .social-links,
-  .social-links a {
-    display: flex;
-  }
-  @media (max-width: 720px) {
-    .social-links {
-      display: none;
-    }
+  
+  /* Ensure SVG icons inherit text color for proper theming */
+  svg {
+    color: inherit;
   }
 </style>

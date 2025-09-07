@@ -32,13 +32,13 @@ TypeScript 背後設計的主要目標是：
 
 舉個例子：
 
-```ts=
+```ts
 const result = Object.assign({}, { a: 1 }, { b: 'hello' });
 ```
 
 你可能會預期這個結果的型別是：
 
-```ts=
+```ts
 { a: number; b: string }
 ```
 

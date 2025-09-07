@@ -42,7 +42,7 @@ Slice 的優勢就是每一個 slice 專注於處理特定的 state 區塊和相
 
 ### 首先安裝 Redux Toolkit 和 React-Redux
 
-```bash=
+```bash
 npm install @reduxjs/toolkit react-redux
 ```
 
@@ -52,7 +52,7 @@ npm install @reduxjs/toolkit react-redux
 
 範例：
 
-```js=
+```js
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
@@ -68,7 +68,7 @@ export const store = configureStore({
 
 範例：
 
-```js=
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -91,7 +91,7 @@ ReactDOM.render(
 
 範例：
 
-```js=
+```js
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = { value: 0 }
@@ -129,7 +129,7 @@ createSlice 和 createAction：
 
 範例：
 
-```js=
+```js
 import { createAction } from '@reduxjs/toolkit'
 
 // 定義 actions
@@ -147,7 +147,7 @@ console.log(decrement()) // { type: 'counter/decrement' }
 
 範例：
 
-```js=
+```js
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counter/counterSlice'
 
@@ -168,7 +168,7 @@ export default store
 
 範例：
 
-```js=
+```js
 import React from 'react'
 // redux hooks
 import { useSelector, useDispatch } from 'react-redux'
@@ -210,7 +210,7 @@ createAsyncThunk 用於生成一個 thunk action creator，這個 action creator
 
 範例：
 
-```js=
+```js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // 定義非同步 thunk

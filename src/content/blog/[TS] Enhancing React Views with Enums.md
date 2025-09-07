@@ -40,7 +40,7 @@ Enum 是在 TypeScript 中的語法，稱作「列舉」
 
 最簡單無腦的寫法，你也可以用 switch case，但實際上差不多，雖然還是好閱讀的，但程式碼攏長，且太多重複性的結構，未來也不好在上面加以擴充。
 
-```ts=
+```ts
 export const Checkout = () => {
   const [currentStep, setCurrentStep] = useState('selectDelivery');
 
@@ -63,7 +63,7 @@ export const Checkout = () => {
 
 進一步優化成物件表達的方式：
 
-```ts=
+```ts
 export const Checkout = () => {
   const [currentStep, setCurrentStep] = useState('selectDelivery');
 
@@ -86,7 +86,7 @@ export const Checkout = () => {
 
 使用 Enum 重構：
 
-```ts=
+```ts
 export enum CheckoutStep {
   SelectDelivery = 'selectDelivery',
   DeliveryAddress = 'deliveryAddress',

@@ -33,7 +33,7 @@ Homebrew 是一個在 MacOS 和 Linux 上著名的套件管理工具，使用 Ru
 
 直接在 terminal 輸入以下指令即可
 
-```bash=
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
@@ -41,7 +41,7 @@ Homebrew 是一個在 MacOS 和 Linux 上著名的套件管理工具，使用 Ru
 
 安裝好後可以執行看看以下這段查看版本號，也可以確定是否已經安裝好
 
-```bash=
+```bash
 brew --version
 ```
 
@@ -53,13 +53,13 @@ brew --version
 
 那我就可以一併安裝 chrome、edge、brave、firefox
 
-```bash=
+```bash
 brew install --cask google-chrome microsoft-edge brave-browser firefox
 ```
 
 另外我也需要安裝一些開發用的 CLI，像是 git、pnpm、node
 
-```bash=
+```bash
 brew install git pnpm node
 ```
 
@@ -69,60 +69,60 @@ brew install git pnpm node
 
 * help 查看有哪些指令可以使用
 
-    ```bash=
+    ```bash
     brew help
     ```
 * update 更新 Homebrew 到最新版本
 
-    ```bash=
+    ```bash
     brew update
     ```
 
 * search 查詢是否已有該軟體或套件
 
-    ```bash=
+    ```bash
     brew search <formula>
     ```
 
 * install 安裝
 
-    ```bash=
+    ```bash
     brew install <formula>
     ```
 
 * uninstall 移除
 
-    ```bash=
+    ```bash
     brew uninstall <formula>
     ```
 
 * info 查看資訊
 
-    ```bash=
+    ```bash
     brew info <formula>
     ```
 
 * list 列出目前已安裝哪些軟體或套件
 
-    ```bash=
+    ```bash
     brew list
     ```
 
 * 以樹狀圖列出目前已安裝軟體或套件
 
-    ```bash=
+    ```bash
     brew deps --tree $(brew leaves)
     ```
 
 * upgrade 更新軟體或套件
 
-    ```bash=
+    ```bash
     brew upgrade <formula>
     ```
 
 * cleanup 刪除過期版本的暫存
 
-    ```bash=
+    ```bash
     brew cleanup
     ```
 
@@ -130,7 +130,7 @@ brew install git pnpm node
 
 首先，可以在舊的環境，輸入以下指令來生成已安裝的套件列表
 
-```bash=
+```bash
 brew bundle dump --file=~/Brewfile
 ```
 
@@ -140,7 +140,7 @@ brew bundle dump --file=~/Brewfile
 
 輸入以下指令，它就會根據 Brewfile 安裝所有套件
 
-```bash=
+```bash
 brew bundle --file=~/Brewfile
 ```
 
