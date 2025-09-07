@@ -147,15 +147,41 @@ h6 {
 
 .prose h1 {
   margin: 1.5rem 0 1.2rem;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .prose h1 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
 }
 
 .prose h2 {
   margin: 1.5rem 0 1.2rem;
   padding-bottom: 1.1rem;
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   border-bottom: 1px solid #e4e4e7;
+}
+
+@media (min-width: 640px) {
+  .prose h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose h2 {
+    font-size: 1.5rem;
+  }
 }
 
 .dark .prose h2,
@@ -165,7 +191,19 @@ h6 {
 
 .prose h3 {
   margin: 1.25rem 0 1.05rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .prose h3 {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose h3 {
+    font-size: 1.25rem;
+  }
 }
 
 .prose h4,
@@ -175,12 +213,38 @@ h6 {
 }
 
 .prose li {
-  font-size: 1.1rem;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .prose li {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .prose li {
+    font-size: 1.1rem;
+  }
 }
 
 .prose p {
   margin: 0 0 1.2rem;
   line-height: 1.75;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .prose p {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .prose p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
 }
 
 .prose a {
@@ -192,20 +256,46 @@ h6 {
   color: skyblue;
 }
 
+/* 深色模式文字顏色 */
+.dark .prose {
+  color: #d4d4d8;
+}
+
+.dark .prose strong {
+  color: #fafafa;
+}
+
+.dark .prose code {
+  color: #fbbf24;
+}
+
 .prose ul {
   list-style-type: disc;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
   margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .prose ul {
+    padding-left: 2rem;
+  }
 }
 
 .prose ol {
   list-style-type: decimal;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
   margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .prose ol {
+    padding-left: 2rem;
+  }
 }
 
 .prose li {
   line-height: 1.75;
+  display: list-item;
 }
 
 /* Fuwari 風格的現代化表格設計 */
@@ -378,15 +468,14 @@ blockquote p {
 
 .dark blockquote {
   background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
+  border-left-color: #3b82f6;
+}
+
+.dark .prose blockquote {
+  color: #d1d5db;
 }
 
 /* mobile style */
-@media (min-width: 1024px) {
-  .prose p {
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
-}
 
 @media (max-width: 720px) {
   main {
