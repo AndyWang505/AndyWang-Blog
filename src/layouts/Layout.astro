@@ -113,18 +113,18 @@ const bannerOffset = (() => {
 
     <!-- Main Content -->
     <div class="absolute w-full z-30 pointer-events-none" style={`top: var(--main-panel-top)`}>
-      <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
-        <div id="main-grid" class="transition-all duration-700 w-full px-0 flex flex-col min-h-[calc(100vh-var(--main-panel-top))]">
-          <main id="swup-container" class="transition-swup-fade overflow-hidden flex-1">
+      <div id="main-grid" class="transition-all duration-700 w-full px-0 grid grid-rows-[1fr_auto] min-h-[calc(100vh-var(--main-panel-top))]">
+        <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto w-full">
+          <main id="swup-container" class="transition-swup-fade overflow-hidden">
             <div id="content-wrapper">
               <slot />
             </div>
           </main>
-          
-          <!-- Full-width Footer -->
-          <div class="footer-wrapper pt-16 pointer-events-auto w-full mt-auto">
-            <Footer />
-          </div>
+        </div>
+        
+        <!-- Full-width Footer -->
+        <div class="footer-wrapper pointer-events-auto w-full pt-16">
+          <Footer />
         </div>
       </div>
     </div>
@@ -254,10 +254,6 @@ const bannerOffset = (() => {
   
   #content-wrapper {
     @apply pb-8;
-  }
-  
-  #swup-container {
-    @apply min-h-[50vh];
   }
 }
 </style>
