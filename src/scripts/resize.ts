@@ -3,7 +3,7 @@
  * handle the recalculation of responsive design
  */
 
-import { BANNER_HEIGHT_EXTEND } from '../constants/banner';
+import { BANNER_HEIGHT_EXTEND } from '../config/banner';
 
 export function initResizeHandling(): void {
   window.addEventListener('resize', () => {

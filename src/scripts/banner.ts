@@ -8,7 +8,7 @@ import {
   BANNER_HEIGHT, 
   BANNER_HEIGHT_HOME, 
   BANNER_HEIGHT_EXTEND 
-} from '../constants/banner';
+} from '../config/banner';
 
 // path equal check
 function pathsEqual(path1: string, path2: string): boolean {

@@ -3,7 +3,7 @@
  * handle the navbar hidden, back-to-top button, etc. scroll related features
  */
 
-import { BANNER_HEIGHT, BANNER_HEIGHT_HOME } from '../constants/banner';
+import { BANNER_HEIGHT, BANNER_HEIGHT_HOME } from '../config/banner';
 
 export function initScrollHandling(): void {
   const bannerEnabled = !!document.getElementById('banner-wrapper');
