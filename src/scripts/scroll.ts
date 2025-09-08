@@ -26,14 +26,17 @@ export function initScrollHandling(): void {
     if (!bannerEnabled || !navbar) return;
     
     const NAVBAR_HEIGHT = 72;
-    const MAIN_PANEL_EXCESS_HEIGHT = 3.5 * 16; // 3.5rem to px
     
+    // Use appropriate banner height based on screen size
     let currentBannerHeight = BANNER_HEIGHT;
-    if (document.body.classList.contains('is-home')) {
+    if (document.body.classList.contains('is-home') && window.innerWidth > 768) {
       currentBannerHeight = BANNER_HEIGHT_HOME;
     }
     
-    const threshold = window.innerHeight * (currentBannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16;
+    // Calculate when to hide navbar - when we've scrolled past most of the banner
+    // but before reaching the content area
+    const bannerHeightPx = window.innerHeight * (currentBannerHeight / 100);
+    const threshold = bannerHeightPx - NAVBAR_HEIGHT - 20; // Hide a bit before banner ends
     
     if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
       navbar.classList.add('navbar-hidden');
@@ -43,4 +46,7 @@ export function initScrollHandling(): void {
   }
   
   window.addEventListener('scroll', scrollFunction);
+  
+  // Also recalculate on resize to handle orientation changes
+  window.addEventListener('resize', scrollFunction);
 }

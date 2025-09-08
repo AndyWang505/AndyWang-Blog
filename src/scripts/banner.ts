@@ -52,12 +52,23 @@ export function initBannerAndTransitions(): void {
       // prevent element from overlapping with navbar
       if (!bannerEnabled) return;
       
-      const threshold = window.innerHeight * (BANNER_HEIGHT / 100) - 72 - 16;
       const navbar = document.getElementById('navbar-wrapper');
       
       if (!navbar || !document.body.classList.contains('is-home')) {
         return;
       }
+      
+      // Use banner-height based detection
+      const NAVBAR_HEIGHT = 72;
+      
+      // Use appropriate banner height for threshold calculation
+      let bannerHeightForThreshold = BANNER_HEIGHT;
+      if (document.body.classList.contains('is-home') && window.innerWidth > 768) {
+        bannerHeightForThreshold = BANNER_HEIGHT_HOME;
+      }
+      
+      const bannerHeightPx = window.innerHeight * (bannerHeightForThreshold / 100);
+      const threshold = bannerHeightPx - NAVBAR_HEIGHT - 20;
       
       if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
         navbar.classList.add('navbar-hidden');
