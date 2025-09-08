@@ -121,11 +121,11 @@ const bannerOffset = (() => {
             </div>
           </main>
           
+          <!-- Full-width Footer -->
+          <div class="footer-wrapper pt-16 pointer-events-auto w-full mt-auto">
+            <Footer />
+          </div>
         </div>
-      </div>
-      <!-- Full-width Footer -->
-      <div class="footer-wrapper pt-16 pointer-events-auto w-full">
-        <Footer />
       </div>
     </div>
     
@@ -170,9 +170,6 @@ const bannerOffset = (() => {
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  body.is-home.enable-banner #main-grid {
-    transform: translateY(var(--banner-height-extend));
-  }
 
   .enable-banner #top-row {
     height: calc(var(--banner-height) - 4.5rem);
@@ -198,9 +195,12 @@ const bannerOffset = (() => {
     body.is-home.enable-banner #banner {
       height: var(--banner-height) !important;
     }
+  }
 
+  /* Ensure main-grid translateY only applies on desktop for home page */
+  @media (min-width: 769px) {
     body.is-home.enable-banner #main-grid {
-      transform: translateY(0) !important;
+      transform: translateY(var(--banner-height-extend));
     }
   }
 
