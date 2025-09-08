@@ -5,7 +5,6 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Layout from './Layout.astro';
 import Aside from './Aside.astro';
 import MobileNav from '../components/MobileNav.astro';
-import BaseHead from '../components/BaseHead.astro';
 
 interface Props {
   entry: CollectionEntry<'blog'>;
@@ -28,7 +27,7 @@ const { headings } = await entry.render();
 ---
 
 <Layout title={title} image={heroImage} description={description}>
-  <!-- Main content wrapper with fuwari-style layout -->
+  <!-- Main content wrapper layout -->
   <div class="relative max-w-[var(--page-width)] mx-auto">
     <div class="w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside headings={headings} />

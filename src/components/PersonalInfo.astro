@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { DEFAULT_AVATAR } from '../consts';
+import { DEFAULT_AVATAR } from '../config/site';
 
 const blog = await getCollection('blog');
 const posts = blog.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());

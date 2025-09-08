@@ -1,5 +1,5 @@
 ---
-import { BANNER_CONFIG, BANNER_HEIGHT_EXTEND } from '../constants/banner';
+import { BANNER_CONFIG, BANNER_HEIGHT_EXTEND } from '../config/banner';
 
 interface Props {
   src?: string;
@@ -35,6 +35,8 @@ const imageStyle = `object-position: ${position}`;
         class="w-full h-full object-cover"
         style={imageStyle}
         loading="eager"
+        decoding="async"
+        fetchpriority="high"
       />
       
       <!-- 版權信息 -->

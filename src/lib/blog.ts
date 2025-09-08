@@ -1,13 +1,4 @@
-export function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-}
+// Blog-related utility functions
 
 interface Post {
   frontmatter: {
@@ -16,7 +7,7 @@ interface Post {
   };
 }
 
-interface Options {
+interface FormatBlogPostsOptions {
   filterOutDrafts?: boolean;
   filterOutFuturePosts?: boolean;
   sortByDate?: boolean;
@@ -28,7 +19,7 @@ export function formatBlogPosts(
   {
     // sortByDate = true,
     limit,
-  }: Options = {}
+  }: FormatBlogPostsOptions = {}
 ): Post[] {
   const filteredPosts = posts.reduce((acc: Post[], post: Post) => {
     // add post to acc
