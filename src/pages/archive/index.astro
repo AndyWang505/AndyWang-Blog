@@ -32,7 +32,7 @@ function formatDate(date: Date) {
 ---
 
 <Layout>
-  <!-- Main content wrapper with fuwari-style layout -->
+  <!-- Main content wrapper layout -->
   <div class="relative max-w-[var(--page-width)] mx-auto ">
     <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
@@ -46,7 +46,7 @@ function formatDate(date: Date) {
         <h3 class="text-sm sm:text-base md:text-xl">共 {posts.length} 筆文章</h3>
       </div>
       
-      <!-- Fuwari-style Timeline -->
+      <!-- Timeline -->
       <div class="px-2 sm:px-3">
         {yearGroups.map((group) => (
           <div class="mb-6 sm:mb-8">

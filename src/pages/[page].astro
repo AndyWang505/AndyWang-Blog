@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
 import Layout from '../layouts/Layout.astro';
 import Aside from '../layouts/Aside.astro';
 import MobileNav from '../components/MobileNav.astro';
@@ -14,13 +13,12 @@ interface PageProps {
 
 const blog = await getCollection('blog');
 
-// 獲取文章內容用於計算字數
 const postsWithContent = await Promise.all(
   blog.map(async (post) => {
     const { Content } = await post.render();
     return {
       ...post,
-      content: post.body // 使用原始 markdown 內容
+      content: post.body
     };
   })
 );
@@ -32,13 +30,12 @@ const posts = postsWithContent.sort(
 export async function getStaticPaths({ paginate }: { paginate: any }) {
   const blog = await getCollection('blog');
   
-  // 獲取文章內容用於計算字數
   const postsWithContent = await Promise.all(
     blog.map(async (post) => {
       const { Content } = await post.render();
       return {
         ...post,
-        content: post.body // 使用原始 markdown 內容
+        content: post.body
       };
     })
   );
@@ -63,7 +60,7 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 ---
 
 <Layout>
-  <!-- Main content wrapper with fuwari-style layout -->
+  <!-- Main content wrapper layout -->
   <div class="relative max-w-[var(--page-width)] mx-auto">
     <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
