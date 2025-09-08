@@ -3,6 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/base.css';
 import { DEFAULT_BLOG_IMAGE } from '../consts';
+import { BANNER_CONFIG } from '../constants/banner';
 
 interface Props {
   title: string;
@@ -42,6 +43,11 @@ const { title, description, image = DEFAULT_BLOG_IMAGE } = Astro.props;
   
   window.__theme = theme;
 </script>
+
+<!-- Banner image preload for faster loading -->
+{BANNER_CONFIG.enable && (
+  <link rel="preload" href={BANNER_CONFIG.src} as="image" />
+)}
 
 <!-- Font preloads -->
 <!-- <link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
