@@ -19,7 +19,7 @@ export const MAIN_PANEL_OVERLAPS_BANNER_HEIGHT: number = BANNER_HEIGHTS.overlaps
 // Banner main configuration
 export const BANNER_CONFIG = {
   enable: true,
-  src: "/banner/banner_0907.jpg",
+  src: "/banner/banner_01.webp",
   position: "center" as const,
   showOnHomePage: true,
   showOnOtherPages: true,

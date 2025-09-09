@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { BANNER_CONFIG, BANNER_HEIGHT_EXTEND } from '../config/banner';
 
 interface Props {
@@ -7,34 +6,16 @@ interface Props {
   alt?: string;
   position?: 'top' | 'center' | 'bottom';
   showCredit?: boolean;
-  width?: number;
-  height?: number;
 }
 
 const { 
   src = BANNER_CONFIG.src, 
   alt = "Blog banner image", 
   position = BANNER_CONFIG.position as 'top' | 'center' | 'bottom',
-  showCredit = BANNER_CONFIG.credit.enable,
-  width = 1920,
-  height = 1080
+  showCredit = BANNER_CONFIG.credit.enable 
 } = Astro.props;
 
 const imageStyle = `object-position: ${position}`;
-
-const isExternal = src && (src.startsWith('http') || src.startsWith('//'));
-
-let bannerImage;
-if (!isExternal && src) {
-  try {
-    if (src.startsWith('/banner/')) {
-      const imagePath = src.replace('/banner/', '');
-      bannerImage = await import(`../assets/banner/${imagePath}`);
-    }
-  } catch (error) {
-    console.warn(`Banner image not found in assets: ${src}`);
-  }
-}
 ---
 
 {BANNER_CONFIG.enable && (
@@ -48,33 +29,15 @@ if (!isExternal && src) {
       class="w-full h-full transition-all duration-700 opacity-100 scale-100 relative"
     >
       <!-- Banner 圖片 -->
-      {bannerImage ? (
-        <Image 
-          src={bannerImage.default}
-          alt={alt}
-          width={width}
-          height={height}
-          format="webp"
-          class="w-full h-full object-cover"
-          style={imageStyle}
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-          quality={85}
-        />
-      ) : (
-        <img 
-          src={src}
-          alt={alt}
-          class="w-full h-full object-cover"
-          style={imageStyle}
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-          width={width}
-          height={height}
-        />
-      )}
+      <img 
+        src={src}
+        alt={alt}
+        class="w-full h-full object-cover"
+        style={imageStyle}
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
       
       <!-- 版權信息 -->
       {showCredit && BANNER_CONFIG.credit.text && (
