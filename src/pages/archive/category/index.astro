@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import Aside from '../../../layouts/Aside.astro';
-import MobileNav from '../../../components/MobileNav.astro';
 
 interface CategoryCount {
   [category: string]: {
@@ -33,8 +32,6 @@ const categoriesArray = Object.values(categoriesCount);
   <div class="relative max-w-[var(--page-width)] mx-auto">
     <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside />
-      <!-- mobile nav -->
-      <MobileNav />
       <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
         <div class="onload-animation">
           <section class="space-y-3 sm:space-y-4">

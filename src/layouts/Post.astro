@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import Layout from './Layout.astro';
 import Aside from './Aside.astro';
-import MobileNav from '../components/MobileNav.astro';
 
 interface Props {
   entry: CollectionEntry<'blog'>;
@@ -31,8 +30,6 @@ const { headings } = await entry.render();
   <div class="relative max-w-[var(--page-width)] mx-auto">
     <div class="w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
       <Aside headings={headings} />
-      <MobileNav />
-      
       <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
         <div class="onload-animation">
           <article class="bg-white shadow-lg rounded-xl dark:bg-zinc-900 border border-gray-100/50 dark:border-zinc-700/50 px-2 py-3 sm:px-4 sm:py-4 md:px-8 md:py-8">
