@@ -59,12 +59,7 @@ body {
   min-height: 100vh;
 }
 
-.dark footer,
 footer {
-  background-image: none;
-}
-
-.dark footer {
   background-image: none;
 }
 
@@ -208,6 +203,8 @@ h6 {
 
 .prose li {
   font-size: 0.875rem;
+  line-height: 1.75;
+  display: list-item;
 }
 
 @media (min-width: 640px) {
@@ -286,10 +283,6 @@ h6 {
   }
 }
 
-.prose li {
-  line-height: 1.75;
-  display: list-item;
-}
 
 /* modern table design */
 .prose table {
@@ -364,7 +357,7 @@ h6 {
   border-top: none;
 }
 
-/* 深色模式 */
+/* Dark mode */
 .dark .prose table {
   border-color: #374151;
   background: #1f2937;
@@ -401,7 +394,7 @@ h6 {
   border-top-color: #374151;
 }
 
-/* 響應式設計 */
+/* Responsive design */
 @media (max-width: 768px) {
   .prose table {
     font-size: 0.8rem;
@@ -440,12 +433,55 @@ h6 {
   border: 1px solid rgb(48, 54, 61);
 }
 
+/* ExpressiveCode code block optimization */
 .expressive-code {
   margin: 0 0 1.2rem;
 }
 
 .expressive-code .frame {
   box-shadow: none !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+}
+
+.expressive-code pre {
+  overflow-x: auto !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  word-break: normal !important;
+  border-radius: 0 0 0.75rem 0.75rem !important;
+}
+
+.expressive-code code {
+  white-space: pre !important;
+  word-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Custom scrollbar style */
+.expressive-code pre::-webkit-scrollbar {
+  height: 8px;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.expressive-code pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.expressive-code pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.expressive-code pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.expressive-code pre::-webkit-scrollbar-corner {
+  background: transparent;
+  border-radius: 0 0 0.75rem 0;
 }
 
 blockquote {

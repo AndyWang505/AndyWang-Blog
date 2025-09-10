@@ -33,24 +33,18 @@ export default function ThemeToggle() {
   }, []);
 
   return isMounted ? (
-    <div className="inline-flex items-center p-0.5 rounded-3xl bg-orange-200 dark:bg-zinc-600">
-      {themes.map((t) => {
-        const checked = t === theme;
-        return (
-          <button
-            key={t}
-            className={`${
-              checked ? 'bg-white text-black' : ''
-            } flex cursor-pointer rounded-3xl p-2`}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
-            {t === 'light' ? <IoSunny className="dark:text-white" /> : <IoMoon />}
-          </button>
-        );
-      })}
-    </div>
+    <button
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+      className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100/60 dark:hover:bg-gray-800/60 transition-all duration-200 active:scale-95"
+    >
+      {theme === 'light' ? (
+        <IoSunny className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+      ) : (
+        <IoMoon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+      )}
+    </button>
   ) : (
-    <div />
+    <div className="w-9 h-9" />
   );
 }

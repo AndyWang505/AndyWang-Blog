@@ -2,10 +2,12 @@
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../config/site';
 import ThemeToggle from './ThemeToggle';
+import HamburgerMenu from './HamburgerMenu.astro';
+import SearchContainer from './SearchContainer.astro';
 ---
 
 <header class="bg-white/80 dark:bg-zinc-900/80 dark:text-zinc-100 sticky top-0 z-50 drop-shadow border-b border-gray-200/20 dark:border-zinc-700/50 rounded-b-lg">
-  <nav class="max-w-6xl py-2 px-4 mx-auto">
+  <nav class="max-w-6xl py-2 pl-4 mx-auto">
     <div class="flex items-center gap-6">
       <!-- Home Link with Icon -->
       <a href="/" class="flex items-center gap-2 text-md font-semibold italic py-1 hover:opacity-80">
@@ -28,8 +30,10 @@ import ThemeToggle from './ThemeToggle';
         </HeaderLink>
       </div>
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center gap-2">
+      <SearchContainer />
       <ThemeToggle client:visible />
+      <HamburgerMenu />
     </div>
   </nav>
 </header>

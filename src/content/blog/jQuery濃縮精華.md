@@ -2,7 +2,7 @@
 title: 'jQuery 濃縮精華'
 description: 'jQuery是HTML、CSS、JavaScript撰寫出來的library，用來製作動畫效果，雖然撰寫上很方便，但當程式碼龐大時會因寫法的關係較難維護'
 pubDate: 'December 05 2021'
-heroImage: '/JS-Image1.jpg'
+heroImage: ''
 tags: ['jQuery','Notes']
 category: 'JavaScript'
 ---

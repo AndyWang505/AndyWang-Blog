@@ -1,0 +1,63 @@
+---
+export interface Props {
+  links: Array<{
+    name: string;
+    url: string;
+    external?: boolean;
+  }>;
+}
+
+const { links } = Astro.props;
+---
+
+<div id="nav-menu-panel" class="float-panel float-panel-closed fixed top-20 right-4 z-40 transition-all duration-300 ease-in-out">
+  <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-lg shadow-lg border border-gray-200/50 dark:border-gray-700/50 px-2 py-2 min-w-[200px]">
+    {links.map((link) => (
+      <a 
+        href={link.external ? link.url : link.url} 
+        class="group flex justify-between items-center py-3 px-4 rounded-lg gap-8 hover:bg-gray-100/60 dark:hover:bg-gray-800/60 active:bg-gray-200/60 dark:active:bg-gray-700/60 transition-colors duration-200"
+        target={link.external ? "_blank" : null}
+        rel={link.external ? "noopener noreferrer" : null}
+      >
+        <div class="transition-colors duration-200 text-gray-700 dark:text-gray-300 font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 group-active:text-blue-700 dark:group-active:text-blue-300">
+          {link.name}
+        </div>
+        {!link.external && (
+          <svg 
+            class="w-5 h-5 text-blue-600 dark:text-blue-400 transition-transform duration-200 group-hover:translate-x-1" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        )}
+        {link.external && (
+          <svg 
+            class="w-4 h-4 text-gray-400 dark:text-gray-500 transition-colors duration-200" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        )}
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+.float-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.float-panel-closed {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.95);
+  pointer-events: none;
+}
+</style>

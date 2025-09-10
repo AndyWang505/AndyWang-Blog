@@ -1,0 +1,146 @@
+---
+import NavMenuPanel from './NavMenuPanel.astro';
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const links = [
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about' },
+  { name: 'Archive', url: '/archive' },
+  { name: 'Category', url: '/archive/category' },
+  { name: 'Tags', url: '/archive/tag' },
+];
+---
+
+<div class={`hamburger-menu ${className}`}>
+  <!-- Hamburger menu button -->
+  <button 
+    aria-label="Menu" 
+    name="Navigation menu" 
+    class="hamburger-btn btn-plain scale-animation rounded-lg w-9 h-9 active:scale-90 md:!hidden hover:bg-gray-100/60 dark:hover:bg-gray-800/60 transition-all duration-200 flex items-center justify-center" 
+    id="nav-menu-switch"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+  
+  <!-- Navigation menu panel -->
+  <NavMenuPanel links={links} />
+</div>
+
+<style>
+.hamburger-btn {
+  position: relative;
+  z-index: 50;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+
+.scale-animation {
+  transition: transform 0.2s ease-in-out;
+}
+
+.scale-animation:active {
+  transform: scale(0.95);
+}
+</style>
+
+<script>
+function initHamburgerMenu() {
+  const menuButton = document.getElementById('nav-menu-switch');
+  const menuPanel = document.getElementById('nav-menu-panel');
+
+  if (!menuButton || !menuPanel) return;
+
+  // 動態創建遮罩
+  let overlay = document.getElementById('menu-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'menu-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 40;
+      backdrop-filter: blur(2px);
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  function toggleMenu() {
+    const isOpen = !menuPanel?.classList.contains('float-panel-closed');
+    
+    if (isOpen) {
+      menuPanel?.classList.add('float-panel-closed');
+      if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+      }
+      document.body.style.overflow = '';
+    } else {
+      menuPanel?.classList.remove('float-panel-closed');
+      if (overlay) {
+        overlay.style.opacity = '1';
+        overlay.style.visibility = 'visible';
+      }
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeMenu() {
+    menuPanel?.classList.add('float-panel-closed');
+    if (overlay) {
+      overlay.style.opacity = '0';
+      overlay.style.visibility = 'hidden';
+    }
+    document.body.style.overflow = '';
+  }
+
+
+  menuButton.addEventListener('click', toggleMenu);
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
+
+  const menuLinks = menuPanel.querySelectorAll('a');
+  menuLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menuPanel.classList.contains('float-panel-closed')) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) {
+      closeMenu();
+    }
+  });
+}
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHamburgerMenu);
+  } else {
+    initHamburgerMenu();
+  }
+}
+</script>
