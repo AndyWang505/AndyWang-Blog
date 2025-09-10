@@ -1,5 +1,6 @@
 ---
 import FormattedDate from './FormattedDate.astro';
+import { Image } from "astro:assets";
 
 export interface Props {
   slug: string;
@@ -18,10 +19,8 @@ const { slug, title, heroImage, pubDate, category, tags, description, content } 
 function getWordCount(text: string): number {
   if (!text) return 0;
   
-  // 移除 HTML 標籤
   const withoutHtml = text.replace(/<[^>]*>/g, ' ');
   
-  // 移除 Markdown 語法
   const withoutMarkdown = withoutHtml
     .replace(/#{1,6}\s/g, '') // 標題
     .replace(/\*\*([^*]+)\*\*/g, '$1') // 粗體
@@ -65,7 +64,16 @@ const coverWidth = "28%";
     <a href={`/post/${slug}/`} 
        class="group block md:hidden w-full h-[150px] relative overflow-hidden">
       <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/20 transition-colors duration-300 ease-out"></div>
-      <img class="w-full h-full object-cover" src={heroImage} alt={title} />
+      <Image 
+        src={heroImage} 
+        alt={title}
+        width={400}
+        height={150}
+        loading="lazy"
+        format="webp"
+        quality={80}
+        class="w-full h-full object-cover"
+      />
     </a>
   }
   
@@ -174,7 +182,16 @@ const coverWidth = "28%";
           <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.58Z"/>
         </svg>
       </div>
-      <img class="w-full h-full object-cover transition-transform duration-500 ease-out" src={heroImage} alt={title} />
+      <Image 
+        src={heroImage} 
+        alt={title}
+        width={300}
+        height={200}
+        loading="lazy"
+        format="webp"
+        quality={80}
+        class="w-full h-full object-cover transition-transform duration-500 ease-out"
+      />
     </a>
   }
 
@@ -190,8 +207,3 @@ const coverWidth = "28%";
     </a>
   }
 </div>
-
-<style define:vars={{coverWidth}}>
-/* 只保留必要的 CSS 變數 */
-</style>
-

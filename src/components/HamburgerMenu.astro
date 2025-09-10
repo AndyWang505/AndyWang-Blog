@@ -33,9 +33,6 @@ const links = [
   
   <!-- Navigation menu panel -->
   <NavMenuPanel links={links} />
-  
-  <!-- Background overlay -->
-  <div id="menu-overlay" class="menu-overlay"></div>
 </div>
 
 <style>
@@ -48,24 +45,6 @@ const links = [
   padding: 8px;
 }
 
-.menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease-in-out;
-  z-index: 30;
-  backdrop-filter: blur(2px);
-}
-
-.menu-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
 
 .scale-animation {
   transition: transform 0.2s ease-in-out;
@@ -80,33 +59,64 @@ const links = [
 function initHamburgerMenu() {
   const menuButton = document.getElementById('nav-menu-switch');
   const menuPanel = document.getElementById('nav-menu-panel');
-  const overlay = document.getElementById('menu-overlay');
 
-  if (!menuButton || !menuPanel || !overlay) return;
+  if (!menuButton || !menuPanel) return;
+
+  // 動態創建遮罩
+  let overlay = document.getElementById('menu-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'menu-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 40;
+      backdrop-filter: blur(2px);
+    `;
+    document.body.appendChild(overlay);
+  }
 
   function toggleMenu() {
     const isOpen = !menuPanel?.classList.contains('float-panel-closed');
     
     if (isOpen) {
       menuPanel?.classList.add('float-panel-closed');
-      overlay?.classList.remove('active');
+      if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+      }
       document.body.style.overflow = '';
     } else {
       menuPanel?.classList.remove('float-panel-closed');
-      overlay?.classList.add('active');
+      if (overlay) {
+        overlay.style.opacity = '1';
+        overlay.style.visibility = 'visible';
+      }
       document.body.style.overflow = 'hidden';
     }
   }
 
   function closeMenu() {
     menuPanel?.classList.add('float-panel-closed');
-    overlay?.classList.remove('active');
+    if (overlay) {
+      overlay.style.opacity = '0';
+      overlay.style.visibility = 'hidden';
+    }
     document.body.style.overflow = '';
   }
 
 
   menuButton.addEventListener('click', toggleMenu);
-  overlay.addEventListener('click', closeMenu);
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
 
   const menuLinks = menuPanel.querySelectorAll('a');
   menuLinks.forEach(link => {

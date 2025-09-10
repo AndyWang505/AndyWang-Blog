@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import Search from './Search';
+
+const posts = await getCollection('blog');
+
+const searchData = posts.map((post: any) => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  category: post.data.category,
+  tags: post.data.tags,
+  pubDate: post.data.pubDate.toISOString(),
+}));
+---
+
+<Search client:load posts={searchData} />

@@ -2,7 +2,7 @@
 title: 'JavaScript 之 this 的運作'
 description: '在 JavaScript 中，this 的指向通常是根據函數如何被調用來決定的。首先我們先觀察一個函式的參數包含哪些東西'
 pubDate: 'July 10 2022'
-heroImage: '/JS-Image1.jpg'
+heroImage: ''
 tags: ['JavaScript', 'Notes']
 category: 'JavaScript'
 ---
