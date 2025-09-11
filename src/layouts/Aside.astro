@@ -3,9 +3,7 @@ import PersonalInfo from '../components/PersonalInfo.astro';
 import CategoryAside from '../components/CategoryAside.astro';
 import TagCloud from '../components/TagCloud.astro';
 import RecentPosts from '../components/RecentPosts.astro';
-import ToC from '../components/ToC.astro';
 
-const { headings = [] } = Astro.props;
 const isPost = Astro.url.pathname.includes('/post/');
 ---
 
@@ -18,9 +16,6 @@ const isPost = Astro.url.pathname.includes('/post/');
     isPost ? (
       <div class="transition-all duration-700 flex flex-col w-full gap-4">
         <RecentPosts />
-        <div class="sticky top-4">
-          <ToC headings={headings} />
-        </div>
       </div>
     ) : (
       <div class="transition-all duration-700 flex flex-col w-full gap-4">
