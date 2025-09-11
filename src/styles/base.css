@@ -38,7 +38,7 @@
   
   /* 代碼塊 */
   --codeblock-bg: #0b0b0c;
-  --codeblock-topbar-bg: #111827;
+  --codeblock-topbar-bg: #0f1e4e;
 }
 
 body {
@@ -485,8 +485,8 @@ h6 {
 }
 
 blockquote {
-  background-color: #f7f7f7;
-  border-left: 4px solid #e4e4e7;
+  background-color: #f0f0f0;
+  border-left: 4px solid #c9c9ce;
   padding: 10px 0 10px 20px;
   margin: 0px 0 1.2rem;
 }
@@ -496,7 +496,7 @@ blockquote p {
 }
 
 .dark blockquote {
-  background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
+  background-color: #0d121a;
   border-left-color: #3b82f6;
 }
 
