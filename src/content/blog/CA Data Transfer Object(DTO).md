@@ -29,11 +29,12 @@ DTO 在 Pattern of Enterprise Application Architecture（PoEAA）與 Clean Archi
 
 ## DTO 究竟何物
 
-抽象來說，DTO 是 **一個沒有行為的資料容器**，它只有欄位，沒有業務邏輯。  
-它的目標不是「聰明的物件」，而是「乾淨的資料結構」。  
+抽象來說，DTO 是 **一個沒有行為的資料容器**。
+
+它的設計並不是像 Domain Model 一樣封裝業務邏輯，而是單純承載資料的結構。
 
 在 CA 裡，DTO 的價值在於：  
-- 幫助 Use Case 定義「輸入輸出契約」  
+- 幫助 Use Case 定義「輸入輸出格式」  
 - 保證核心層與外部框架解耦  
 - 減少資料洩漏（不會把敏感欄位傳到 UI 或 API）
 
