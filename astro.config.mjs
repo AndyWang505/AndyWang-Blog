@@ -73,7 +73,25 @@ export default defineConfig({
         showCopyToClipboardButton: true,
       }
     }
-  ), sitemap(), react(), tailwind()],
+  ), sitemap({
+    changefreq: 'weekly',
+    priority: 0.7,
+    lastmod: new Date(),
+    entryLimit: 10000,
+    customPages: [
+      'https://andywangtw.dev/about',
+      'https://andywangtw.dev/archive',
+      'https://andywangtw.dev/archive/category',
+      'https://andywangtw.dev/archive/tag',
+      'https://andywangtw.dev/link',
+    ],
+    i18n: {
+      defaultLocale: 'zh-TW',
+      locales: {
+        'zh-TW': 'zh-TW'
+      }
+    }
+  }), react(), tailwind()],
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
