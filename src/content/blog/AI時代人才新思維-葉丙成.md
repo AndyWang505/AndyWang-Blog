@@ -4,7 +4,7 @@ description: '2025 SITCON 議程分享「AI 時代人才新思維」，主要講
 pubDate: 'March 9 2025'
 heroImage: '/SITCON2025.png'
 tags: ['AI', '心得']
-category: 'Conferences'
+category: '心得'
 ---
 
 2025 SITCON 議程分享「AI 時代人才新思維」，主要講述現今變化快速的 AI 時代，未來人才需要具備的關鍵特質，人才培養思維應該怎麼改變，以及現今教育的困境。

@@ -4,7 +4,7 @@ description: '在 CSS 中經常會遇到需要覆蓋樣式的情況，這通常�
 pubDate: 'March 26 2022'
 heroImage: '/CSS-Image1.jpg'
 tags: ['CSS','Notes']
-category: 'CSS'
+category: 'Performance'
 ---
 
 在 CSS 中經常會遇到需要覆蓋樣式的情況，這通常涉及到 CSS 的權重問題。當多個 CSS 使用在同一個元素並且產生衝突時，就會根據權重來決定最終的樣式為何。

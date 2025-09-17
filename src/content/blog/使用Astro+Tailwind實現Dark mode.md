@@ -3,8 +3,8 @@ title: '使用 Astro+Tailwind 實現 Dark mode'
 description: '紀錄如何使用 Astro+Tailwind 來實現 Dark mode 功能，並將狀態儲存在 localStorage，每次進入時檢查 localStorage 的 theme 來切換 mode。'
 pubDate: 'July 15 2024'
 heroImage: '/Astro-Image1.png'
-tags: ['Notes','Blog']
-category: 'Astro'
+tags: ['Notes', 'Astro']
+category: 'Blog'
 ---
 
 紀錄如何使用 Astro+Tailwind 來實現 Dark mode 功能，並將狀態儲存在 localStorage，每次進入時檢查 localStorage 的 theme 來切換 mode

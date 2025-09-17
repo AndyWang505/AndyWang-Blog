@@ -3,7 +3,7 @@ title: '前端效能優化(1) - Debounce'
 description: 'Debounce 是一種常見的效能優化方式，主要用於限制高頻事件的觸發次數，例如：當你使用 Google 搜尋某個關鍵字，它並不會在你輸入過程不斷搜尋，而是當你停下輸入後才去做搜尋的動作。'
 pubDate: 'July 17 2024'
 heroImage: '/React-Image1.png'
-tags: ['Notes','JavaScript','Frontend']
+tags: ['Notes', 'JavaScript', 'Frontend']
 category: 'JavaScript'
 ---
 

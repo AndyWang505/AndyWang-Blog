@@ -3,8 +3,8 @@ title: 'CA: Data Transfer Object (DTO)'
 description: '為了解決層與層之間的耦合，內部核心 Entities、Use Cases 去依賴外部格式，可能會造成今天欄位異動，連動核心需要跟著去修改，違反了依賴反轉原則（DIP），日後要擴充或是重構也是一大挑戰。'
 pubDate: 'September 11 2025'
 heroImage: ''
-tags: ['Notes', 'DTO', 'Clean Architecture']
-category: 'Clean Architecture'
+tags: ['Notes', 'DTO', 'Clean-Architecture']
+category: 'SystemDesign'
 ---
 
 為了解決層與層之間的耦合，內部核心 Entities、Use Cases 去依賴外部格式，可能會造成今天欄位異動，連動核心需要跟著去修改，違反了依賴反轉原則（DIP），日後要擴充或是重構也是一大挑戰。
