@@ -1,0 +1,175 @@
+---
+import PaginationIcon from './PaginationIcons.tsx';
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl?: string;
+  showNumbers?: boolean;
+  maxPages?: number;
+}
+
+const {
+  currentPage,
+  totalPages,
+  baseUrl = "",
+  showNumbers = true,
+  maxPages = 5
+} = Astro.props;
+
+const getPageNumbers = () => {
+  const pages = [];
+  const halfMax = Math.floor(maxPages / 2);
+
+  let start = Math.max(1, currentPage - halfMax);
+  let end = Math.min(totalPages, start + maxPages - 1);
+
+  if (end - start + 1 < maxPages) {
+    start = Math.max(1, end - maxPages + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+};
+
+const pageNumbers = showNumbers ? getPageNumbers() : [];
+
+const getPageUrl = (page: number) => {
+  if (page === 1) {
+    return baseUrl === "" ? "/" : baseUrl;
+  }
+  return `${baseUrl}/${page}`;
+};
+---
+
+<nav class="pagination flex justify-center items-center gap-3 my-8" aria-label="分頁導航">
+  <div class="flex items-center gap-2">
+    {currentPage > 1 ? (
+      <a
+        href={getPageUrl(currentPage - 1)}
+        class="pagination-btn pagination-prev"
+        aria-label="上一頁"
+      >
+        <PaginationIcon type="prev" client:load />
+      </a>
+    ) : (
+      <span class="pagination-btn pagination-disabled">
+        <PaginationIcon type="prev" client:load />
+      </span>
+    )}
+
+    {totalPages > 1 && (
+      <>
+        {currentPage === 1 ? (
+          <span class="pagination-btn pagination-current" aria-current="page">1</span>
+        ) : (
+          <a href={getPageUrl(1)} class="pagination-btn" aria-label="前往第一頁">1</a>
+        )}
+
+        {pageNumbers[0] > 2 && (
+          <span class="pagination-ellipsis">…</span>
+        )}
+
+        {pageNumbers.map((pageNum) => (
+          pageNum !== 1 && pageNum !== totalPages && (
+            pageNum === currentPage ? (
+              <span
+                class="pagination-btn pagination-current"
+                aria-current="page"
+                aria-label={`目前頁面：第 ${pageNum} 頁`}
+              >
+                {pageNum}
+              </span>
+            ) : (
+              <a
+                href={getPageUrl(pageNum)}
+                class="pagination-btn"
+                aria-label={`前往第 ${pageNum} 頁`}
+              >
+                {pageNum}
+              </a>
+            )
+          )
+        ))}
+
+        {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
+          <span class="pagination-ellipsis">…</span>
+        )}
+
+        {totalPages > 1 && (
+          currentPage === totalPages ? (
+            <span class="pagination-btn pagination-current" aria-current="page">{totalPages}</span>
+          ) : (
+            <a href={getPageUrl(totalPages)} class="pagination-btn" aria-label="前往最後一頁">{totalPages}</a>
+          )
+        )}
+      </>
+    )}
+
+    {currentPage < totalPages ? (
+      <a
+        href={getPageUrl(currentPage + 1)}
+        class="pagination-btn pagination-next"
+        aria-label="下一頁"
+      >
+        <PaginationIcon type="next" client:load />
+      </a>
+    ) : (
+      <span class="pagination-btn pagination-disabled">
+        <PaginationIcon type="next" client:load />
+      </span>
+    )}
+  </div>
+
+  <div class="pagination-info">
+    Page {currentPage} of {totalPages}
+  </div>
+</nav>
+
+<style>
+  .pagination-btn {
+    @apply min-w-[2.5rem] h-10 px-3 py-2 rounded-lg border
+           flex items-center justify-center text-sm font-medium;
+  }
+
+  .pagination-btn:not(.pagination-disabled):not(.pagination-current) {
+    @apply bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700
+           text-gray-700 dark:text-gray-300
+           hover:bg-gray-50 dark:hover:bg-zinc-700;
+  }
+
+  .pagination-current {
+    @apply bg-blue-500 dark:bg-blue-600 border-blue-500 dark:border-blue-600
+           text-white font-semibold;
+  }
+
+  .pagination-prev {
+    @apply bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800
+           text-orange-600 dark:text-orange-400
+           hover:bg-orange-100 dark:hover:bg-orange-900/30;
+  }
+
+  .pagination-next {
+    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800
+           text-blue-600 dark:text-blue-400
+           hover:bg-blue-100 dark:hover:bg-blue-900/30;
+  }
+
+  .pagination-disabled {
+    @apply bg-gray-50 dark:bg-zinc-900 border-gray-100 dark:border-zinc-800
+           text-gray-400 dark:text-zinc-600 cursor-not-allowed;
+  }
+
+  .pagination-ellipsis {
+    @apply px-2 py-2 text-gray-500 dark:text-gray-400 text-sm;
+  }
+
+  .pagination-info {
+    @apply ml-4 px-3 py-2 text-sm text-gray-500 dark:text-gray-400
+           bg-gray-50 dark:bg-zinc-800/50 rounded-lg border
+           border-gray-200 dark:border-zinc-700;
+  }
+</style>
