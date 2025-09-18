@@ -4,7 +4,7 @@ description: '在軟體業工作一陣子後，一定都會碰到 Zero Downtime 
 pubDate: 'January 31 2025'
 heroImage: '/Kubernetes.png'
 tags: ['Notes', 'Kubernetes', 'Deployment']
-category: 'Kubernetes'
+category: 'DevOps'
 ---
 
 在軟體業工作一陣子後，一定都會碰到 Zero Downtime 的問題，特別是在版本更新時，如何確保系統穩定、不影響使用者體驗，如何解決是 DevOps 中的重要課題。

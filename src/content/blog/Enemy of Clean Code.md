@@ -3,8 +3,8 @@ title: 'Enemy of Clean Code'
 description: '在現實開發中，有許多因素和習慣會成為 Clean Code 的「敵人」。這些「敵人」通常會導致程式碼難以理解、難以維護、出錯率高，最終影響團隊的開發效率和軟體的品質。'
 pubDate: 'November 10 2024'
 heroImage: '/Algo-Image1.png'
-tags: ['心得', 'Performance']
-category: 'Clean Code'
+tags: ['心得', 'Performance', 'Clean Code']
+category: '心得'
 ---
 
 在現實開發中，有許多因素和習慣會成為 Clean Code 的「敵人」。這些「敵人」通常會導致程式碼難以理解、難以維護、出錯率高，最終影響團隊的開發效率和軟體的品質。

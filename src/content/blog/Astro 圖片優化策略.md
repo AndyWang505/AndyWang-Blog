@@ -3,8 +3,8 @@ title: 'Astro 圖片優化策略'
 description: '近期在重構部落格時，發現過去一直都有靜態資源載入的問題，例如 layout structure 先出來了，但圖片還在 loading，後來也發現其實 astro 有針對這類靜態資源做優化。'
 pubDate: 'September 8 2025'
 heroImage: ''
-tags: ['blog', 'performance']
-category: 'Astro'
+tags: ['blog', 'performance', 'Astro']
+category: 'Blog'
 ---
 
 近期在重構部落格時，發現過去一直都有靜態資源載入的問題，例如 layout structure 先出來了，但圖片還在 loading，後來也發現其實 astro 有針對這類靜態資源做優化。

@@ -3,8 +3,8 @@ title: 'Build Your Own Cursor Rules'
 description: "Cursor 本身已經很好用了，但偶爾還是會犯下一些不太聰明的錯誤，你可以透過自訂 Cursor Rules 來降低這些錯誤的發生，讓開發體驗更舒適流暢，不必每次都來回花時間糾正。"
 pubDate: 'April 29 2025'
 heroImage: 'https://mintlify.s3.us-west-1.amazonaws.com/cursor/images/context/rules/rules-applied.png'
-tags: ['Cursor', 'Cursor Rules']
-category: 'Cursor'
+tags: ['Cursor', 'Cursor-Rules']
+category: 'Tools'
 ---
 
 Cursor 本身已經很好用了，但偶爾還是會犯下一些不太聰明的錯誤，你可以透過自訂 Cursor Rules 來降低這些錯誤的發生，讓開發體驗更舒適流暢，不必每次都來回花時間糾正。

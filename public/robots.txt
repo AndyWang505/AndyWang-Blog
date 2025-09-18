@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://andywangtw.dev/sitemap-index.xml
+Sitemap: https://andywangtw.dev/sitemap-0.xml
+
+# Block crawling of development files
+Disallow: /_astro/
+Disallow: /src/
+Disallow: /*.json
+
+# Allow crawling of all content
+Allow: /post/
+Allow: /archive/
+Allow: /about
+Allow: /link
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

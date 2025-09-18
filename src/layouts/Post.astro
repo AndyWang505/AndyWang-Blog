@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import Layout from './Layout.astro';
 import Aside from './Aside.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
 
 interface Props {
   entry: CollectionEntry<'blog'>;
@@ -20,6 +21,41 @@ blog.forEach((post) => {
     tagsSet.add(tag);
   });
 });
+
+// Function to find related posts based on tags
+function getRelatedPosts(currentPost: CollectionEntry<'blog'>, allPosts: CollectionEntry<'blog'>[], limit = 4) {
+  const currentTags = currentPost.data.tags || [];
+  const currentCategory = currentPost.data.category;
+
+  // Filter out current post and calculate similarity score
+  const relatedPosts = allPosts
+    .filter(post => post.slug !== currentPost.slug)
+    .map(post => {
+      let score = 0;
+      const postTags = post.data.tags || [];
+      const postCategory = post.data.category;
+
+      // Calculate tag similarity (each matching tag = +1 point)
+      const matchingTags = currentTags.filter(tag => postTags.includes(tag));
+      score += matchingTags.length * 2;
+
+      // Bonus for same category (+1 point)
+      if (postCategory === currentCategory) {
+        score += 1;
+      }
+
+      return { post, score };
+    })
+    .filter(item => item.score > 0) // Only include posts with some similarity
+    .sort((a, b) => b.score - a.score) // Sort by similarity score (descending)
+    .slice(0, limit) // Take top N posts
+    .map(item => item.post);
+
+  return relatedPosts;
+}
+
+// Get related posts
+const relatedPosts = getRelatedPosts(entry, blog);
 
 // Get headings from the ToC
 const { headings } = await entry.render();
@@ -96,9 +132,31 @@ const { headings } = await entry.render();
             <div class="prose max-w-none prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-zinc-100 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-pink-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50/50 dark:prose-blockquote:bg-blue-900/10 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
               <slot />
             </div>
+
+            <!-- CC BY-SA 4.0 License -->
+            <div class="mt-8 pt-6 border-t border-gray-200 dark:border-zinc-700">
+              <div class="flex items-start gap-3 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-lg">
+                <svg class="w-6 h-6 mt-0.5 text-gray-600 dark:text-gray-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <div class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p class="font-medium mb-2">Licensed under CC BY-SA 4.0</p>
+                  <p class="mb-1 text-xs text-gray-500 dark:text-gray-400">
+                    Unless otherwise noted, content on this site is licensed under
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">CC BY-SA 4.0</a>.
+                    You are free to share and adapt with attribution.
+                  </p>
+                </div>
+              </div>
+            </div>
           </article>
         </div>
       </main>
+
+      <!-- Related Posts Section - Independent Cards Outside Container -->
+      <div class="col-span-2 lg:col-span-1 lg:col-start-2">
+        <RelatedPosts relatedPosts={relatedPosts} />
+      </div>
     </div>
   </div>
 </Layout>

@@ -3,8 +3,8 @@ title: 'Leetcode 326. Power of Three'
 description: 'Power of Three，主要想記錄看到一個很有趣的解法，這題非常簡單，就是找到3的冪次方，回傳 true，要挑戰的就是不要用迴圈來完成。'
 pubDate: 'July 20 2025'
 heroImage: ''
-tags: ['Leetcode', 'Algorithm', 'Data Structure']
-category: 'Leetcode'
+tags: ['Leetcode', 'Algorithm', 'Data-Structure']
+category: 'LeetCode'
 ---
 
 主要想記錄看到一個很有趣的解法，這題非常簡單，就是找到3的冪次方，回傳 true，要挑戰的就是不要用迴圈來完成。

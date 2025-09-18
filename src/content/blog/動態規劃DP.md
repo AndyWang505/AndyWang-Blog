@@ -4,7 +4,7 @@ description: '動態規劃 (Dynamic Programming) 簡稱DP，屬於 Divide-and-co
 pubDate: 'May 05 2022'
 heroImage: '/Algo-Image1.png'
 tags: ['Notes', 'DP', 'Recursion']
-category: 'Algorithm'
+category: 'Performance'
 ---
 ## 動態規劃 (Dynamic Programming)，簡稱DP
 

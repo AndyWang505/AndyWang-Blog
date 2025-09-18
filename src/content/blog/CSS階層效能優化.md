@@ -4,7 +4,7 @@ description: '其實CSS階層在瀏覽器上會影響效能，但因為現今電
 pubDate: 'March 27 2022'
 heroImage: '/CSS-Image1.jpg'
 tags: ['CSS','Notes']
-category: 'CSS'
+category: 'Performance'
 ---
 其實CSS階層在瀏覽器上會影響效能
 
