@@ -4,6 +4,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Layout from '../layouts/Layout.astro';
 import Aside from '../layouts/Aside.astro';
 import CardItem from '../components/CardItem.astro';
+import Pagination from '../components/Pagination.astro';
 
 const blog = await getCollection('blog');
 
@@ -50,34 +51,11 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
           ))}
 
             </ul>
-            <nav class="my-6">
-              <ul class="mx-auto flex justify-center">
-                {
-                  currentPage > 1 && (
-                    <li>
-                      <a
-                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-orange-400 hover:text-orange-600 transition-colors"
-                        href={`/${currentPage - 1}`}
-                      >
-                        &lt;&lt; Previous
-                      </a>
-                    </li>
-                  )
-                }
-                {
-                  currentPage < totalPages && (
-                    <li>
-                      <a
-                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-blue-400 hover:text-blue-600 transition-colors"
-                        href={`/${currentPage + 1}`}
-                      >
-                        Next &gt;&gt;
-                      </a>
-                    </li>
-                  )
-                }
-              </ul>
-            </nav>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              baseUrl=""
+            />
           </section>
         </div>
       </main>
