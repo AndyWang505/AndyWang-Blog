@@ -9,16 +9,23 @@ import Layout from '../../layouts/Layout.astro';
     <title>Weiwei Link</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon-16x16.png" type="image/png" />
+    <!-- 圖片預載入 -->
+    <link rel="preload" as="image" href="https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true" fetchpriority="high" />
+    <link rel="preload" as="image" href="https://avatars.githubusercontent.com/u/71600455?v=4" fetchpriority="high" />
+
+    <!-- 字體優化載入 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+TC:wght@100..900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playball&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      media="print" onload="this.media='all'"
     />
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" /></noscript>
 
     <style>
       html,
@@ -71,10 +78,12 @@ import Layout from '../../layouts/Layout.astro';
         background-position: center;
         background-size: cover;
         background-attachment: fixed;
+        background-repeat: no-repeat;
+        will-change: transform, opacity;
         transform: scale(1);
         transition:
           transform 0.2s ease-in-out,
-          opacity 1.5s ease-in-out;
+          opacity 0.6s ease-in-out;
         z-index: -1;
         opacity: 0;
       }
@@ -108,11 +117,16 @@ import Layout from '../../layouts/Layout.astro';
         border-radius: 10px;
         z-index: 100;
         opacity: 0;
-        transition: opacity 1.5s ease-in-out;
+        transform: translateY(20px);
+        transition:
+          opacity 0.8s ease-in-out,
+          transform 0.8s ease-in-out;
       }
 
       main.loaded section {
         opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.3s;
       }
 
       header {
@@ -178,6 +192,29 @@ import Layout from '../../layouts/Layout.astro';
       h1 {
         font-style: italic;
       }
+
+      /* 手機版換行設定 */
+      .mobile-break {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .mobile-break {
+          display: inline;
+        }
+
+        section {
+          padding: 1.5rem;
+          margin: 0 1rem;
+          min-width: calc(100vw - 3rem); /* 確保最小寬度 */
+          max-width: calc(100vw - 2rem);
+        }
+
+        header p {
+          line-height: 1.6;
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -187,13 +224,16 @@ import Layout from '../../layouts/Layout.astro';
           <img
             src="https://avatars.githubusercontent.com/u/71600455?v=4"
             alt="head shot"
-            loading="lazy"
+            width="96"
+            height="96"
+            loading="eager"
+            fetchpriority="high"
           />
           <h1>AndyWang</h1>
           <p class="address">
             <i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City
           </p>
-          <p>hi, you can call me weiwei. I enjoy solving issues.</p>
+          <p>Hi, you can call me Weiwei.<br class="mobile-break"> I enjoy solving problems.</p>
         </header>
         <ul>
           <li>
@@ -209,15 +249,21 @@ import Layout from '../../layouts/Layout.astro';
             </a>
           </li>
           <li>
-            <a href="https://www.pixiv.net/users/39278115" target="_blank">
-              <i class="fa-brands fa-pixiv"></i>
-              <h2>Pivix</h2>
-            </a>
-          </li>
-          <li>
             <a href="https://x.com/andywang890505" target="_blank">
               <i class="fa-brands fa-twitter"></i>
               <h2>Twitter</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@chengwei55" target="_blank">
+              <i class="fa-brands fa-youtube"></i>
+              <h2>YouTube</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.pixiv.net/users/39278115" target="_blank">
+              <i class="fa-brands fa-pixiv"></i>
+              <h2>Pivix</h2>
             </a>
           </li>
           <li>
@@ -299,16 +345,28 @@ import Layout from '../../layouts/Layout.astro';
         canvas.height = window.innerHeight;
       });
 
-      // Background image fade-in effect
+      // Background image fade-in effect with faster loading
       const mainElement = document.querySelector('main');
       if (mainElement) {
         const backgroundImage = new Image();
         backgroundImage.src =
           'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
 
-        backgroundImage.onload = () => {
+        if (backgroundImage.complete) {
           mainElement.classList.add('loaded');
-        };
+        } else {
+          backgroundImage.onload = () => {
+            mainElement.classList.add('loaded');
+          };
+          backgroundImage.onerror = () => {
+            mainElement.classList.add('loaded');
+          };
+          setTimeout(() => {
+            if (!mainElement.classList.contains('loaded')) {
+              mainElement.classList.add('loaded');
+            }
+          }, 2000);
+        }
       }
     </script>
   </body>
