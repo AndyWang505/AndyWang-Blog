@@ -76,7 +76,7 @@ Ref: [Domain-Driven Design (DDD): 1.2 Ubiquitous Language](https://softengbook.o
 
 ## 戰略設計 & 戰術設計
 
-![DDD](/public/ddd.png)
+![DDD](/ddd.png)
 
 Ref: [Domain-Driven Design Reference](https://www.domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)
 
