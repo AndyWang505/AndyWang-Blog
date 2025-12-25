@@ -178,6 +178,17 @@ import Layout from '../../layouts/Layout.astro';
       h1 {
         font-style: italic;
       }
+
+      /* Mobile responsive */
+      @media (max-width: 480px) {
+        section {
+          padding: 2rem 1rem;
+        }
+
+        header p {
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -193,19 +204,19 @@ import Layout from '../../layouts/Layout.astro';
           <p class="address">
             <i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City
           </p>
-          <p>hi, you can call me weiwei. I enjoy solving issues.</p>
+          <p>hi, you can call me weiwei. I enjoy solving problems.</p>
         </header>
         <ul>
-          <li>
-            <a href="https://andywangtw.dev" target="_blank">
-              <i class="fa-solid fa-code"></i>
-              <h2>Blog</h2>
-            </a>
-          </li>
           <li>
             <a href="https://github.com/AndyWang505" target="_blank">
               <i class="fa-brands fa-github"></i>
               <h2>GitHub</h2>
+            </a>
+          </li>
+          <li>
+            <a href="https://andywangtw.dev" target="_blank">
+              <i class="fa-solid fa-code"></i>
+              <h2>Blog</h2>
             </a>
           </li>
           <li>
