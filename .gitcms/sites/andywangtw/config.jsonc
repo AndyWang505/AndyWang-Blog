@@ -1,0 +1,60 @@
+{
+  "version": "1",
+  "media_path": "/public",
+  "ssg_framework": "astro",
+  "frontmatter_format": "yaml",
+  "sitemap_url": "https://andywangtw.dev/sitemap.xml",
+  "publishing_mode": "editorial_workflow",
+  "collections": [
+    {
+      "name": "blog",
+      "git_path": "/src/content/blog/",
+      "file_extension": ".md",
+      "filename_pattern": "",
+      "collection_type": "flat",
+      "frontmatter_schema": [
+        {
+          "name": "title",
+          "type": "title",
+          "label": "Title",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "richtext",
+          "label": "Description",
+          "required": true
+        },
+        {
+          "name": "pubDate",
+          "type": "text",
+          "label": "Pub Date",
+          "required": true
+        },
+        {
+          "name": "heroImage",
+          "type": "image",
+          "label": "Hero Image",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "multiselect",
+          "label": "Tags",
+          "required": true,
+          "options": [
+            "Retro",
+            "Life"
+          ],
+          "color": "blue"
+        },
+        {
+          "name": "category",
+          "type": "text",
+          "label": "Category",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
