@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Aside from '../layouts/Aside.astro';
 import CardItem from '../components/CardItem.astro';
 
 interface PageProps {
@@ -59,60 +58,51 @@ const paginatedPosts = posts.slice(startIndex, endIndex);
 ---
 
 <Layout>
-  <!-- Main content wrapper layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
-      <Aside />
-      
-      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
-        <div class="onload-animation">
-          <section>
-            <ul>
-              {paginatedPosts.map((post: any) => (
-                <CardItem
-                  slug={post.slug}
-                  title={post.data.title}
-                  heroImage={post.data.heroImage}
-                  pubDate={post.data.pubDate}
-                  category={post.data.category}
-                  tags={post.data.tags}
-                  description={post.data.description}
-                  content={post.content}
-                />
-              ))}
-            </ul>
-            
-            <nav class="my-6">
-              <ul class="mx-auto flex justify-center">
-                {
-                  currentPage > 1 && (
-                    <li>
-                      <a
-                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-orange-400 hover:text-orange-600 transition-colors"
-                        href={`/${currentPage - 1}`}
-                      >
-                        &lt;&lt; Previous
-                      </a>
-                    </li>
-                  )
-                }
-                {
-                  currentPage < totalPages && (
-                    <li>
-                      <a
-                        class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-blue-400 hover:text-blue-600 transition-colors"
-                        href={`/${currentPage + 1}`}
-                      >
-                        Next &gt;&gt;
-                      </a>
-                    </li>
-                  )
-                }
-              </ul>
-            </nav>
-          </section>
-        </div>
-      </main>
-    </div>
+  <div class="onload-animation">
+    <section>
+      <ul>
+        {paginatedPosts.map((post: any) => (
+          <CardItem
+            slug={post.slug}
+            title={post.data.title}
+            heroImage={post.data.heroImage}
+            pubDate={post.data.pubDate}
+            category={post.data.category}
+            tags={post.data.tags}
+            description={post.data.description}
+            content={post.content}
+          />
+        ))}
+      </ul>
+
+      <nav class="my-6">
+        <ul class="mx-auto flex justify-center">
+          {
+            currentPage > 1 && (
+              <li>
+                <a
+                  class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-orange-400 hover:text-orange-600 transition-colors"
+                  href={`/${currentPage - 1}`}
+                >
+                  &lt;&lt; Previous
+                </a>
+              </li>
+            )
+          }
+          {
+            currentPage < totalPages && (
+              <li>
+                <a
+                  class="p-2 mx-2 bg-white dark:bg-zinc-800 shadow-md rounded-lg text-blue-400 hover:text-blue-600 transition-colors"
+                  href={`/${currentPage + 1}`}
+                >
+                  Next &gt;&gt;
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+    </section>
   </div>
 </Layout>

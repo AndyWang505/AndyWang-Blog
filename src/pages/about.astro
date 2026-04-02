@@ -1,16 +1,10 @@
 ---
 import FormattedDate from '../components/FormattedDate.astro';
 import Layout from '../layouts/Layout.astro';
-import Aside from '../layouts/Aside.astro';
 ---
 
 <Layout>
-  <!-- Main content wrapper layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
-      <Aside />
-      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
-        <div class="onload-animation">
+  <div class="onload-animation">
           <!-- Hero Section -->
           <section class="bg-white dark:bg-zinc-900 shadow-sm dark:shadow-gray-900/20 rounded-xl overflow-hidden mb-4">
             <div class="relative bg-white dark:bg-purple-900/10 p-8 md:p-12">
@@ -145,8 +139,5 @@ import Aside from '../layouts/Aside.astro';
               </div>
             </div>
           </section>
-        </div>
-      </main>
-    </div>
   </div>
 </Layout>

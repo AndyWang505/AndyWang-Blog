@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Banner from '../components/Banner.astro';
+import Aside from './Aside.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../config/site';
 import { 
   BANNER_CONFIG, 
@@ -20,9 +21,10 @@ export interface Props {
   image?: string;
   description?: string;
   banner?: string;
+  hasSidebar?: boolean;
 }
 
-const { title, image, description, banner } = Astro.props;
+const { title, image, description, banner, hasSidebar = true } = Astro.props;
 const dynamicTitle = title || SITE_TITLE;
 const dynamicDescription = description || SITE_DESCRIPTION;
 
@@ -115,11 +117,22 @@ const bannerOffset = (() => {
     <div class="absolute w-full z-30 pointer-events-none" style={`top: var(--main-panel-top)`}>
       <div id="main-grid" class="transition-all duration-700 w-full px-0 grid grid-rows-[1fr_auto] min-h-[calc(100vh-var(--main-panel-top))]">
         <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto w-full">
-          <main id="swup-container" class="transition-swup-fade overflow-hidden">
-            <div id="content-wrapper">
-              <slot />
+          {hasSidebar ? (
+            <div class="w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
+              <Aside />
+              <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 p-0 overflow-hidden">
+                <div id="content-wrapper">
+                  <slot />
+                </div>
+              </main>
             </div>
-          </main>
+          ) : (
+            <main id="swup-container" class="transition-swup-fade overflow-hidden">
+              <div id="content-wrapper">
+                <slot />
+              </div>
+            </main>
+          )}
         </div>
         
         <!-- Full-width Footer -->

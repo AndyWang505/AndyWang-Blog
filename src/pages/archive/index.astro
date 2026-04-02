@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Aside from '../../layouts/Aside.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
@@ -31,13 +30,7 @@ function formatDate(date: Date) {
 ---
 
 <Layout>
-  <!-- Main content wrapper layout -->
-  <div class="relative max-w-[var(--page-width)] mx-auto ">
-    <div class="transition duration-700 w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
-      <Aside />
-      <!-- mobile nav -->
-      <main class="col-span-2 lg:col-span-1 p-0 overflow-hidden">
-        <div class="onload-animation">
+  <div class="onload-animation">
           <section class="dark:bg-zinc-900 bg-white rounded-xl overflow-hidden py-3 sm:py-6">
       <div class="mb-4 sm:mb-8 ml-3 sm:ml-6 md:ml-12 dark:text-neutral-200">
         <h2 class="text-lg sm:text-xl md:text-2xl">Archive</h2>
@@ -97,8 +90,5 @@ function formatDate(date: Date) {
         ))}
       </div>
           </section>
-        </div>
-      </main>
-    </div>
   </div>
 </Layout>
