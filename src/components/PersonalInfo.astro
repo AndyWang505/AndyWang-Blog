@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { DEFAULT_AVATAR } from '../config/site';
+import Section from './Section.astro';
 
 const blog = await getCollection('blog');
 const posts = blog.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -20,7 +21,7 @@ blog.forEach((post: any) => {
 const categoriesCount = categoriesSet.size;
 ---
 
-<div class="w-full rounded-xl bg-white dark:bg-zinc-900 p-4 text-center">
+<Section class="p-4 text-center">
   <a
     href="/"
     aria-label="Go to About Page"
@@ -157,4 +158,4 @@ const categoriesCount = categoriesSet.size;
       </svg>
     </a>
   </div>
-</div>
+</Section>

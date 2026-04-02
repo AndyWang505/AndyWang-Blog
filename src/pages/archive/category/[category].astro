@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
 import CardItem from '../../../components/CardItem.astro';
 
 const blog = await getCollection('blog');
@@ -28,7 +29,7 @@ const avaliableCurrentCategoryPosts = blog
   <div class="onload-animation">
           <section class="space-y-3 sm:space-y-4">
       <!-- Header -->
-      <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm dark:shadow-gray-900/20 p-3 sm:p-4 md:p-6">
+      <Section class="p-3 sm:p-4 md:p-6">
         <nav class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mb-3 sm:mb-4">
           <a href="/archive/" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
             Archive
@@ -56,7 +57,7 @@ const avaliableCurrentCategoryPosts = blog
             <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">{avaliableCurrentCategoryPosts.length} posts in this category</p>
           </div>
         </div>
-      </div>
+      </Section>
 
       <!-- Posts List -->
       <div>

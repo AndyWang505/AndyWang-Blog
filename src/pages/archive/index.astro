@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
@@ -31,7 +32,7 @@ function formatDate(date: Date) {
 
 <Layout>
   <div class="onload-animation">
-          <section class="dark:bg-zinc-900 bg-white rounded-xl overflow-hidden py-3 sm:py-6">
+          <Section class="overflow-hidden py-3 sm:py-6">
       <div class="mb-4 sm:mb-8 ml-3 sm:ml-6 md:ml-12 dark:text-neutral-200">
         <h2 class="text-lg sm:text-xl md:text-2xl">Archive</h2>
         <h3 class="text-sm sm:text-base md:text-xl">共 {posts.length} 筆文章</h3>
@@ -89,6 +90,6 @@ function formatDate(date: Date) {
           </div>
         ))}
       </div>
-          </section>
+          </Section>
   </div>
 </Layout>

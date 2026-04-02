@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
+import Section from './Section.astro';
 
 const posts = await getCollection('blog');
 const recentPosts = posts
@@ -8,7 +9,7 @@ const recentPosts = posts
   .slice(0, 5);
 ---
 
-<div class="w-full rounded-xl bg-white dark:bg-zinc-900 p-6">
+<Section class="p-6">
   <h3 class="text-md font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
     RECENT POSTS
   </h3>
@@ -33,4 +34,4 @@ const recentPosts = posts
       ))
     }
   </ul>
-</div>
+</Section>

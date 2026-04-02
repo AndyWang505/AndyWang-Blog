@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Section from './Section.astro';
 
 const blog = await getCollection('blog');
 // get unique tags
@@ -11,7 +12,7 @@ blog.forEach((post) => {
 const tagsArray = Array.from(tagsSet).sort();
 ---
 
-<div class="w-full rounded-xl bg-white dark:bg-zinc-900 p-6">
+<Section class="p-6">
   <h3 class="text-md font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-4">
     TAGS
   </h3>
@@ -23,4 +24,4 @@ const tagsArray = Array.from(tagsSet).sort();
       </a>
     ))}
   </div>
-</div>
+</Section>
