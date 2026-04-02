@@ -15,7 +15,6 @@ html.is-animating .transition-swup-fade {
 .banner-container img,
 .banner-image img {
     opacity: 1 !important;
-    transition: height 0.7s ease-out, margin-top 0.7s ease-out !important;
 }
 
 /* Ensure banner always stays visible during transitions */
@@ -24,7 +23,6 @@ html.is-animating #banner-wrapper,
 html.is-changing .banner-container,
 html.is-animating .banner-container {
     opacity: 1 !important;
-    transform: none !important;
 }
 
 /* Fade-in animations for components */

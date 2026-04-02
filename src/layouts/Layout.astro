@@ -104,7 +104,7 @@ const bannerOffset = (() => {
     {"is-home": isHomePage, "enable-banner": BANNER_CONFIG.enable}
   ]}>
     <!-- Header -->
-    <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 mx-auto">
+    <div id="top-row" class="z-50 pointer-events-none relative max-w-[var(--page-width)] px-0 mx-auto">
       <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
         <Header />
       </div>
@@ -115,7 +115,7 @@ const bannerOffset = (() => {
 
     <!-- Main Content -->
     <div class="absolute w-full z-30 pointer-events-none" style={`top: var(--main-panel-top)`}>
-      <div id="main-grid" class="transition-all duration-700 w-full px-0 grid grid-rows-[1fr_auto] min-h-[calc(100vh-var(--main-panel-top))]">
+      <div id="main-grid" class="w-full px-0 grid grid-rows-[1fr_auto] min-h-[calc(100vh-var(--main-panel-top))]">
         <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto w-full">
           {hasSidebar ? (
             <div class="w-full grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4">
@@ -159,16 +159,17 @@ const bannerOffset = (() => {
   .enable-banner #banner-wrapper {
     height: var(--banner-height);
     top: 0;
-    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+    will-change: height, top;
+    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .enable-banner #banner {
     height: var(--banner-height);
-    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: height;
+    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  
+
   body.is-home.enable-banner #banner-wrapper {
     height: var(--banner-height-home);
     top: calc(-1 * var(--banner-height-extend));
@@ -180,13 +181,14 @@ const bannerOffset = (() => {
 
   #main-grid {
     transform: translateY(0);
+    will-change: transform;
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-
   .enable-banner #top-row {
     height: calc(var(--banner-height) - 4.5rem);
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: height;
+    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   body.is-home.enable-banner #top-row {
@@ -201,15 +203,6 @@ const bannerOffset = (() => {
     }
 
     .enable-banner #banner {
-      height: var(--banner-height) !important;
-    }
-    
-    body.is-home.enable-banner #banner-wrapper {
-      height: var(--banner-height) !important;
-      top: 0 !important;
-    }
-
-    body.is-home.enable-banner #banner {
       height: var(--banner-height) !important;
     }
 
@@ -229,14 +222,9 @@ const bannerOffset = (() => {
     }
   }
 
-  .enable-banner #banner.show {
-    opacity: 1;
-    transform: scale(1);
-  }
-  
   .enable-banner #banner {
     opacity: 0;
-    animation: bannerFadeIn 0.8s ease-out forwards;
+    animation: bannerFadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
   .enable-banner #banner.loaded {

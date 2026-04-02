@@ -62,11 +62,7 @@ export function initBannerAndTransitions(): void {
       const NAVBAR_HEIGHT = 72;
       
       // Use appropriate banner height for threshold calculation
-      let bannerHeightForThreshold = BANNER_HEIGHT;
-      if (document.body.classList.contains('is-home') && window.innerWidth > 768) {
-        bannerHeightForThreshold = BANNER_HEIGHT_HOME;
-      }
-      
+      const bannerHeightForThreshold = window.innerWidth > 768 ? BANNER_HEIGHT_HOME : BANNER_HEIGHT;
       const bannerHeightPx = window.innerHeight * (bannerHeightForThreshold / 100);
       const threshold = bannerHeightPx - NAVBAR_HEIGHT - 20;
       
@@ -76,25 +72,7 @@ export function initBannerAndTransitions(): void {
     });
 
     // handle visit start - prepare animation
-    (window as any).swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
-      const bodyElement = document.querySelector('body');
-      const targetUrl = new URL(visit.to.url);
-      const isTargetHome = pathsEqual(targetUrl.pathname, '/');
-      const isCurrentHome = bodyElement?.classList.contains('is-home');
-      
-      // set height change in advance to achieve smooth transition
-      if (isTargetHome && !isCurrentHome) {
-        // go to home: delay adding class to start height transition
-        setTimeout(() => {
-          bodyElement?.classList.add('is-home');
-        }, 50);
-      } else if (!isTargetHome && isCurrentHome) {
-        // leave home: delay removing class to start height transition
-        setTimeout(() => {
-          bodyElement?.classList.remove('is-home');
-        }, 50);
-      }
-
+    (window as any).swup.hooks.on('visit:start', () => {
       // increase page height to prevent scrolling jump
       const heightExtend = document.getElementById('page-height-extend');
       if (heightExtend) {
@@ -102,12 +80,17 @@ export function initBannerAndTransitions(): void {
       }
     });
 
-    // handle page view
-    (window as any).swup.hooks.on('page:view', () => {
-      // keep page height extend visible
-      const heightExtend = document.getElementById('page-height-extend');
-      if (heightExtend) {
-        heightExtend.classList.remove('hidden');
+    // handle content replace - trigger banner resize AFTER new content is in DOM
+    // so the transition is visible during the new page's fade-in, not the old page's fade-out
+    (window as any).swup.hooks.on('content:replace', () => {
+      const currentPath = window.location.pathname;
+      const isTargetHome = pathsEqual(currentPath, '/');
+      const hasIsHome = document.body.classList.contains('is-home');
+
+      if (isTargetHome && !hasIsHome) {
+        document.body.classList.add('is-home');
+      } else if (!isTargetHome && hasIsHome) {
+        document.body.classList.remove('is-home');
       }
     });
 
@@ -119,7 +102,7 @@ export function initBannerAndTransitions(): void {
         if (heightExtend) {
           heightExtend.classList.add('hidden');
         }
-        
+
         // reinitialize banner display
         const banner = document.getElementById('banner');
         if (banner && BANNER_CONFIG.enable) {
@@ -137,24 +120,6 @@ export function initBannerAndTransitions(): void {
   }
 
   showBanner();
-}
-
-// initialize Banner height variables
-export function initBannerHeight(): void {
-  let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
-  offset = offset - offset % 4;
-  document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
-  
-  document.documentElement.style.setProperty('--banner-height', `${BANNER_HEIGHT}vh`);
-  document.documentElement.style.setProperty('--banner-height-home', `${BANNER_HEIGHT_HOME}vh`);
-  
-  const currentPath = window.location.pathname;
-  const isHome = currentPath === '/' || currentPath === '';
-  if (isHome && !document.body.classList.contains('is-home')) {
-    document.body.classList.add('is-home');
-  } else if (!isHome && document.body.classList.contains('is-home')) {
-    document.body.classList.remove('is-home');
-  }
 }
 
 // ensure banner display after DOM load
