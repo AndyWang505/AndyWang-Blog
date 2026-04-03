@@ -100,12 +100,6 @@ export function initBannerAndTransitions(): void {
           heightExtend.classList.add('hidden');
         }
 
-        // reinitialize banner display
-        const banner = document.getElementById('banner');
-        if (banner && BANNER_CONFIG.enable) {
-          banner.style.opacity = '1';
-          banner.style.transform = 'scale(1)';
-        }
       }, 500); // sync with CSS transition time
     });
   };
