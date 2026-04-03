@@ -21,14 +21,6 @@ export const BANNER_CONFIG = {
   enable: true,
   src: "/banner/banner.webp",
   position: "center" as const,
-  showOnHomePage: true,
-  showOnOtherPages: true,
-  smoothTransition: true,
-  transitionDuration: 500,
-  height: {
-    home: BANNER_HEIGHT_HOME,
-    other: BANNER_HEIGHT
-  },
   credit: {
     enable: true,
     text: "夏生(なつお)@nathuo101102",
