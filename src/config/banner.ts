@@ -19,7 +19,7 @@ export const MAIN_PANEL_OVERLAPS_BANNER_HEIGHT: number = BANNER_HEIGHTS.overlaps
 // Banner main configuration
 export const BANNER_CONFIG = {
   enable: true,
-  src: "/banner/banner_01.webp",
+  src: "/banner/banner.webp",
   position: "center" as const,
   showOnHomePage: true,
   showOnOtherPages: true,
@@ -30,8 +30,8 @@ export const BANNER_CONFIG = {
     other: BANNER_HEIGHT
   },
   credit: {
-    enable: false,
-    text: "",
-    url: ""
+    enable: true,
+    text: "夏生(なつお)@nathuo101102",
+    url: "https://x.com/nathuo101102"
   }
 } as const;
