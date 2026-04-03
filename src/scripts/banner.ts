@@ -71,26 +71,23 @@ export function initBannerAndTransitions(): void {
       }
     });
 
-    // handle visit start - prepare animation
-    (window as any).swup.hooks.on('visit:start', () => {
-      // increase page height to prevent scrolling jump
-      const heightExtend = document.getElementById('page-height-extend');
-      if (heightExtend) {
-        heightExtend.classList.remove('hidden');
-      }
-    });
-
-    // handle content replace - trigger banner resize AFTER new content is in DOM
-    // so the transition is visible during the new page's fade-in, not the old page's fade-out
-    (window as any).swup.hooks.on('content:replace', () => {
-      const currentPath = window.location.pathname;
-      const isTargetHome = pathsEqual(currentPath, '/');
+    // handle visit start - update banner height immediately on click for synchronized animation
+    (window as any).swup.hooks.on('visit:start', (visit: any) => {
+      // change is-home immediately so banner animates in sync with content transition
+      const targetPath = new URL(visit.to.url, window.location.origin).pathname;
+      const isTargetHome = pathsEqual(targetPath, '/');
       const hasIsHome = document.body.classList.contains('is-home');
 
       if (isTargetHome && !hasIsHome) {
         document.body.classList.add('is-home');
       } else if (!isTargetHome && hasIsHome) {
         document.body.classList.remove('is-home');
+      }
+
+      // increase page height to prevent scrolling jump
+      const heightExtend = document.getElementById('page-height-extend');
+      if (heightExtend) {
+        heightExtend.classList.remove('hidden');
       }
     });
 
