@@ -12,12 +12,21 @@ import Layout from '../../layouts/Layout.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+TC:wght@100..900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playball&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/brands.min.css"
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/solid.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css"
     />
 
     <style>
@@ -100,8 +109,9 @@ import Layout from '../../layouts/Layout.astro';
 
       section {
         position: absolute;
-        padding: 2rem;
+        padding: 2.8rem 3rem;
         margin: 0 0.3rem;
+        min-width: 340px;
         backdrop-filter: blur(10px);
         background-color: transparent;
         border: 1.5px solid rgb(230, 230, 230);
@@ -113,16 +123,51 @@ import Layout from '../../layouts/Layout.astro';
 
       main.loaded section {
         opacity: 1;
+        transition-delay: 1.2s;
+        animation: float 6s ease-in-out infinite;
+        animation-delay: 3s;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-7px); }
       }
 
       header {
         text-align: center;
       }
 
+      .avatar-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+
+      .avatar-wrap::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 9999px;
+        border: 2px solid rgba(255, 255, 255, 0.55);
+        animation: pulse-ring 3s ease-out infinite;
+      }
+
+      @keyframes pulse-ring {
+        0%   { transform: scale(1);   opacity: 0.6; }
+        100% { transform: scale(1.4); opacity: 0; }
+      }
+
       header img {
         border-radius: 9999px;
         width: 6rem;
         height: 6rem;
+        display: block;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25), 0 0 18px rgba(255, 255, 255, 0.12);
+        transition: box-shadow 0.3s ease;
+      }
+
+      header img:hover {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6), 0 0 28px rgba(255, 255, 255, 0.28);
       }
 
       header h1 {
@@ -140,25 +185,96 @@ import Layout from '../../layouts/Layout.astro';
 
       li {
         margin: 2rem auto;
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      main.loaded li {
+        animation: slideInUp 0.5s ease forwards;
+      }
+
+      main.loaded li:nth-child(1) { animation-delay: 1.5s; }
+      main.loaded li:nth-child(2) { animation-delay: 1.62s; }
+      main.loaded li:nth-child(3) { animation-delay: 1.74s; }
+      main.loaded li:nth-child(4) { animation-delay: 1.86s; }
+      main.loaded li:nth-child(5) { animation-delay: 1.98s; }
+
+      @keyframes slideInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       li a {
+        position: relative;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0.3rem 1.2rem;
+        border-radius: 8px;
+        transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      li a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -80%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.13) 50%,
+          transparent 100%
+        );
+        transition: left 0s;
+        pointer-events: none;
+      }
+
+      li a:hover::before {
+        left: 150%;
+        transition: left 0.5s ease;
+      }
+
+      li a:hover {
+        transform: scale(1.04);
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
       }
 
       li h2 {
         padding: 0 0.6rem;
+        transition: letter-spacing 0.3s ease, text-shadow 0.3s ease;
       }
 
       li i {
         font-size: 26px;
+        transition: text-shadow 0.3s ease;
       }
 
-      a:hover h2,
+      a:hover h2 {
+        letter-spacing: 0.06em;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
       a:hover i {
-        color: rgb(95, 95, 95);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      .ripple {
+        position: absolute;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.22);
+        transform: scale(0);
+        animation: ripple-expand 0.55s ease-out forwards;
+        pointer-events: none;
+      }
+
+      @keyframes ripple-expand {
+        to { transform: scale(2.8); opacity: 0; }
       }
 
       footer {
@@ -182,7 +298,9 @@ import Layout from '../../layouts/Layout.astro';
       /* Mobile responsive */
       @media (max-width: 480px) {
         section {
-          padding: 2rem 1rem;
+          padding: 2.2rem 1.4rem;
+          min-width: unset;
+          width: calc(100vw - 2rem);
         }
 
         header p {
@@ -195,11 +313,15 @@ import Layout from '../../layouts/Layout.astro';
     <main>
       <section id="app">
         <header>
-          <img
-            src="https://avatars.githubusercontent.com/u/71600455?v=4"
-            alt="head shot"
-            loading="lazy"
-          />
+          <div class="avatar-wrap">
+            <img
+              src="https://avatars.githubusercontent.com/u/71600455?v=4"
+              alt="head shot"
+              fetchpriority="high"
+              width="96"
+              height="96"
+            />
+          </div>
           <h1>AndyWang</h1>
           <p class="address">
             <i class="fa-solid fa-location-dot"></i>Taiwan, Hsinchu City
@@ -296,31 +418,99 @@ import Layout from '../../layouts/Layout.astro';
         });
       }
 
+      // Shooting stars
+      const shootingStars = [];
+
+      function createShootingStar() {
+        return {
+          x: Math.random() * canvas.width * 0.7,
+          y: Math.random() * canvas.height * 0.4,
+          length: Math.random() * 100 + 60,
+          speed: Math.random() * 6 + 4,
+          opacity: 1,
+          angle: Math.PI / 5,
+          active: true,
+        };
+      }
+
+      function drawShootingStars() {
+        shootingStars.forEach((s, idx) => {
+          if (!s.active) return;
+          const dx = Math.cos(s.angle) * s.length;
+          const dy = Math.sin(s.angle) * s.length;
+          const grad = ctx.createLinearGradient(s.x, s.y, s.x - dx, s.y - dy);
+          grad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
+          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y);
+          ctx.lineTo(s.x - dx, s.y - dy);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          s.x += Math.cos(s.angle) * s.speed;
+          s.y += Math.sin(s.angle) * s.speed;
+          s.opacity -= 0.018;
+          if (s.opacity <= 0 || s.x > canvas.width || s.y > canvas.height) {
+            shootingStars.splice(idx, 1);
+          }
+        });
+      }
+
+      // Spawn a shooting star every 2.5–5 seconds
+      function scheduleShootingStar() {
+        shootingStars.push(createShootingStar());
+        setTimeout(scheduleShootingStar, Math.random() * 2500 + 2500);
+      }
+      scheduleShootingStar();
+
       function animate() {
         drawStars();
+        drawShootingStars();
         updateStars();
         requestAnimationFrame(animate);
       }
 
       animate(); // Start the animation
 
-      // Adjust canvas size on window resize
+      // Adjust canvas size on window resize (debounced)
+      let resizeTimer;
       window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }, 100);
       });
 
-      // Background image fade-in effect
+      // Background image fade-in effect with fallback timeout
       const mainElement = document.querySelector('main');
       if (mainElement) {
         const backgroundImage = new Image();
         backgroundImage.src =
           'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
 
+        const fallback = setTimeout(() => mainElement.classList.add('loaded'), 3000);
+
         backgroundImage.onload = () => {
+          clearTimeout(fallback);
           mainElement.classList.add('loaded');
         };
       }
+
+      // Ripple effect on link click
+      document.querySelectorAll('li a').forEach((link) => {
+        link.addEventListener('click', function (e) {
+          const ripple = document.createElement('span');
+          ripple.classList.add('ripple');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+          ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+          this.appendChild(ripple);
+          ripple.addEventListener('animationend', () => ripple.remove());
+        });
+      });
     </script>
   </body>
 </html>
