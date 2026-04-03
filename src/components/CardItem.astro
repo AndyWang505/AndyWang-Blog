@@ -1,6 +1,7 @@
 ---
 import FormattedDate from './FormattedDate.astro';
 import { Image } from "astro:assets";
+import { getWordCount, getReadingTime } from '../lib/utils/readingTime';
 
 export interface Props {
   slug: string;
@@ -14,41 +15,6 @@ export interface Props {
 }
 
 const { slug, title, heroImage, pubDate, category, tags, description, content } = Astro.props;
-
-// 計算文章內容的字數（移除 HTML 標籤和 Markdown 語法）
-function getWordCount(text: string): number {
-  if (!text) return 0;
-  
-  const withoutHtml = text.replace(/<[^>]*>/g, ' ');
-  
-  const withoutMarkdown = withoutHtml
-    .replace(/#{1,6}\s/g, '') // 標題
-    .replace(/\*\*([^*]+)\*\*/g, '$1') // 粗體
-    .replace(/\*([^*]+)\*/g, '$1') // 斜體
-    .replace(/`([^`]+)`/g, '$1') // 行內代碼
-    .replace(/```[\s\S]*?```/g, '') // 代碼塊
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 連結
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1') // 圖片
-    .replace(/>\s/g, '') // 引用
-    .replace(/[-*+]\s/g, '') // 列表
-    .replace(/\d+\.\s/g, ''); // 有序列表
-  
-  // 計算中文字符和英文單詞
-  const chineseChars = (withoutMarkdown.match(/[\u4e00-\u9fff]/g) || []).length;
-  const englishWords = (withoutMarkdown.match(/[a-zA-Z]+/g) || []).length;
-  
-  // 中文按字符計算，英文按單詞計算
-  return chineseChars + englishWords;
-}
-
-// 計算閱讀時間（中文250字/分鐘，英文200詞/分鐘的平均速度）
-function getReadingTime(wordCount: number): number {
-  if (wordCount === 0) return 1;
-  
-  // 平均閱讀速度：中文250字/分鐘
-  const readingTime = Math.ceil(wordCount / 250);
-  return Math.max(1, readingTime);
-}
 
 const wordCount = content ? getWordCount(content) : getWordCount(description);
 const readingTime = getReadingTime(wordCount);
