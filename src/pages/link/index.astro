@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <html lang="zh-TW">
@@ -18,16 +19,46 @@
     />
 
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/brands.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/solid.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/brands.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/solid.min.css"
+    />
 
     <!-- Preload background -->
-    <link rel="preload" as="image" href="https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true" />
+    <link
+      rel="preload"
+      as="image"
+      href="https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true"
+    />
 
     <style>
       /* ── Reset ── */
-      html, body, a, h1, h2, h3, h4, h5, h6, p, span, ul, ol, li {
+      html {
+        background: #000;
+      }
+
+      html,
+      body,
+      a,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      span,
+      ul,
+      ol,
+      li {
         margin: 0;
         padding: 0;
         font: inherit;
@@ -56,6 +87,12 @@
         width: 100%;
         height: 100%;
         z-index: 1;
+        opacity: 0;
+        transition: opacity 3.5s ease-in-out;
+      }
+
+      main.loaded ~ canvas {
+        opacity: 1;
       }
 
       /* ── Background image ── */
@@ -69,7 +106,7 @@
         background-attachment: fixed;
         z-index: -1;
         opacity: 0;
-        transition: opacity 1.5s ease-in-out;
+        transition: opacity 3.5s ease-in-out;
         animation: bg-scale 60s linear infinite;
       }
 
@@ -78,20 +115,31 @@
       }
 
       @keyframes bg-scale {
-        from { transform: scale(1); }
-        to   { transform: scale(1.5); }
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.5);
+        }
       }
 
       /* ── Loader ── */
       #loader-screen {
         position: fixed;
         inset: 0;
-        background: #000;
+        background: transparent;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 99999;
-        transition: opacity 0.7s ease;
+        transition: opacity 0.8s ease;
+      }
+
+      #loader-overlay {
+        position: absolute;
+        inset: 0;
+        background: #000;
+        z-index: 0;
       }
 
       #loader-screen.done {
@@ -101,11 +149,35 @@
 
       #loader-percent {
         font-family: 'Playfair Display', cursive;
-        font-size: 6rem;
+        font-size: 3.5rem;
         font-style: italic;
-        color: rgba(255, 255, 255, 0.88);
+        color: rgba(255, 255, 255, 0.92);
         letter-spacing: -0.02em;
         line-height: 1;
+      }
+
+      #loader-suffix {
+        font-family: 'Playfair Display', cursive;
+        font-size: 1.8rem;
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1;
+        margin-left: 2px;
+      }
+
+      @keyframes num-tick {
+        from {
+          opacity: 0.2;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #loader-percent.ticking {
+        animation: num-tick 0.12s ease-out forwards;
       }
 
       #loader-bar {
@@ -114,14 +186,228 @@
         left: 0;
         height: 3px;
         width: 0%;
-        background: linear-gradient(90deg, rgba(255,255,255,0.4), #fff, rgba(255,255,255,0.4));
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.4),
+          #fff,
+          rgba(255, 255, 255, 0.4)
+        );
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
         z-index: 9999;
-        transition: width 0.3s ease, opacity 0.5s ease;
+        transition:
+          width 0.3s ease,
+          opacity 0.5s ease;
       }
 
       #loader-bar.done {
         opacity: 0;
+      }
+
+      /* ── Loader enhancements ── */
+      #loader-screen {
+        overflow: hidden;
+      }
+
+      /* CRT scanline texture */
+      #loader-screen::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(0, 0, 0, 0.07) 3px,
+          rgba(0, 0, 0, 0.07) 4px
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Moving scan beam */
+      #loader-scan-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 110px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 255, 255, 0.045),
+          transparent
+        );
+        animation: scan-move 3.5s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      @keyframes scan-move {
+        from {
+          top: -110px;
+        }
+        to {
+          top: 100%;
+        }
+      }
+
+      /* HUD corner brackets */
+      .loader-corner {
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        opacity: 0;
+        animation: lc-appear 0.5s ease forwards;
+        z-index: 2;
+      }
+
+      .lc-tl {
+        top: 22px;
+        left: 22px;
+        border-top: 1.5px solid rgba(255, 255, 255, 0.5);
+        border-left: 1.5px solid rgba(255, 255, 255, 0.5);
+        animation-delay: 0.05s;
+      }
+      .lc-tr {
+        top: 22px;
+        right: 22px;
+        border-top: 1.5px solid rgba(255, 255, 255, 0.5);
+        border-right: 1.5px solid rgba(255, 255, 255, 0.5);
+        animation-delay: 0.15s;
+      }
+      .lc-bl {
+        bottom: 22px;
+        left: 22px;
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.5);
+        border-left: 1.5px solid rgba(255, 255, 255, 0.5);
+        animation-delay: 0.25s;
+      }
+      .lc-br {
+        bottom: 22px;
+        right: 22px;
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.5);
+        border-right: 1.5px solid rgba(255, 255, 255, 0.5);
+        animation-delay: 0.35s;
+      }
+
+      @keyframes lc-appear {
+        from {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        to {
+          opacity: 0.65;
+          transform: scale(1);
+        }
+      }
+
+      /* Loader content */
+      #loader-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Label */
+      #loader-label {
+        margin-top: 0.3rem;
+        font-size: 0.72rem;
+        opacity: 0.55;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition: opacity 0.25s ease;
+      }
+
+      /* Bouncing dots */
+      #loader-dots-line {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 0.2rem;
+      }
+
+      .ld {
+        opacity: 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.5);
+        animation: ld-bounce 1.2s ease-in-out infinite;
+      }
+
+      .ld:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .ld:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .ld:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes ld-bounce {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-4px);
+        }
+      }
+
+      /* ── Circular progress ring ── */
+      #loader-ring-wrap {
+        display: grid;
+        width: 220px;
+        height: 220px;
+        place-items: center;
+      }
+
+      #loader-ring-svg {
+        grid-area: 1 / 1;
+        width: 220px;
+        height: 220px;
+        transform: rotate(-90deg);
+        overflow: visible;
+      }
+
+      #loader-ring-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.07);
+        stroke-width: 1.5;
+      }
+
+      #loader-ring-track {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.4);
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-dasharray: 596.9;
+        stroke-dashoffset: 596.9;
+        transition:
+          stroke-dashoffset 0.15s ease,
+          filter 0.5s ease,
+          stroke 0.3s ease;
+      }
+
+      #loader-number-inner {
+        grid-area: 1 / 1;
+        width: 220px;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Glow transition on the number */
+      #loader-percent {
+        transition: text-shadow 0.5s ease;
+      }
+
+      #loader-percent,
+      #loader-suffix {
+        font-variant-numeric: tabular-nums;
       }
 
       /* ── Card ── */
@@ -148,8 +434,13 @@
       }
 
       @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50%       { transform: translateY(-7px); }
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-7px);
+        }
       }
 
       /* ── Status badge ── */
@@ -180,8 +471,15 @@
       }
 
       @keyframes dot-pulse {
-        0%, 100% { opacity: 1;   transform: scale(1); }
-        50%       { opacity: 0.5; transform: scale(0.8); }
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
       }
 
       /* ── Profile ── */
@@ -189,7 +487,8 @@
         text-align: center;
       }
 
-      header p, h1 {
+      header p,
+      h1 {
         font-style: italic;
       }
 
@@ -209,8 +508,14 @@
       }
 
       @keyframes pulse-ring {
-        0%   { transform: scale(1);   opacity: 0.6; }
-        100% { transform: scale(1.4); opacity: 0; }
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(1.4);
+          opacity: 0;
+        }
       }
 
       header img {
@@ -218,12 +523,16 @@
         border-radius: 9999px;
         width: 6rem;
         height: 6rem;
-        box-shadow: 0 0 0 2px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.12);
+        box-shadow:
+          0 0 0 2px rgba(255, 255, 255, 0.25),
+          0 0 18px rgba(255, 255, 255, 0.12);
         transition: box-shadow 0.3s ease;
       }
 
       header img:hover {
-        box-shadow: 0 0 0 3px rgba(255,255,255,0.6), 0 0 28px rgba(255,255,255,0.28);
+        box-shadow:
+          0 0 0 3px rgba(255, 255, 255, 0.6),
+          0 0 28px rgba(255, 255, 255, 0.28);
       }
 
       header h1 {
@@ -253,15 +562,30 @@
         transform: translateY(16px);
       }
 
-      main.loaded li { animation: slideInUp 0.5s ease forwards; }
-      main.loaded li:nth-child(1) { animation-delay: 1.5s; }
-      main.loaded li:nth-child(2) { animation-delay: 1.62s; }
-      main.loaded li:nth-child(3) { animation-delay: 1.74s; }
-      main.loaded li:nth-child(4) { animation-delay: 1.86s; }
-      main.loaded li:nth-child(5) { animation-delay: 1.98s; }
+      main.loaded li {
+        animation: slideInUp 0.5s ease forwards;
+      }
+      main.loaded li:nth-child(1) {
+        animation-delay: 1.5s;
+      }
+      main.loaded li:nth-child(2) {
+        animation-delay: 1.62s;
+      }
+      main.loaded li:nth-child(3) {
+        animation-delay: 1.74s;
+      }
+      main.loaded li:nth-child(4) {
+        animation-delay: 1.86s;
+      }
+      main.loaded li:nth-child(5) {
+        animation-delay: 1.98s;
+      }
 
       @keyframes slideInUp {
-        to { opacity: 1; transform: translateY(0); }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       li a {
@@ -272,7 +596,11 @@
         justify-content: center;
         padding: 0.3rem 1.2rem;
         border-radius: 8px;
-        transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        transition:
+          transform 0.25s ease,
+          background 0.3s ease,
+          box-shadow 0.3s ease;
+        will-change: transform;
       }
 
       /* Shimmer sweep */
@@ -283,7 +611,12 @@
         left: -80%;
         width: 60%;
         height: 100%;
-        background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.13) 50%, transparent 100%);
+        background: linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.13) 50%,
+          transparent 100%
+        );
         transition: left 0s;
         pointer-events: none;
       }
@@ -294,14 +627,16 @@
       }
 
       li a:hover {
-        transform: scale(1.04);
+        transform: translateY(-2px);
         background: rgba(255, 255, 255, 0.07);
         box-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
       }
 
       li h2 {
         padding: 0 0.6rem;
-        transition: letter-spacing 0.3s ease, text-shadow 0.3s ease;
+        transition:
+          letter-spacing 0.3s ease,
+          text-shadow 0.3s ease;
       }
 
       li i {
@@ -329,7 +664,10 @@
       }
 
       @keyframes ripple-expand {
-        to { transform: scale(2.8); opacity: 0; }
+        to {
+          transform: scale(2.8);
+          opacity: 0;
+        }
       }
 
       /* ── Footer ── */
@@ -351,11 +689,22 @@
           animation: none !important;
         }
 
-        header img { width: 5rem; height: 5rem; }
-        header h1  { font-size: 1.3em; }
-        header p   { font-size: 13px; }
-        li         { margin: 0.45rem auto; }
-        li i       { font-size: 22px; }
+        header img {
+          width: 5rem;
+          height: 5rem;
+        }
+        header h1 {
+          font-size: 1.3em;
+        }
+        header p {
+          font-size: 13px;
+        }
+        li {
+          margin: 0.45rem auto;
+        }
+        li i {
+          font-size: 22px;
+        }
       }
 
       @media (min-width: 481px) and (max-width: 768px) {
@@ -366,22 +715,58 @@
       }
 
       @media (min-width: 769px) {
-        section     { max-width: 520px; padding: 3.2rem 3.8rem; }
-        header img  { width: 8rem; height: 8rem; }
-        header h1   { font-size: 1.9em; margin: 8px auto; }
-        header p    { font-size: 1.05em; }
-        .address    { margin-bottom: 10px; }
-        li          { margin: 0.85rem auto; }
-        li i        { font-size: 30px; }
-        li h2       { font-size: 1.1em; }
+        section {
+          max-width: 520px;
+          padding: 3.2rem 3.8rem;
+        }
+        header img {
+          width: 8rem;
+          height: 8rem;
+        }
+        header h1 {
+          font-size: 1.9em;
+          margin: 8px auto;
+        }
+        header p {
+          font-size: 1.05em;
+        }
+        .address {
+          margin-bottom: 10px;
+        }
+        li {
+          margin: 0.85rem auto;
+        }
+        li i {
+          font-size: 30px;
+        }
+        li h2 {
+          font-size: 1.1em;
+        }
       }
     </style>
   </head>
   <body>
     <div id="loader-screen">
+      <div id="loader-overlay"></div>
+      <div class="loader-corner lc-tl"></div>
+      <div class="loader-corner lc-tr"></div>
+      <div class="loader-corner lc-bl"></div>
+      <div class="loader-corner lc-br"></div>
+      <div id="loader-scan-line"></div>
       <div id="loader-content">
-        <span id="loader-percent">0</span><span id="loader-suffix">%</span>
-        <p id="loader-label">Loading</p>
+        <div id="loader-ring-wrap">
+          <svg id="loader-ring-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <circle id="loader-ring-bg" cx="110" cy="110" r="95"></circle>
+            <circle id="loader-ring-track" cx="110" cy="110" r="95"></circle>
+          </svg>
+          <div id="loader-number-inner">
+            <span id="loader-percent">0</span><span id="loader-suffix">%</span>
+          </div>
+        </div>
+        <p id="loader-label">Initializing</p>
+        <p id="loader-dots-line">
+          <span class="ld">.</span><span class="ld">.</span><span class="ld">.</span>
+        </p>
       </div>
     </div>
     <div id="loader-bar"></div>
@@ -553,32 +938,127 @@
       // ── Loader ──
       const loaderBar = document.getElementById('loader-bar');
       const loaderScreen = document.getElementById('loader-screen');
+      const loaderOverlay = document.getElementById('loader-overlay');
       const loaderPercent = document.getElementById('loader-percent');
+      const loaderLabel = document.getElementById('loader-label');
+      const ringTrack = document.getElementById('loader-ring-track');
+      const numberInner = document.getElementById('loader-number-inner');
+      const RING_CIRC = 2 * Math.PI * 95; // 596.9
       let loaderProgress = 0;
+      let glitchCount = 0;
+      const passedMilestones = new Set();
 
+      function tickNumber(value) {
+        loaderPercent.classList.remove('ticking');
+        void loaderPercent.offsetWidth; // force reflow to restart animation
+        loaderPercent.textContent = value;
+        loaderPercent.classList.add('ticking');
+      }
+
+      // Fade overlay from opaque→transparent as progress 30%→100%
+      function updateOverlay(p) {
+        const alpha = p <= 30 ? 1 : 1 - (p - 30) / 70;
+        loaderOverlay.style.opacity = Math.max(0, alpha).toFixed(3);
+      }
+
+      // ── Ring + glow helpers ──
+      function updateRing(p) {
+        ringTrack.style.strokeDashoffset = RING_CIRC * (1 - p / 100);
+        const glow = (p / 100) * 14;
+        const opacity = 0.25 + (p / 100) * 0.45;
+        ringTrack.style.filter = `drop-shadow(0 0 ${glow.toFixed(1)}px rgba(255,255,255,${opacity.toFixed(2)}))`;
+      }
+
+      function updateNumberGlow(p) {
+        const g = ((p / 100) * 28).toFixed(0);
+        const o = ((p / 100) * 0.6).toFixed(2);
+        loaderPercent.style.textShadow = `0 0 ${g}px rgba(255,255,255,${o})`;
+      }
+
+      function triggerMilestone(color) {
+        ringTrack.style.stroke = color;
+        setTimeout(() => {
+          ringTrack.style.stroke = '';
+        }, 350);
+      }
+
+      // ── Cycling messages ──
+      const loaderMessages = ['Initializing', 'Loading assets', 'Rendering world', 'Almost there'];
+      let msgIdx = 0;
+      const msgTimer = setInterval(() => {
+        msgIdx = (msgIdx + 1) % loaderMessages.length;
+        loaderLabel.style.opacity = '0';
+        setTimeout(() => {
+          loaderLabel.textContent = loaderMessages[msgIdx];
+          loaderLabel.style.opacity = '1';
+        }, 250);
+      }, 900);
+
+      // ── Progress interval ──
       const loaderInterval = setInterval(() => {
-        if      (loaderProgress < 30) loaderProgress += 4;
+        if (loaderProgress < 30) loaderProgress += 4;
         else if (loaderProgress < 60) loaderProgress += 2;
         else if (loaderProgress < 85) loaderProgress += 0.6;
-        else { clearInterval(loaderInterval); return; }
+        else {
+          clearInterval(loaderInterval);
+          return;
+        }
+
         loaderBar.style.width = loaderProgress + '%';
-        loaderPercent.textContent = Math.floor(loaderProgress);
+        updateRing(loaderProgress);
+        updateNumberGlow(loaderProgress);
+        updateOverlay(loaderProgress);
+        triggerPop();
+
+        // Milestone colour pulse: 25 / 50 / 75
+        for (const [threshold, color] of [
+          [25, 'rgba(180,230,255,0.9)'],
+          [50, 'rgba(200,180,255,0.9)'],
+          [75, 'rgba(255,220,160,0.9)'],
+        ]) {
+          if (loaderProgress >= threshold && !passedMilestones.has(threshold)) {
+            passedMilestones.add(threshold);
+            triggerMilestone(color);
+          }
+        }
+
+        // Occasional glitch: flash wrong digit then snap back
+        glitchCount++;
+        if (glitchCount % 9 === 0) {
+          const correct = Math.floor(loaderProgress);
+          tickNumber(Math.floor(Math.random() * 10));
+          loaderPercent.classList.add('glitching');
+          setTimeout(() => {
+            tickNumber(correct);
+            loaderPercent.classList.remove('glitching');
+          }, 90);
+        } else {
+          tickNumber(Math.floor(loaderProgress));
+        }
       }, 120);
 
       function completeLoader() {
         clearInterval(loaderInterval);
+        clearInterval(msgTimer);
         loaderBar.style.width = '100%';
-        loaderPercent.textContent = '100';
+        tickNumber('100');
+        loaderPercent.classList.remove('glitching');
+        loaderLabel.style.opacity = '1';
+        loaderLabel.textContent = 'Complete';
+        updateRing(100);
+        updateNumberGlow(100);
+
         setTimeout(() => {
           loaderScreen.classList.add('done');
           loaderBar.classList.add('done');
-        }, 400);
+        }, 500);
       }
 
       // ── Background image & page reveal ──
       const mainElement = document.querySelector('main');
       const backgroundImage = new Image();
-      backgroundImage.src = 'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
+      backgroundImage.src =
+        'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
 
       const fallback = setTimeout(() => {
         mainElement.classList.add('loaded');
