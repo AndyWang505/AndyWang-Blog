@@ -149,20 +149,26 @@
 
       #loader-percent {
         font-family: 'Playfair Display', cursive;
-        font-size: 3.5rem;
+        font-size: 4.8rem;
         font-style: italic;
         color: rgba(255, 255, 255, 0.92);
         letter-spacing: -0.02em;
         line-height: 1;
+        vertical-align: baseline;
+      }
+
+      #loader-number-group {
+        display: flex;
+        align-items: flex-end;
       }
 
       #loader-suffix {
         font-family: 'Playfair Display', cursive;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-style: italic;
         color: rgba(255, 255, 255, 0.5);
         line-height: 1;
-        margin-left: 2px;
+        margin-left: 3px;
       }
 
       @keyframes num-tick {
@@ -398,6 +404,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transform: translateY(-10px);
       }
 
       /* Glow transition on the number */
@@ -737,7 +744,9 @@
             <circle id="loader-ring-track" cx="110" cy="110" r="95"></circle>
           </svg>
           <div id="loader-number-inner">
-            <span id="loader-percent">0</span><span id="loader-suffix">%</span>
+            <div id="loader-number-group">
+              <span id="loader-percent">0</span><span id="loader-suffix">%</span>
+            </div>
           </div>
         </div>
         <p id="loader-label">Initializing</p>
@@ -923,13 +932,11 @@
       const RING_CIRC = 2 * Math.PI * 95; // 596.9
       let loaderProgress = 0;
       let glitchCount = 0;
+      let imageLoaded = false;
       const passedMilestones = new Set();
 
       function tickNumber(value) {
-        loaderPercent.classList.remove('ticking');
-        void loaderPercent.offsetWidth; // force reflow to restart animation
         loaderPercent.textContent = value;
-        loaderPercent.classList.add('ticking');
       }
 
       // Fade overlay from opaque→transparent as progress 30%→100%
@@ -973,19 +980,22 @@
 
       // ── Progress interval ──
       const loaderInterval = setInterval(() => {
-        if (loaderProgress < 30) loaderProgress += 4;
-        else if (loaderProgress < 60) loaderProgress += 2;
-        else if (loaderProgress < 85) loaderProgress += 0.6;
-        else {
-          clearInterval(loaderInterval);
-          return;
+        if (imageLoaded) {
+          loaderProgress = Math.min(100, loaderProgress + 8);
+        } else if (loaderProgress < 30) {
+          loaderProgress += 4;
+        } else if (loaderProgress < 60) {
+          loaderProgress += 2;
+        } else if (loaderProgress < 85) {
+          loaderProgress += 0.6;
+        } else {
+          loaderProgress += 0.15; // 慢速等待圖片載入
         }
 
         loaderBar.style.width = loaderProgress + '%';
         updateRing(loaderProgress);
         updateNumberGlow(loaderProgress);
         updateOverlay(loaderProgress);
-        triggerPop();
 
         // Milestone colour pulse: 25 / 50 / 75
         for (const [threshold, color] of [
@@ -999,24 +1009,16 @@
           }
         }
 
-        // Occasional glitch: flash wrong digit then snap back
-        glitchCount++;
-        if (glitchCount % 9 === 0) {
-          const correct = Math.floor(loaderProgress);
-          tickNumber(Math.floor(Math.random() * 10));
-          loaderPercent.classList.add('glitching');
-          setTimeout(() => {
-            tickNumber(correct);
-            loaderPercent.classList.remove('glitching');
-          }, 90);
-        } else {
-          tickNumber(Math.floor(loaderProgress));
+        tickNumber(Math.floor(loaderProgress));
+
+        if (loaderProgress >= 100) {
+          clearInterval(loaderInterval);
+          clearInterval(msgTimer);
+          completeLoader();
         }
       }, 120);
 
       function completeLoader() {
-        clearInterval(loaderInterval);
-        clearInterval(msgTimer);
         loaderBar.style.width = '100%';
         tickNumber('100');
         loaderPercent.classList.remove('glitching');
@@ -1028,6 +1030,7 @@
         setTimeout(() => {
           loaderScreen.classList.add('done');
           loaderBar.classList.add('done');
+          mainElement.classList.add('loaded');
         }, 500);
       }
 
@@ -1038,14 +1041,12 @@
         'https://github.com/AndyWang505/link/blob/main/img/Suisei03.png?raw=true';
 
       const fallback = setTimeout(() => {
-        mainElement.classList.add('loaded');
-        completeLoader();
+        imageLoaded = true;
       }, 3000);
 
       backgroundImage.onload = () => {
         clearTimeout(fallback);
-        mainElement.classList.add('loaded');
-        completeLoader();
+        imageLoaded = true;
       };
 
     </script>
