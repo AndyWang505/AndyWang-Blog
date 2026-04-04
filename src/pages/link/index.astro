@@ -584,7 +584,7 @@
       @keyframes slideInUp {
         to {
           opacity: 1;
-          transform: translateY(0);
+          transform: none;
         }
       }
 
@@ -597,10 +597,8 @@
         padding: 0.3rem 1.2rem;
         border-radius: 8px;
         transition:
-          transform 0.25s ease,
           background 0.3s ease,
           box-shadow 0.3s ease;
-        will-change: transform;
       }
 
       /* Shimmer sweep */
@@ -627,16 +625,13 @@
       }
 
       li a:hover {
-        transform: translateY(-2px);
         background: rgba(255, 255, 255, 0.07);
         box-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
       }
 
       li h2 {
         padding: 0 0.6rem;
-        transition:
-          letter-spacing 0.3s ease,
-          text-shadow 0.3s ease;
+        transition: text-shadow 0.3s ease;
       }
 
       li i {
@@ -645,29 +640,11 @@
       }
 
       a:hover h2 {
-        letter-spacing: 0.06em;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
 
       a:hover i {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      }
-
-      /* Ripple */
-      .ripple {
-        position: absolute;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.22);
-        transform: scale(0);
-        animation: ripple-expand 0.55s ease-out forwards;
-        pointer-events: none;
-      }
-
-      @keyframes ripple-expand {
-        to {
-          transform: scale(2.8);
-          opacity: 0;
-        }
       }
 
       /* ── Footer ── */
@@ -1071,20 +1048,6 @@
         completeLoader();
       };
 
-      // ── Ripple on link click ──
-      document.querySelectorAll('li a').forEach((link) => {
-        link.addEventListener('click', function (e) {
-          const ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          const rect = this.getBoundingClientRect();
-          const size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
-          ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
-          this.appendChild(ripple);
-          ripple.addEventListener('animationend', () => ripple.remove());
-        });
-      });
     </script>
   </body>
 </html>
