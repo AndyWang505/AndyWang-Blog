@@ -4,7 +4,7 @@ description: '自從踏入軟體開發職場後，我最早認識到的開發流
 pubDate: 'October 4 2025'
 heroImage: ''
 tags: ['TDD', 'Test', 'X-Driven']
-category: 'SystemDesign'
+category: 'Development'
 ---
 
 自從踏入軟體開發職場後，我最早認識到的開發流程之一就是 TDD，我也認為他應該是每位軟體開發者都應該知道的開發流程，即使在實務上並非所有專案或情境都適合採用，但我覺得能有 TDD 的概念也很棒。

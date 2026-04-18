@@ -4,7 +4,7 @@ description: '在開發過程中，經常會遇到一種很常見的問題：即
 pubDate: 'November 1 2025'
 heroImage: ''
 tags: ['BDD', 'Test', 'X-Driven']
-category: 'SystemDesign'
+category: 'Development'
 ---
 
 ## 前言
